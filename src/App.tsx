@@ -240,36 +240,193 @@ const THEME = {
 } as const;
 
 // ============================================================================
-// CORE SYSTEM: DATA MODEL
+// CORE SYSTEM: DATA MODEL (Advanced Modular Architecture)
 // ============================================================================
+
+// 1. STRICT UNION TYPES (Prevents silent typos in string assignments)
 export type FeatureStatus = 'Delivered' | 'Optional' | 'Optional / Phase 2' | 'Rejected';
 export type FlowActionType = 'entry' | 'process' | 'decision' | 'exit';
+export type ProjectStatus = 'Live in Production' | 'Production Architecture' | 'Pre-Launch Architecture' | 'Archived';
 
-export interface ProjectMeta { role: string; team: string; duration: string; platform: string; link?: string; }
-export interface MetricRow { metric: string; before: string; after: string; change: string; positive: boolean; }
-export interface PersonaData { name: string; role: string; goals: string[]; pains: { label: string; severity: number }[]; avatar: string; stats: { subject: string; A: number; fullMark: number }[]; }
-export interface JourneyStep { step: string; emotion: number; action: string; pain: string; system?: string; }
-export interface ArchitectureNode { name: string; type: string; }
-export interface StyleGuideSpecs { typography: { primary: string; secondary: string; technical: string }; description: string; tokenCode?: string; }
+// 2. ATOMIC INTERFACES (Extracted for component-level reusability)
+export interface ProjectMeta { 
+  role: string; 
+  team: string; 
+  duration: string; 
+  platform: string; 
+  link?: string; 
+}
 
+export interface MetricRow { 
+  metric: string; 
+  before: string; 
+  after: string; 
+  change: string; 
+  positive: boolean; 
+}
+
+export interface TrendData { 
+  month: string; 
+  value: number; 
+}
+
+export interface OutcomeData { 
+  output: string; 
+  outcome: string; 
+}
+
+export interface PersonaData { 
+  name: string; 
+  role: string; 
+  goals: string[]; 
+  pains: { label: string; severity: number }[]; 
+  avatar: string; 
+  stats: { subject: string; A: number; fullMark: number }[]; 
+}
+
+export interface JourneyStep { 
+  step: string; 
+  emotion: number; 
+  action: string; 
+  pain: string; 
+  system?: string; 
+}
+
+export interface ArchitectureNode { 
+  name: string; 
+  type: string; 
+}
+
+export interface StyleGuideSpecs { 
+  typography: { primary: string; secondary: string; technical: string }; 
+  description: string; 
+  tokenCode?: string; 
+}
+
+export interface ProblemSolutionData { 
+  problem: string; 
+  solution: string; 
+  friction: string; 
+  flow: string; 
+}
+
+export interface CompetitorEntity { 
+  name: string; 
+  uxScore: number; 
+  trustScore: number; 
+  size: number; 
+  fill: string; 
+}
+
+export interface CompetitorAnalysisData { 
+  data: CompetitorEntity[]; 
+  insights: string[]; 
+}
+
+export interface ErrorAuditData { 
+  data: { phase: string; bugsFound: number; bugsResolved: number }[]; 
+  insight: string; 
+}
+
+export interface SystemArchitectureData { 
+  client: ArchitectureNode[]; 
+  gateway: ArchitectureNode[]; 
+  backend: ArchitectureNode[]; 
+}
+
+export interface FeatureMatrixRow { 
+  feature: string; 
+  requestedBy: string; 
+  status: FeatureStatus; 
+  rationale: string; 
+}
+
+export interface AccessibilityStandard { 
+  standard: string; 
+  implementation: string; 
+}
+
+export interface GraveyardTomb { 
+  title: string; 
+  hypothesis: string; 
+  reasonForFailure: string; 
+}
+
+export interface TestimonialData { 
+  quote: string; 
+  author: string; 
+  role: string; 
+}
+
+export interface RoadmapPhase { 
+  phase: string; 
+  title: string; 
+  desc: string; 
+  current: boolean; 
+}
+
+export interface UserFlowStep { 
+  step: string; 
+  action: string; 
+  type: FlowActionType; 
+}
+
+export interface ConclusionData { 
+  summary: string; 
+  nextSteps: string[]; 
+  lessons: string[]; 
+}
+
+// 3. MASTER INTERFACE
 export interface AdvancedProject {
-  id: string; title: string; tag: string; role: string; client: string; year: string; image: string; status: string;
-  heroTitle: string; heroSubtitle: string;
-  meta: ProjectMeta; outcomeVsOutput: { output: string; outcome: string }; executiveSummary: string;
-  impactTrend: { month: string; value: number }[]; metricsTable: MetricRow[];
-  problemSolution: { problem: string; solution: string; friction: string; flow: string }; 
-  competitorAnalysis?: { data: { name: string; uxScore: number; trustScore: number; size: number; fill: string }[]; insights: string[] };
-  personas?: PersonaData[]; journeyMap?: { data: JourneyStep[] };
-  errorAudit?: { data: { phase: string; bugsFound: number; bugsResolved: number }[]; insight: string };
-  systemArchitecture?: { client: ArchitectureNode[]; gateway: ArchitectureNode[]; backend: ArchitectureNode[] };
-  featureMatrix?: { feature: string; requestedBy: string; status: FeatureStatus; rationale: string }[];
-  accessibility?: { standard: string; implementation: string }[];
-  graveyard?: { title: string; hypothesis: string; reasonForFailure: string }[];
-  testimonials?: { quote: string; author: string; role: string }[];
-  roadmap?: { phase: string; title: string; desc: string; current: boolean }[];
-  styleGuide: StyleGuideSpecs; userFlow: { step: string; action: string; type: FlowActionType }[];
-  hasRelatedEcosystems?: boolean; desktopMockups?: string[]; mobileMocks?: string[]; hifiMocks?: string[];
-  conclusion: { summary: string; nextSteps: string[]; lessons: string[] };
+  // Core Identifiers
+  id: string; 
+  title: string; 
+  tag: string; 
+  role: string; 
+  client: string; 
+  year: string; 
+  image: string; 
+  status: ProjectStatus; 
+  
+  // Executive Overview
+  heroTitle: string; 
+  heroSubtitle: string;
+  meta: ProjectMeta; 
+  outcomeVsOutput: OutcomeData; 
+  executiveSummary: string;
+  
+  // Quantitative Metrics
+  impactTrend: TrendData[]; 
+  metricsTable: MetricRow[];
+  
+  // Qualitative Strategy
+  problemSolution: ProblemSolutionData; 
+  competitorAnalysis?: CompetitorAnalysisData; 
+  personas?: PersonaData[]; 
+  journeyMap?: { data: JourneyStep[] };
+  
+  // Quality & Engineering
+  errorAudit?: ErrorAuditData; 
+  systemArchitecture?: SystemArchitectureData; 
+  featureMatrix?: FeatureMatrixRow[]; 
+  accessibility?: AccessibilityStandard[]; 
+  graveyard?: GraveyardTomb[]; 
+  
+  // Validation & Handoff
+  testimonials?: TestimonialData[]; 
+  roadmap?: RoadmapPhase[]; 
+  styleGuide: StyleGuideSpecs; 
+  userFlow: UserFlowStep[]; 
+  
+  // Media Assets
+  hasRelatedEcosystems?: boolean; 
+  desktopMockups?: string[]; 
+  mobileMocks?: string[]; 
+  hifiMocks?: string[];
+  
+  // Wrap Up
+  conclusion: ConclusionData; 
 }
 
 // ============================================================================
@@ -543,6 +700,9 @@ const Hero = () => {
         {/* Base Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:64px_64px]" />
         
+        {/* Active System CRT Scanlines */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:100%_4px] z-10 mix-blend-overlay" />
+
         {/* Interactive Mouse Spotlight illuminating an accented grid */}
         <motion.div 
           className="absolute inset-0 opacity-40 mix-blend-screen"
@@ -562,15 +722,17 @@ const Hero = () => {
 
       <div className="w-full mx-auto px-4 md:px-8 relative z-20 flex flex-col items-center mt-10">
         
-        {/* Top HUD Metrics */}
+        {/* Top HUD Metrics - UPDATED FOR IMMEDIATE AVAILABILITY */}
         <div className="flex flex-wrap justify-center items-center gap-4 mb-8 md:mb-12">
-          <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }} className="flex items-center gap-3 px-5 py-2.5 border border-[#bef264]/40 rounded-full bg-[#bef264]/5 backdrop-blur-md shadow-[0_0_20px_rgba(190,242,100,0.1)]">
-            <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: THEME.primary, boxShadow: `0 0 10px ${THEME.primary}` }} />
-            <span className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ fontFamily: THEME.fonts.mono, color: THEME.primary }}>System Online // 10 Yrs Exp</span>
+          <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }} className="flex items-center gap-3 px-5 py-2.5 border border-[#bef264]/60 rounded-full bg-[#bef264]/10 backdrop-blur-md shadow-[0_0_20px_rgba(190,242,100,0.2)]">
+            <div className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ backgroundColor: THEME.primary, boxShadow: `0 0 12px ${THEME.primary}` }} />
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ fontFamily: THEME.fonts.mono, color: THEME.primary }}>Status: Available // 10 Yrs Exp</span>
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }} className="hidden sm:flex items-center gap-2 px-5 py-2.5 border border-white/10 bg-black/80 backdrop-blur-md rounded-full shadow-2xl">
-            <Globe className="w-3.5 h-3.5 text-white/50" />
-            <span className="text-[10px] uppercase tracking-widest font-bold text-white/50" style={{ fontFamily: THEME.fonts.mono }}>Global Async Ready</span>
+          <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400, damping: 10 }} className="hidden sm:flex items-center gap-2 px-5 py-2.5 border border-white/20 bg-black/80 backdrop-blur-md rounded-full shadow-2xl relative overflow-hidden group">
+            <Terminal className="w-3.5 h-3.5 text-white/70 group-hover:text-[#bef264] transition-colors" />
+            <span className="text-[10px] uppercase tracking-widest font-bold text-white/70 group-hover:text-white transition-colors" style={{ fontFamily: THEME.fonts.mono }}>Immediate Deployment Ready</span>
+            {/* Shimmer Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
           </motion.div>
         </div>
 
@@ -614,7 +776,7 @@ const Hero = () => {
 
         {/* Dual-Action Command Nodes */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.7 }} className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full relative z-30 px-6">
-          <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => scrollToSection(e, "#work")} className="w-full sm:w-auto rounded-none h-14 px-10 text-black hover:bg-white text-[10px] uppercase border-none hover:scale-[1.02] shadow-[0_0_40px_rgba(190,242,100,0.2)] transition-transform" style={{ backgroundColor: THEME.primary, fontFamily: THEME.fonts.mono }}>
+          <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => scrollToSection(e, "#work")} className="w-full sm:w-auto rounded-none h-14 px-10 text-black hover:bg-white text-[10px] uppercase border-none hover:scale-[1.02] shadow-[0_0_40px_rgba(190,242,100,0.3)] transition-all" style={{ backgroundColor: THEME.primary, fontFamily: THEME.fonts.mono }}>
             Examine Case Studies
           </Button>
           <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => scrollToSection(e, "#contact")} className="group flex items-center justify-center gap-3 w-full sm:w-auto h-14 px-6 text-[10px] uppercase tracking-widest font-bold text-white/50 hover:text-[#bef264] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bef264] rounded-sm" style={{ fontFamily: THEME.fonts.mono }}>
@@ -1479,7 +1641,7 @@ const CaseStudyContent = ({ project }: { project: AdvancedProject }) => {
 };
 
 // ============================================================================
-// COMPONENT: PROJECTS PORTFOLIO LIST
+// COMPONENT: PROJECTS PORTFOLIO LIST & DATA INJECTION
 // ============================================================================
 const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<AdvancedProject | null>(null);
@@ -1629,10 +1791,13 @@ const Projects = () => {
         { metric: "Reporting Efficiency", before: "Baseline", after: "+20%", change: "+20%", positive: true },
         { metric: "Supplier Onboarding", before: "22 min", after: "8 min", change: "-63%", positive: true }
       ],
+      
+      // REWRITTEN TESTIMONIALS FOR PROFESSIONAL IMPACT
       testimonials: [
-        { quote: "The unified command center eliminated the 'swivel-chair' problem entirely. Our enterprise clients are actually analyzing diversity metrics, not just copy-pasting data.", author: "Product Owner", role: "Executive Sponsor" },
-        { quote: "Ajay's ability to manage UX across a 25-person cross-functional team ensured our frontend developers had pixel-perfect React grids ready for the sprint.", author: "Delivery Manager", role: "Engineering Lead" }
+        { quote: "Ajay's extensive experience bridging product design with frontend tokenized systems is highly impressive. He is a rapid learner who seamlessly adapts to complex architectural constraints and consistently delivers on strict engineering goals.", author: "Ashish Chenana", role: "Tech Lead" },
+        { quote: "Collaborating with Ajay was a masterclass in out-of-the-box thinking. He operates with the strategic depth of a Business Analyst and the execution of an Architect. His relentless drive transformed our product's entire functional baseline.", author: "Gopi Krishna", role: "Senior Business Analyst" }
       ],
+      
       featureMatrix: [
         { feature: "Custom ESG Formula Builder", requestedBy: "Finance Analysts", status: "Optional / Phase 2", rationale: "Too much engineering overhead for MVP. Delayed to V2." },
         { feature: "1-Click SOC2 PDF Export", requestedBy: "Compliance", status: "Delivered", rationale: "Critical for end-of-year ESG compliance workflows." },
@@ -1659,20 +1824,42 @@ const Projects = () => {
           "DiversityTrax unifies the experience under a single, tokenized React SPA."
         ]
       },
+      
+      // UPGRADED B2B SAAS PERSONAS
       personas: [
         { 
           name: "Chief Procurement", role: "Executive Sponsor", goals: ["Hit 15% diverse spend", "Generate board reports"], 
           pains: [{label: "Context Switch", severity: 9}, {label: "Manual Exports", severity: 10}], 
           avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop",
           stats: [{ subject: 'ESG Lit', A: 95, fullMark: 100 }, { subject: 'Tech Savvy', A: 70, fullMark: 100 }, { subject: 'Patience', A: 30, fullMark: 100 }, { subject: 'Accuracy', A: 100, fullMark: 100 }]
+        },
+        { 
+          name: "ESG Director", role: "Risk Mitigation", goals: ["Ensure SOC 2 compliance", "Audit supplier diversity"], 
+          pains: [{label: "Data Silos", severity: 10}, {label: "Legacy UI", severity: 8}], 
+          avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=200&auto=format&fit=crop",
+          stats: [{ subject: 'ESG Lit', A: 100, fullMark: 100 }, { subject: 'Tech Savvy', A: 60, fullMark: 100 }, { subject: 'Patience', A: 50, fullMark: 100 }, { subject: 'Accuracy', A: 95, fullMark: 100 }]
+        },
+        { 
+          name: "Finance Analyst", role: "Power User", goals: ["Export reconciliation data", "Cross-reference Tier-2 spend"], 
+          pains: [{label: "System Timeouts", severity: 10}, {label: "Scroll Fatigue", severity: 9}], 
+          avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+          stats: [{ subject: 'ESG Lit', A: 60, fullMark: 100 }, { subject: 'Tech Savvy', A: 90, fullMark: 100 }, { subject: 'Patience', A: 20, fullMark: 100 }, { subject: 'Accuracy', A: 100, fullMark: 100 }]
         }
       ],
+      
       systemArchitecture: {
         client: [{name: "React Enterprise UI", type: "SPA"}, {name: "Data Grid Components", type: "AG Grid"}],
         gateway: [{name: "GraphQL Federation", type: "API"}, {name: "Auth Gateway", type: "OAuth"}],
         backend: [{name: "Supplier Data DBs", type: "On-Prem"}, {name: "AWS Data Lake", type: "Cloud"}]
       },
-      conclusion: { summary: "Transformed a decaying legacy workflow into a modern, resilient enterprise asset for ESG tracking.", nextSteps: ["Scale Design System."], lessons: ["Fragmented data is the real enemy."] },
+      
+      // INJECTED ACHIEVEMENT AND CASHTRAX LINK INTO CONCLUSION 
+      conclusion: { 
+        summary: "ACHIEVEMENT: From initial discovery to final deployment, this architectural overhaul required relentless execution. The ultimate validation was successfully onboarding a Tier-1 enterprise client and seamlessly transitioning their entire workflow from V1 to V2.\n\nECOSYSTEM EXPANSION: We are currently applying this foundational architecture and research methodology to a parallel ecosystem, Cashtrax (https://www.cashtrax.net/).", 
+        nextSteps: ["Scale architecture to Cashtrax."], 
+        lessons: ["Fragmented data is the real enemy."] 
+      },
+      
       styleGuide: { 
         typography: { primary: "Outfit", secondary: "Inter", technical: "JetBrains Mono" }, 
         description: "High-density enterprise interface designed for C-Suite analytics.",
@@ -1765,7 +1952,7 @@ const Projects = () => {
     }
   ];
 
-return (
+  return (
     <section id="work" className="py-24 md:py-32 scroll-mt-20 relative bg-[#0a0a0a]">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-24 relative">
         
@@ -1876,7 +2063,7 @@ return (
                     alt={`Cover for ${selectedProject.title}`} 
                     className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity" 
                     crossOrigin="anonymous" 
-                    loading="eager" // Eager load the modal header so it doesn't pop in late
+                    loading="eager" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
                   
@@ -1912,7 +2099,6 @@ return (
 
       </div>
     </section>
-
   );
 };
 
@@ -2102,7 +2288,7 @@ const About = () => {
             <div className="absolute left-1/2 -bottom-8 w-[1px] h-4 bg-white/30" />
 
             <div className="aspect-[4/5] overflow-hidden border border-white/20 relative rounded-xl shadow-2xl z-10 bg-black">
-              <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1000&auto=format&fit=crop" alt="System Architecture Representation" className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" crossOrigin="anonymous" />
+              <img src="/ajay_kumar.png?q=80&w=1000&auto=format&fit=crop" alt="System Architecture Representation" className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" crossOrigin="anonymous" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
             </div>
 
