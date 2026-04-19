@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@100..900&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Enforcing Global Font Architecture */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Outfit", ui-sans-serif, system-ui, sans-serif; /* Overrides default serif to maintain modern geometric aesthetic */
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Enterprise Deep Black & Neon Lime Palette */
+  --color-background: #000000;
+  --color-foreground: #ffffff;
+  
+  --color-card: #0a0a0a;
+  --color-card-foreground: #ffffff;
+  
+  --color-popover: #0a0a0a;
+  --color-popover-foreground: #ffffff;
+  
+  --color-primary: #bef264;
+  --color-primary-foreground: #000000;
+  
+  --color-secondary: #1a1a1a;
+  --color-secondary-foreground: #ffffff;
+  
+  --color-muted: #a3a3a3;
+  --color-muted-foreground: #5e5d5d;
+  
+  --color-accent: #bef264;
+  --color-accent-foreground: #000000;
+  
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-input: rgba(255, 255, 255, 0.1);
+  --color-ring: #bef264;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  /* * THEME-SYNCED CUSTOM CURSOR (NEON LIME)
+   * Applied only to devices with a precise pointing device (mouse).
+   * Generates a scalable SVG directly in CSS to eliminate JS render blocking.
+   */
+  @media (pointer: fine) {
+    body {
+      /* Default state: A precision 3px solid primary dot */
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='3' fill='%23bef264'/%3E%3C/svg%3E") 12 12, auto;
+    }
+    
+    a, button, [role="button"], input, textarea, select, .cursor-pointer {
+      /* Hover state: Expands to a hollow, illuminated primary ring */
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='10' fill='rgba(190,242,100,0.1)' stroke='%23bef264' stroke-width='1.5'/%3E%3C/svg%3E") 16 16, pointer !important;
+    }
+  }
+
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary selection:text-primary-foreground;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+  }
+  
+  /* Removed global italic to respect geometric sans-serif integrity */
+  h1, h2, h3, h4 {
+    @apply font-serif font-normal tracking-tight;
+  }
+
+  /* * ENTERPRISE SCROLLBAR 
+   * Thinned out to 4px and rounded. Avoids the "default browser" blocky look.
+   */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-primary/50 transition-colors;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply py-20 md:py-48 px-6 md:px-24;
+  }
+  
+  .editorial-label {
+    @apply text-[10px] uppercase tracking-[0.5em] font-bold text-primary mb-6 md:mb-8 block font-sans;
+  }
+  
+  .editorial-border {
+    @apply border-border;
+  }
+  
+  .editorial-grid-item {
+    @apply border-b border-border py-12 flex items-center justify-between transition-colors duration-500;
+  }
+  
+  .editorial-grid-item:first-child {
+    @apply border-t border-border;
+  }
+  
+  .glass {
+    @apply bg-background/80 backdrop-blur-2xl border-b border-border;
+  }
+
+  .bento-grid {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-6;
+  }
+
+  .bento-card {
+    @apply bg-card border border-border p-8 md:p-12 rounded-none flex flex-col justify-between hover:border-primary/50 transition-all duration-700 ease-out;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
