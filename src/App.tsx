@@ -22,6 +22,8 @@ import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis,
   ScatterChart, Scatter, ReferenceLine, ReferenceArea, BarChart, Bar, Cell
 } from "recharts";
+import { Analytics } from "@vercel/analytics/react";
+
 
 // ============================================================================
 // CORE SYSTEM: STRICTLY TYPED UI COMPONENTS 
@@ -2488,6 +2490,8 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* INJECTED VERCEL TELEMETRY */}
+      <Analytics />
     </div>
   );
 }
