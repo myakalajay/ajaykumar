@@ -14,7 +14,7 @@ import {
   ArrowUpRight, X, Terminal, FileText, Layout, AlertCircle, 
   Network, Database, Target, Activity, 
   Code, TrendingUp, ArrowRight, ArrowLeft, Briefcase,
-  Quote, ListChecks, ShieldCheck, Milestone, ExternalLink, AlertTriangle, Bug,
+  Quote, ListChecks, ShieldCheck, Milestone, ExternalLink, AlertTriangle, Bug, Smartphone,
   Megaphone, ShoppingBag, Menu
 } from "lucide-react";
 import { 
@@ -797,7 +797,7 @@ const Hero = () => {
 };
 
 // ============================================================================
-// COMPONENT: HORIZONTAL TIMELINE
+// COMPONENT: HORIZONTAL TIMELINE (Ascension Matrix)
 // ============================================================================
 const Experience = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -809,13 +809,64 @@ const Experience = () => {
     }
   };
 
+  // Upgraded Data Array with Phase Logic
   const experiences = [
-    { role: "Lead UX Consultant", context: "B2B2C Mortgage Technology", company: "Homeloc Solutions LLC", dates: "Mar 2024 - Mar 2026", duration: "2 Yrs", desc: "Defined end-to-end UX strategy for a complex digital mortgage platform. Engineered a progressive disclosure pipeline grounded in SOC 2 compliance, reducing projected borrower drop-off by 18%." },
-    { role: "Senior UI/UX Designer", context: "FinTech & Enterprise Analytics", company: "Computech Business Solutions", dates: "Mar 2023 - Mar 2024", duration: "1 Yr 1 Mo", desc: "Architected DiversityTrax, an enterprise ESG platform. Unified fragmented legacy DBs into a single React SPA, driving a 20% efficiency lift in supplier diversity reporting." },
-    { role: "Senior UI/UX Designer", context: "Public Financial & Governance", company: "Visual IT Solutions", dates: "Sep 2022 - Mar 2023", duration: "7 Mos", desc: "Scaled public governance platforms. Developed high-traffic, WCAG-accessible UX patterns for complex administrative workflows, mitigating compliance risks." },
-    { role: "Senior UI/UX Designer", context: "Workflow Automation Platforms", company: "Gaian Solutions", dates: "Oct 2021 - Aug 2022", duration: "11 Mos", desc: "Architected self-serve, low-code workflow builders and monetization analytics dashboards, eliminating enterprise reliance on engineering support." },
-    { role: "UI/UX Designer", context: "B2C Consumer Digital Platform", company: "Way2news Interactive", dates: "May 2018 - Jun 2021", duration: "3 Yrs 2 Mos", desc: "Drove 30% DAU growth via vernacular content discovery overhauls. Designed native ad features that scaled revenue without cannibalizing retention." },
-    { role: "UI/UX Designer", context: "Recruitment & Talent System", company: "Nitya Software Solutions", dates: "Jan 2016 - May 2018", duration: "2 Yrs 5 Mos", desc: "Optimized recruiter workflows by architecting a scalable job portal. Decreased user friction by entirely rebuilding search, filtering, and profile management." }
+    { 
+      phase: "Phase III: Enterprise Architecture", 
+      role: "Lead UX Consultant", 
+      context: "B2B2C Mortgage Technology", 
+      company: "Homeloc Solutions LLC", 
+      dates: "Mar 2024 - Mar 2026", 
+      duration: "2 Yrs", 
+      desc: "Defined end-to-end UX strategy for a complex digital mortgage platform. Engineered a progressive disclosure pipeline grounded in SOC 2 compliance, reducing projected borrower drop-off by 18%.",
+      isRecent: true
+    },
+    { 
+      phase: "Phase III: Enterprise Architecture", 
+      role: "Senior UI/UX Designer", 
+      context: "FinTech & Enterprise Analytics", 
+      company: "Computech Business Solutions", 
+      dates: "Mar 2023 - Mar 2024", 
+      duration: "1 Yr 1 Mo", 
+      desc: "Architected DiversityTrax, an enterprise ESG platform. Unified fragmented legacy DBs into a single React SPA, driving a 20% efficiency lift in supplier diversity reporting.",
+      isRecent: true
+    },
+    { 
+      phase: "Phase II: Scale & Governance", 
+      role: "Senior UI/UX Designer", 
+      context: "Public Financial & Governance", 
+      company: "Visual IT Solutions", 
+      dates: "Sep 2022 - Mar 2023", 
+      duration: "7 Mos", 
+      desc: "Scaled public governance platforms. Developed high-traffic, WCAG-accessible UX patterns for complex administrative workflows, mitigating compliance risks." 
+    },
+    { 
+      phase: "Phase II: Scale & Governance", 
+      role: "Senior UI/UX Designer", 
+      context: "Workflow Automation Platforms", 
+      company: "Gaian Solutions", 
+      dates: "Oct 2021 - Aug 2022", 
+      duration: "11 Mos", 
+      desc: "Architected self-serve, low-code workflow builders and monetization analytics dashboards, eliminating enterprise reliance on engineering support." 
+    },
+    { 
+      phase: "Phase I: Foundation", 
+      role: "UI/UX Designer", 
+      context: "B2C Consumer Digital Platform", 
+      company: "Way2news Interactive", 
+      dates: "May 2018 - Jun 2021", 
+      duration: "3 Yrs 2 Mos", 
+      desc: "Drove 30% DAU growth via vernacular content discovery overhauls. Designed native ad features that scaled revenue without cannibalizing retention." 
+    },
+    { 
+      phase: "Phase I: Foundation", 
+      role: "UI/UX Designer", 
+      context: "Recruitment & Talent System", 
+      company: "Nitya Software Solutions", 
+      dates: "Jan 2016 - May 2018", 
+      duration: "2 Yrs 5 Mos", 
+      desc: "Optimized recruiter workflows by architecting a scalable job portal. Decreased user friction by entirely rebuilding search, filtering, and profile management." 
+    }
   ];
 
   return (
@@ -847,7 +898,9 @@ const Experience = () => {
       <div className="w-full overflow-x-auto custom-scrollbar snap-x snap-mandatory pb-12 px-6 md:px-12 xl:px-24 relative z-0" ref={scrollRef}>
         <div className="flex gap-6 md:gap-8 w-max min-w-full items-stretch pt-4">
           {experiences.map((exp, i) => (
-            <motion.div key={i} initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="w-[300px] md:w-[400px] snap-center flex-shrink-0 bg-[#0a0a0a] border border-white/10 rounded-xl p-8 relative group hover:border-[#bef264]/50 transition-colors duration-300 flex flex-col justify-between shadow-2xl">
+            <motion.div key={i} initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} 
+              className={`w-[300px] md:w-[400px] snap-center flex-shrink-0 bg-[#0a0a0a] border border-white/10 rounded-xl p-8 relative group hover:border-[#bef264]/50 transition-colors duration-300 flex flex-col justify-between shadow-2xl ${exp.isRecent ? 'bg-gradient-to-br from-[#111111] to-[#0a0a0a] border-white/20' : ''}`}
+            >
               <div className="absolute top-0 left-8 w-12 h-[2px] bg-[#bef264] opacity-0 group-hover:opacity-100 transition-opacity" />
               <div>
                 <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
@@ -857,6 +910,12 @@ const Experience = () => {
                   </div>
                   <span className="text-[10px] font-bold text-white/20 font-mono">0{i+1}</span>
                 </div>
+                
+                {/* INJECTED PHASE TAG */}
+                <div className="mb-4 inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-[9px] uppercase tracking-widest text-white/60 font-mono group-hover:text-white/90 group-hover:bg-white/10 transition-colors">
+                  {exp.phase}
+                </div>
+
                 <h3 className="text-xl md:text-2xl font-bold text-white mb-1 leading-tight">{exp.role}</h3>
                 <p className="text-[10px] uppercase tracking-widest font-bold text-white/40 mb-5">{exp.context}</p>
                 <h4 className="text-sm font-bold mb-6 text-white/70 flex items-center gap-2"><Briefcase className="w-4 h-4 opacity-50" /> {exp.company}</h4>
@@ -1661,7 +1720,7 @@ const Projects = () => {
       client: "Homeloc Solutions LLC",
       year: "Mar 2024 — Mar 2026",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1920&auto=format&fit=crop", 
-      status: "Production Architecture",
+      status: "Deployed & Handed Off",
       heroTitle: "Scaling Mortgage Efficiency",
       heroSubtitle: "Zero-to-One Ecosystem",
       
@@ -1750,12 +1809,21 @@ const Projects = () => {
         gateway: [{name: "PII Encryption Node", type: "Azure"}, {name: "Rate Aggregator", type: "API REST"}],
         backend: [{name: "Lender CRM Sync", type: "Webhooks"}, {name: "SOC 2 Logging", type: "Cosmos DB"}]
       },
+      
+      // UPGRADED ROADMAP REFLECTING HANDOFF
       roadmap: [
-        { phase: "Q1", title: "Design System & Discovery Core", desc: "Establishing tokens and the unauthenticated rate exploration engine.", current: false },
-        { phase: "Q2", title: "Progressive Auth & Staging", desc: "Deploying the SOC 2 compliant PII collection pipeline.", current: true },
-        { phase: "Q3", title: "Lender CRM Integrations", desc: "Bridging matched leads directly into enterprise backends via Plaid.", current: false }
+        { phase: "Q1", title: "Design System & Discovery Core", desc: "Established tokens and the unauthenticated rate exploration engine.", current: false },
+        { phase: "Q2", title: "Progressive Auth & Staging", desc: "Deployed the SOC 2 compliant PII collection pipeline to production.", current: false },
+        { phase: "Q3", title: "Architecture Handoff", desc: "Successfully transitioned the complete React token pipeline to the internal engineering team for post-launch scaling.", current: true }
       ],
-      conclusion: { summary: "Engineered an ecosystem that filters high-intent leads without resorting to forced data harvesting. The architecture proves that transparency is a stronger conversion tool than friction.", nextSteps: ["Scale Design System."], lessons: ["Transparency is a stronger conversion tool than forced funnels."] },
+      
+      // UPGRADED CONCLUSION REFLECTING HANDOFF
+      conclusion: { 
+        summary: "Successfully shipped the V1 architecture to production and formally transitioned the tokenized design system to the internal frontend team. Engineered an ecosystem that filters high-intent leads without resorting to forced data harvesting, proving that transparency is a stronger conversion tool than friction.", 
+        nextSteps: ["Internal engineering scale."], 
+        lessons: ["Transparency is a stronger conversion tool than forced funnels."] 
+      },
+      
       styleGuide: { 
         typography: { primary: "Outfit", secondary: "Inter", technical: "JetBrains Mono" }, 
         description: "Clinical, high-trust aesthetic prioritizing data legibility and security.",
@@ -1792,7 +1860,6 @@ const Projects = () => {
         { metric: "Supplier Onboarding", before: "22 min", after: "8 min", change: "-63%", positive: true }
       ],
       
-      // REWRITTEN TESTIMONIALS FOR PROFESSIONAL IMPACT
       testimonials: [
         { quote: "Ajay's extensive experience bridging product design with frontend tokenized systems is highly impressive. He is a rapid learner who seamlessly adapts to complex architectural constraints and consistently delivers on strict engineering goals.", author: "Ashish Chenana", role: "Tech Lead" },
         { quote: "Collaborating with Ajay was a masterclass in out-of-the-box thinking. He operates with the strategic depth of a Business Analyst and the execution of an Architect. His relentless drive transformed our product's entire functional baseline.", author: "Gopi Krishna", role: "Senior Business Analyst" }
@@ -1825,7 +1892,6 @@ const Projects = () => {
         ]
       },
       
-      // UPGRADED B2B SAAS PERSONAS
       personas: [
         { 
           name: "Chief Procurement", role: "Executive Sponsor", goals: ["Hit 15% diverse spend", "Generate board reports"], 
@@ -1853,7 +1919,6 @@ const Projects = () => {
         backend: [{name: "Supplier Data DBs", type: "On-Prem"}, {name: "AWS Data Lake", type: "Cloud"}]
       },
       
-      // INJECTED ACHIEVEMENT AND CASHTRAX LINK INTO CONCLUSION 
       conclusion: { 
         summary: "ACHIEVEMENT: From initial discovery to final deployment, this architectural overhaul required relentless execution. The ultimate validation was successfully onboarding a Tier-1 enterprise client and seamlessly transitioning their entire workflow from V1 to V2.\n\nECOSYSTEM EXPANSION: We are currently applying this foundational architecture and research methodology to a parallel ecosystem, Cashtrax (https://www.cashtrax.net/).", 
         nextSteps: ["Scale architecture to Cashtrax."], 
@@ -2307,10 +2372,19 @@ const About = () => {
 };
 
 // ============================================================================
-// COMPONENT: CONTACT 
+// COMPONENT: CONTACT (Functional Comm Link)
 // ============================================================================
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { e.preventDefault(); };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => { 
+    e.preventDefault(); 
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+    
+    // Fallback native routing since there is no backend API connected
+    window.location.href = `mailto:ajaykumarmyakala@outlook.com?subject=Enterprise Portfolio Inquiry: ${name}&body=${message}%0D%0A%0D%0AReply to: ${email}`;
+  };
 
   return (
     <section id="contact" className="py-24 md:py-32 scroll-mt-20 px-6 md:px-12 xl:px-24 relative bg-[#000000]">
@@ -2323,11 +2397,20 @@ const Contact = () => {
             LET'S <br /><span className="font-bold">CONNECT.</span>
           </h2>
           <p className="text-base md:text-lg font-light leading-relaxed max-w-md" style={{ color: THEME.muted, fontFamily: THEME.fonts.body }}>
-            Open to discussing strategic design challenges and high-impact enterprise opportunities globally.
+            Open to discussing strategic design challenges and high-impact enterprise opportunities globally. Available for immediate deployment.
           </p>
           <div className="space-y-6 pt-4">
+            {/* Phone Number Injection */}
+            <a href="tel:+917382328066" className="flex items-center gap-5 group cursor-pointer w-max">
+              <div className="w-12 h-12 flex items-center justify-center rounded-md transition-all bg-white/5 border border-white/10 group-hover:border-[#bef264]/50 shadow-lg">
+                <Smartphone className="w-4 h-4 text-white/70 group-hover:text-[#bef264] transition-colors" />
+              </div>
+              <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors" style={{ fontFamily: THEME.fonts.body }}>
+                +91-7382328066
+              </span>
+            </a>
             <a href="mailto:ajaykumarmyakala@outlook.com" className="flex items-center gap-5 group cursor-pointer w-max">
-              <div className="w-12 h-12 flex items-center justify-center rounded-md transition-all bg-white/5 border border-white/10 group-hover:border-[#bef264]/50">
+              <div className="w-12 h-12 flex items-center justify-center rounded-md transition-all bg-white/5 border border-white/10 group-hover:border-[#bef264]/50 shadow-lg">
                 <Mail className="w-4 h-4 text-white/70 group-hover:text-[#bef264] transition-colors" />
               </div>
               <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors" style={{ fontFamily: THEME.fonts.body }}>
@@ -2335,7 +2418,7 @@ const Contact = () => {
               </span>
             </a>
             <a href="https://www.linkedin.com/in/ajay-kumar-designer/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-5 group cursor-pointer w-max">
-              <div className="w-12 h-12 flex items-center justify-center rounded-md transition-all bg-white/5 border border-white/10 group-hover:border-[#bef264]/50">
+              <div className="w-12 h-12 flex items-center justify-center rounded-md transition-all bg-white/5 border border-white/10 group-hover:border-[#bef264]/50 shadow-lg">
                 <Linkedin className="w-4 h-4 text-white/70 group-hover:text-[#bef264] transition-colors" />
               </div>
               <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors" style={{ fontFamily: THEME.fonts.body }}>
@@ -2351,21 +2434,21 @@ const Contact = () => {
                 <label className="text-[9px] uppercase tracking-[0.15em] font-bold text-white/40 group-focus-within:text-[#bef264] transition-colors">
                   Full Name
                 </label>
-                <Input required className="w-full bg-transparent border-0 border-b border-white/10 rounded-none h-10 focus:outline-none focus:ring-0 focus:border-[#bef264] px-0 text-sm text-white transition-colors placeholder-transparent" placeholder=" " />
+                <Input name="name" required className="w-full bg-transparent border-0 border-b border-white/10 rounded-none h-10 focus:outline-none focus:ring-0 focus:border-[#bef264] px-0 text-sm text-white transition-colors placeholder-transparent" placeholder=" " />
               </div>
               <div className="space-y-2 group">
                 <label className="text-[9px] uppercase tracking-[0.15em] font-bold text-white/40 group-focus-within:text-[#bef264] transition-colors">
                   Email
                 </label>
-                <Input type="email" required className="w-full bg-transparent border-0 border-b border-white/10 rounded-none h-10 focus:outline-none focus:ring-0 focus:border-[#bef264] px-0 text-sm text-white transition-colors placeholder-transparent" placeholder=" " />
+                <Input name="email" type="email" required className="w-full bg-transparent border-0 border-b border-white/10 rounded-none h-10 focus:outline-none focus:ring-0 focus:border-[#bef264] px-0 text-sm text-white transition-colors placeholder-transparent" placeholder=" " />
               </div>
               <div className="space-y-2 group">
                 <label className="text-[9px] uppercase tracking-[0.15em] font-bold text-white/40 group-focus-within:text-[#bef264] transition-colors">
                   Message
                 </label>
-                <Textarea required className="w-full bg-transparent border-0 border-b border-white/10 rounded-none min-h-[80px] focus:outline-none focus:ring-0 focus:border-[#bef264] px-0 text-sm text-white resize-none transition-colors placeholder-transparent" placeholder=" " />
+                <Textarea name="message" required className="w-full bg-transparent border-0 border-b border-white/10 rounded-none min-h-[80px] focus:outline-none focus:ring-0 focus:border-[#bef264] px-0 text-sm text-white resize-none transition-colors placeholder-transparent" placeholder=" " />
               </div>
-              <Button type="submit" className="w-full h-14 text-black rounded-lg text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-white transition-all border-none mt-6" style={{ backgroundColor: THEME.primary }}>
+              <Button type="submit" className="w-full h-14 text-black rounded-lg text-[10px] uppercase tracking-[0.2em] font-bold hover:bg-white transition-all border-none mt-6 shadow-[0_0_20px_rgba(190,242,100,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]" style={{ backgroundColor: THEME.primary }}>
                 Transmit
               </Button>
             </form>
