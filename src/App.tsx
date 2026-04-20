@@ -819,7 +819,8 @@ const Experience = () => {
       role: "Lead UX Consultant", 
       context: "B2B2C Mortgage Technology", 
       company: "Homeloc Solutions LLP", 
-      dates: "Mar 2024 - Mar 2026", 
+      dates: "Mar 2024 - Mar 2026",
+      domain: "FinTech & SME Lending", 
       duration: "2 Yrs", 
       desc: "Defined end-to-end UX strategy for a complex digital mortgage platform. Engineered a progressive disclosure pipeline grounded in SOC 2 compliance, reducing projected borrower drop-off by 18%.",
       isRecent: true
@@ -830,7 +831,8 @@ const Experience = () => {
       context: "FinTech & Enterprise Analytics", 
       company: "Computech Business Solutions", 
       dates: "Mar 2023 - Mar 2024", 
-      duration: "1 Yr 1 Mo", 
+      duration: "1 Yr 1 Mo",
+      domain: "B2B SaaS & Procurement", 
       desc: "Architected DiversityTrax, an enterprise ESG platform. Unified fragmented legacy DBs into a single React SPA, driving a 20% efficiency lift in supplier diversity reporting.",
       isRecent: true
     },
@@ -848,7 +850,8 @@ const Experience = () => {
       role: "Senior UI/UX Designer", 
       context: "Workflow Automation Platforms", 
       company: "Gaian Solutions", 
-      dates: "Oct 2021 - Aug 2022", 
+      dates: "Oct 2021 - Aug 2022",
+      domain: "Workflow Automation & Low-Code", 
       duration: "11 Mos", 
       desc: "Architected self-serve, low-code workflow builders and monetization analytics dashboards, eliminating enterprise reliance on engineering support." 
     },
@@ -859,6 +862,7 @@ const Experience = () => {
       company: "Way2news Interactive", 
       dates: "May 2018 - Jun 2021", 
       duration: "3 Yrs 2 Mos", 
+      domain: "High-Traffic Algorithmic Consumer",
       desc: "Drove 30% DAU growth via vernacular content discovery overhauls. Designed native ad features that scaled revenue without cannibalizing retention." 
     },
     { 
@@ -2179,29 +2183,29 @@ const Skills = () => {
       id: "01", 
       category: "Systems Architecture", 
       icon: <Layout className="w-5 h-5 relative z-10" />, 
-      description: "Architecting resilient, zero-to-one enterprise ecosystems and aligning user experience with macro-business objectives.", 
-      items: ["Ecosystem Design", "GTM Strategy", "Dual-Track Agile"] 
+      description: "Architecting resilient, zero-to-one enterprise ecosystems, integrating AI-driven workflows, and aligning UX with macro-business objectives.", 
+      items: ["Ecosystem Design", "Algorithmic & AI UX", "Progressive Disclosure"] 
     },
     { 
       id: "02", 
-      category: "Enterprise B2B SaaS", 
+      category: "Enterprise Domains", 
       icon: <Database className="w-5 h-5 relative z-10" />, 
-      description: "Synthesizing high-density data matrices into intuitive, scalable enterprise command centers.", 
-      items: ["B2B Portals", "FinTech Dashboards", "Data Storytelling"] 
+      description: "Synthesizing high-density data matrices into intuitive, scalable command centers across complex, regulated sectors.", 
+      items: ["FinTech & SME Banking", "HR Tech & Procurement", "B2B SaaS Portals"] 
     },
     { 
       id: "03", 
-      category: "DesignOps & Tooling", 
+      category: "Enterprise Design Systems", 
       icon: <Code className="w-5 h-5 relative z-10" />, 
-      description: "Structuring strict design tokens to eliminate handoff friction and accelerate React CI/CD development pipelines.", 
-      items: ["React Integration", "Tokenization", "Storybook Specs"] 
+      description: "Structuring strict design tokens and UI frameworks to eliminate handoff friction and ensure pixel-perfect brand translation.", 
+      items: ["Frameworks (SLDS, MUI)", "Design Tokens", "Brand-to-UI Translation"] 
     },
     { 
       id: "04", 
       category: "Omnichannel Growth", 
       icon: <Target className="w-5 h-5 relative z-10" />, 
-      description: "Scaling conversion pipelines and brand presence through robust CMS and cross-platform marketing architectures.", 
-      items: ["CMS Architecture", "Vernacular Scaling", "Conversion CRO"] 
+      description: "Scaling conversion pipelines and self-serve environments through robust CMS and workflow automation architectures.", 
+      items: ["CMS Architecture", "Workflow Automation", "High-Traffic Consumer"] 
     },
     { 
       id: "05", 
@@ -2214,8 +2218,8 @@ const Skills = () => {
       id: "06", 
       category: "Strategic Leadership", 
       icon: <Network className="w-5 h-5 relative z-10" />, 
-      description: "Driving cross-functional alignment between engineering, product, and C-suite stakeholders to secure UX ROI.", 
-      items: ["Stakeholder Alignment", "UX Mentorship", "ROI Modeling"] 
+      description: "Driving cross-functional alignment within Agile squads, governing offshore engineering teams, and securing UX ROI.", 
+      items: ["Agile Squad Delivery", "Offshore Governance", "Stakeholder Alignment"] 
     }
   ];
 
