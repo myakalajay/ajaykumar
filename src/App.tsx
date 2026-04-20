@@ -536,7 +536,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [time, setTime] = useState("");
 
-  // Live System Clock calculation (60fps cycle avoided by 1000ms interval for performance)
+  // Live System Clock calculation
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -611,8 +611,9 @@ const Navbar = () => {
 
           {/* Desktop Controls */}
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: CUSTOM_EASE }} className="hidden lg:flex items-center gap-6">
+            
             <a href="/Ajay_Kumar_Myakala_Product_Designer.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold transition-colors hover:text-[#bef264] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bef264] rounded-sm py-1" style={{ color: THEME.muted, fontFamily: THEME.fonts.body }}>
-              <FileText className="w-4 h-4" /> Resumé
+              <FileText className="w-4 h-4" /> Resume
             </a>
             <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => scrollToSection(e, "#contact")} className="rounded-none px-6 h-10 text-[10px] uppercase text-black border-none hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(190,242,100,0.4)] relative overflow-hidden group" style={{ backgroundColor: THEME.primary, fontFamily: THEME.fonts.body }}>
               <span className="relative z-10 flex items-center gap-2">Initialize Comm <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" /></span>
@@ -815,7 +816,7 @@ const Experience = () => {
       phase: "Phase III: Enterprise Architecture", 
       role: "Lead UX Consultant", 
       context: "B2B2C Mortgage Technology", 
-      company: "Homeloc Solutions LLC", 
+      company: "Homeloc Solutions LLP", 
       dates: "Mar 2024 - Mar 2026", 
       duration: "2 Yrs", 
       desc: "Defined end-to-end UX strategy for a complex digital mortgage platform. Engineered a progressive disclosure pipeline grounded in SOC 2 compliance, reducing projected borrower drop-off by 18%.",
