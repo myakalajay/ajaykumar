@@ -1718,7 +1718,7 @@ const Projects = () => {
       title: "HomeRatesYard",
       tag: "FinTech / Mortgage Tech",
       role: "Senior Product Designer",
-      client: "Homeloc Solutions LLC",
+      client: "Homeloc Solutions LLP",
       year: "Mar 2024 — Mar 2026",
       image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1920&auto=format&fit=crop", 
       status: "Deployed & Handed Off",
