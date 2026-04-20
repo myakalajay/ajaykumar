@@ -23,7 +23,7 @@ import {
   ScatterChart, Scatter, ReferenceLine, ReferenceArea, BarChart, Bar, Cell
 } from "recharts";
 import { Analytics } from "@vercel/analytics/react";
-
+import { track } from '@vercel/analytics';
 
 // ============================================================================
 // CORE SYSTEM: STRICTLY TYPED UI COMPONENTS 
@@ -614,9 +614,18 @@ const Navbar = () => {
           {/* Desktop Controls */}
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: CUSTOM_EASE }} className="hidden lg:flex items-center gap-6">
             
-            <a href="/Ajay_Kumar_Myakala_Designer.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold transition-colors hover:text-[#bef264] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bef264] rounded-sm py-1" style={{ color: THEME.muted, fontFamily: THEME.fonts.body }}>
+            {/* VERCEL TRACKING INJECTED HERE */}
+            <a 
+              href="/Ajay_Kumar_Myakala_Designer.pdf" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onClick={() => track('Downloaded_Desktop_Resume')}
+              className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold transition-colors hover:text-[#bef264] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#bef264] rounded-sm py-1" 
+              style={{ color: THEME.muted, fontFamily: THEME.fonts.body }}
+            >
               <FileText className="w-4 h-4" /> Resume
             </a>
+
             <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => scrollToSection(e, "#contact")} className="rounded-none px-6 h-10 text-[10px] uppercase text-black border-none hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(190,242,100,0.4)] relative overflow-hidden group" style={{ backgroundColor: THEME.primary, fontFamily: THEME.fonts.body }}>
               <span className="relative z-10 flex items-center gap-2">Initialize Comm <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" /></span>
             </Button>
@@ -647,9 +656,18 @@ const Navbar = () => {
                   );
                 })}
                 <div className="flex flex-col gap-6 pt-4">
-                  <a href="/Ajay_Kumar_Myakala_Product_Designer.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-white/70 hover:text-[#bef264] transition-colors">
+                  
+                  {/* VERCEL TRACKING INJECTED HERE */}
+                  <a 
+                    href="/Ajay_Kumar_Myakala_Product_Designer.pdf" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    onClick={() => track('Downloaded_Mobile_Resume')}
+                    className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-white/70 hover:text-[#bef264] transition-colors"
+                  >
                     <FileText className="w-4 h-4" /> Download Resumé
                   </a>
+
                   <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => { scrollToSection(e, "#contact"); setMobileMenuOpen(false); }} className="w-full h-12 text-[10px] uppercase text-black bg-[#bef264]">
                     Initialize Comm
                   </Button>
