@@ -13,7 +13,7 @@ import {
   Globe, Layers, CheckCircle2, Mail, Linkedin, 
   ArrowUpRight, X, Terminal, FileText, Layout, AlertCircle, Search,
   Network, Database, Target, Activity, 
-  Code, TrendingUp, ArrowRight, ArrowLeft, Briefcase,
+  Code, TrendingUp, ArrowRight, ArrowLeft, Briefcase, 
   Quote, ListChecks, ShieldCheck, Milestone, ExternalLink, AlertTriangle, Bug, Smartphone,
   Megaphone, ShoppingBag, Menu, MapPin
 } from "lucide-react";
