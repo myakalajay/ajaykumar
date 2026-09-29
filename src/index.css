@@ -429,9 +429,16 @@ section { padding: var(--s16) var(--s6); position: relative; }
 /* case page */
 .case-fs { position: fixed; inset: 0; z-index: 200; background: var(--bg); overflow-y: auto; overscroll-behavior: contain; }
 .case-bar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: var(--s2); padding: 12px var(--s4); background: rgba(244, 241, 236, 0.92); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+.case-count-mobile { display: none; }
 .case-back { display: inline-flex; align-items: center; gap: 8px; font-weight: 650; font-size: 14px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-2); background: #fff; transition: border-color 0.2s; }
 .case-back:hover { border-color: var(--ink); }
-.case-bar-title { flex: 1; text-align: center; font-size: 13px; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.case-bar-title { flex: 1; text-align: center; font-size: 13px; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-flex; align-items: center; justify-content: center; gap: 14px; }
+.case-count { display: inline-flex; align-items: center; gap: 8px; flex: none; }
+.case-count b { display: inline-block; min-width: 20px; text-align: right; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--ink); }
+.case-count i { font-style: normal; font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.case-dots { display: inline-flex; gap: 5px; align-items: center; }
+.case-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line-2); transition: background 0.3s, transform 0.3s; }
+.case-dots i.on { background: var(--accent-2); transform: scale(1.35); }
 .case-kbd { display: inline-flex; gap: 4px; align-items: center; color: var(--muted); font-family: var(--mono); font-size: 10px; }
 .case-kbd kbd { padding: 2px 6px; border-radius: 5px; border: 1px solid var(--line-2); border-bottom-width: 2.5px; background: #fff; }
 .case-bar-actions { display: flex; gap: var(--s1); align-items: center; }
@@ -561,6 +568,8 @@ section { padding: var(--s16) var(--s6); position: relative; }
   .menu-btn { display: grid; margin-left: auto; }
   .header-nav { display: none; }
   .case-kbd { display: none; }
+  .case-count { display: none; }
+  .case-count-mobile { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--ink); }
   .sticker { left: 0; max-width: 210px; font-size: 15px; }
   .sticker b { font-size: 26px; }
   .contact-big-arrow { display: none; }

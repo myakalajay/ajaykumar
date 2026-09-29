@@ -591,14 +591,14 @@ function Hero() {
 
 /* ----------------------------------- work ----------------------------------- */
 
-function BrowserFrame({ image, alt, accent }: { image: string; alt: string; accent: string }) {
+function BrowserFrame({ image, alt, accent, eager = false }: { image: string; alt: string; accent: string; eager?: boolean }) {
   return (
     <div className="browser-frame">
       <div className="frame-bar">
         <span className="dot" style={{ background: accent }}/><span className="dot"/><span className="dot"/>
         <span className="frame-url">{alt}</span>
       </div>
-      <div className="frame-body"><img src={image} alt={`${alt} product visual`} loading="lazy"/></div>
+      <div className="frame-body"><img src={image} alt={`${alt} product visual`} loading={eager ? "eager" : "lazy"} decoding={eager ? "sync" : "async"}/></div>
     </div>
   );
 }
@@ -894,6 +894,10 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
     openerRef.current?.focus?.();
   }, []);
   useEffect(() => { document.querySelector(".case-fs")?.scrollTo({ top: 0 }); }, [project.id]);
+  // Preload neighbour cases' hero images so arrow-key transitions never flash.
+  useEffect(() => {
+    [prev.image, next.image].forEach(src => { const img = new Image(); img.src = src; });
+  }, [prev.image, next.image]);
   return (
     <motion.div
       className="case-fs"
@@ -909,9 +913,32 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
       <div className="case-bar">
         <button className="case-back" onClick={onClose}><ArrowLeft size={16}/> All work</button>
         <span className="case-bar-title">{project.title}</span>
+        <span className="case-count" aria-label={`Case ${idx + 1} of ${projects.length}`} role="status">
+          <AnimatePresence initial={false} mode="popLayout">
+            <motion.b
+              key={project.id}
+              initial={reduce ? false : { y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={reduce ? { opacity: 0 } : { y: -10, opacity: 0 }}
+              transition={{ duration: 0.3, ease: EASE }}
+            >{String(idx + 1).padStart(2, "0")}</motion.b>
+          </AnimatePresence>
+          <i>/ {String(projects.length).padStart(2, "0")}</i>
+          <span className="case-dots" aria-hidden="true">
+            {projects.map(p => (
+              <motion.i
+                key={p.id}
+                className={p.id === project.id ? "on" : ""}
+                layout
+                transition={{ duration: 0.3, ease: EASE }}
+              />
+            ))}
+          </span>
+        </span>
         <div className="case-bar-actions">
           {project.link && <a className="btn btn-ghost btn-sm" href={project.link} target="_blank" rel="noreferrer">Live product <ExternalLink size={13}/></a>}
           <span className="case-kbd" aria-hidden="true"><kbd>←</kbd><kbd>→</kbd> cases</span>
+          <span className="case-count-mobile" aria-hidden="true">{String(idx + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}</span>
           <button ref={closeRef} className="case-close" onClick={onClose} aria-label="Close case study"><X size={17}/></button>
         </div>
       </div>
@@ -928,7 +955,7 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
           </div>
         </header>
 
-        <div className="case-figure"><BrowserFrame image={project.image} alt={project.title} accent={project.accent}/></div>
+        <div className="case-figure"><BrowserFrame image={project.image} alt={project.title} accent={project.accent} eager/></div>
 
         <section className="case-sec">
           <h2><span>01</span> The brief</h2>
