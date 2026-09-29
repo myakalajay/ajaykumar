@@ -7,7 +7,7 @@ import {
 } from "framer-motion";
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BrainCircuit, ChevronDown, Compass,
-  ExternalLink, FileText, FlaskConical, GitBranch, Layers, Linkedin, Mail,
+  ExternalLink, FileText, FlaskConical, GitBranch, Layers, Linkedin, Mail, Monitor, Smartphone,
   Menu, Network, ShieldCheck, Sparkles, Target, Users, Workflow, X, Zap,
   type LucideIcon,
 } from "lucide-react";
@@ -36,6 +36,7 @@ interface Project {
   process: [string, string][];
   actors: string[]; journey: string[]; sentiment: number[]; pains: string[];
   wf: [WfVariant, string][];
+  hifi: [MockVariant, string][];
   maps: { map: string; mapAlt: string; title: string; desc: string; evidence: string; evidenceAlt: string }[];
   chart: Bar[];
   evidence: { label: string; value: string; note: string; kind: "measured" | "scope" | "objective" | "gap" }[];
@@ -63,6 +64,7 @@ const projects: Project[] = [
     sentiment: [70, 55, 62, 40, 48, 78],
     pains: ["Too many rate options", "Jargon-heavy forms", "Side-by-side unclear", "Document upload anxiety", "Black-box status", "No servicing entry"],
     wf: [["web-hero", "Rate discovery — landing structure"], ["web-dash", "Borrower dashboard states"]],
+    hifi: [["rates", "homeratesyard.com — rate discovery"], ["dash", "Borrower dashboard — application state"]],
     maps: [
       { map: "/concept-maps/concept-paper-pencil-clean.png", mapAlt: "Original paper and pencil ecosystem sketch for the mortgage product", title: "Paper ecosystem sketch", desc: "The original hand-drawn map: borrower intent on one side, operational decisions on the other — the frame the whole product was designed against.", evidence: "/real-work/homeratesyard-1600x900.jpg", evidenceAlt: "HomeRatesYard product surface the sketch informed" },
       { map: "/concept-maps/ecosystem-map-realistic-clean.png", mapAlt: "Lending ecosystem map with actors and dependencies", title: "Lending ecosystem map", desc: "Borrower, mortgage professional, underwriting operations and engineering as one connected system — used to find the handoffs that caused black-box status.", evidence: "/real-work/homeratesyard-1600x900.jpg", evidenceAlt: "Shipped mortgage platform surface" },
@@ -90,6 +92,7 @@ const projects: Project[] = [
     sentiment: [55, 48, 42, 38, 58, 70],
     pains: ["Lengthy registration", "Scattered data requests", "Unclear priorities", "Mismatched records", "Static reports", "No next action"],
     wf: [["web-table", "Supplier register — table patterns"], ["web-dash", "Spend visibility overview"]],
+    hifi: [["supplier", "Supplier network — performance"], ["segments", "Audience console — segment states"]] as [MockVariant, string][],
     maps: [
       { map: "/concept-maps/service-blueprint-realistic-clean.png", mapAlt: "Procurement service blueprint with frontstage and backstage lanes", title: "Procurement service blueprint", desc: "Frontstage supplier actions wired to backstage compliance and finance rules — exposed the dependencies behind scattered data requests.", evidence: "/real-work/procurement-1600x900.jpg", evidenceAlt: "Procurement platform surface in production" },
       { map: "/concept-maps/ecosystem-map-realistic-clean.png", mapAlt: "Supplier ecosystem map across procurement roles", title: "Supplier ecosystem map", desc: "Procurement lead, supplier, compliance reviewer and finance as actors in one system — the base for role-based dashboard IA.", evidence: "/real-work/procurement-1600x900.jpg", evidenceAlt: "Enterprise dashboard surface shipped" },
@@ -117,6 +120,7 @@ const projects: Project[] = [
     sentiment: [82, 74, 50, 46, 60, 66],
     pains: ["Content overload", "Weak retention hooks", "Fragmented segments", "Blind targeting", "Vanity metrics", "Unconnected revenue"],
     wf: [["mobile-feed", "Discover feed — mobile-first"], ["web-dash", "Audience segmentation console"]],
+    hifi: [["feed", "Way2News — discover feed"], ["dash", "Audience console — workflow states"]] as [MockVariant, string][],
     maps: [
       { map: "/concept-maps/journey-map-realistic-clean.png", mapAlt: "Reader journey map across discovery and retention", title: "Reader journey map", desc: "Discover → engage → retain for four language editions — kept consumer discovery separate from the operational intelligence underneath.", evidence: "/real-work/reporting-1600x900.jpg", evidenceAlt: "Reporting product evidence" },
       { map: "/concept-maps/research-loop-realistic-clean.png", mapAlt: "Audience research loop from observation to validation", title: "Audience research loop", desc: "Behavioural analytics feeding hypotheses and validation — how audience insights stayed connected to both consumer and enterprise surfaces.", evidence: "/real-work/reporting-1600x900.jpg", evidenceAlt: "Audience intelligence reporting surface" },
@@ -144,6 +148,7 @@ const projects: Project[] = [
     sentiment: [76, 68, 58, 52, 44, 72],
     pains: ["Unclear value", "Weak filters", "Missing trust cues", "Hidden costs", "Form friction", "No order clarity"],
     wf: [["mobile-checkout", "Checkout flow — mobile states"], ["web-hero", "Product landing structure"]],
+    hifi: [["shop", "Storefront — product grid"], ["checkout", "Checkout — payment state"]] as [MockVariant, string][],
     maps: [
       { map: "/concept-maps/decision-tree-realistic-clean.png", mapAlt: "Purchase decision tree with trust and recovery paths", title: "Purchase decision tree", desc: "Evaluate → trust → commit with explicit recovery at every risky step — the map that shaped checkout state coverage.", evidence: "/ecommerce-art.svg", evidenceAlt: "E-commerce experience cover" },
       { map: "/concept-maps/service-blueprint-realistic-clean.png", mapAlt: "Checkout service blueprint with payment backstage", title: "Checkout service blueprint", desc: "Cart and payment frontstage wired to fulfilment and failure backstage — where hidden costs and error states were designed, not discovered.", evidence: "/ecommerce-art.svg", evidenceAlt: "Checkout experience cover" },
@@ -332,6 +337,183 @@ function Wireframe({ variant, caption }: { variant: WfVariant; caption: string }
       </div>
       <figcaption>{caption}</figcaption>
     </figure>
+  );
+}
+
+/* --------------------------- hi-fi product mocks ---------------------------- */
+
+type MockVariant = "rates" | "dash" | "supplier" | "spend" | "feed" | "segments" | "shop" | "checkout";
+
+function MsNav({ name, accent }: { name: string; accent: string }) {
+  return (
+    <div className="ms-top">
+      <span className="ms-logo" style={{ background: accent }}/>
+      <b>{name}</b>
+      <span className="ms-links"><i/><i/><i/></span>
+      <span className="ms-av">A</span>
+    </div>
+  );
+}
+
+function MsBars({ vals, accent }: { vals: number[]; accent: string }) {
+  return <div className="ms-bars">{vals.map((h, i) => <i key={i} style={{ height: `${h}%`, background: accent, opacity: 0.35 + (i % 3) * 0.2 }}/>)}</div>;
+}
+
+function MockScreen({ v, accent }: { v: MockVariant; accent: string }) {
+  const status = <div className="ms-status"><span>9:41</span><span className="ms-sig"><i/><i/><i/></span></div>;
+  const tabs = <div className="ms-tabs"><i className="on"/><i/><i/><i/></div>;
+  switch (v) {
+    case "rates": return (
+      <div className="ms">
+        <MsNav name="HomeRatesYard" accent={accent}/>
+        <div className="ms-body">
+          <div className="ms-hero">
+            <div>
+              <b className="ms-h1">Compare today's mortgage rates</b>
+              <span className="ms-line" style={{ width: "72%" }}/>
+              <span className="ms-line" style={{ width: "48%" }}/>
+              <div className="ms-pillrow"><span className="ms-chip on">30-yr fixed</span><span className="ms-chip">15-yr</span><span className="ms-chip">ARM</span></div>
+            </div>
+            <div className="ms-cards3">
+              <div className="ms-rate hot"><small>30-Yr Fixed</small><b>6.42%</b><em>5.98% APR</em><span className="ms-btn">Get started</span></div>
+              <div className="ms-rate"><small>15-Yr Fixed</small><b>5.71%</b><em>5.32% APR</em><span className="ms-btn ghost">Compare</span></div>
+              <div className="ms-rate"><small>5/1 ARM</small><b>5.98%</b><em>6.11% APR</em><span className="ms-btn ghost">Compare</span></div>
+            </div>
+          </div>
+          <div className="ms-strip"><span>✓ No hidden fees</span><span>✓ Lock your rate in 60s</span><span>✓ Licensed lender network</span></div>
+        </div>
+      </div>
+    );
+    case "dash": return (
+      <div className="ms">
+        <div className="ms-app">
+          <div className="ms-side"><span className="ms-logo" style={{ background: accent }}/><i className="on"/><i/><i/><i/></div>
+          <div className="ms-main">
+            <div className="ms-topline"><b>Good morning, Jordan</b><span className="ms-av">J</span></div>
+            <div className="ms-kpis">
+              <div><small>Loan progress</small><b>68%</b><div className="ms-prog"><i style={{ width: "68%", background: accent }}/></div></div>
+              <div><small>Next payment</small><b>$1,842</b><em>Due in 12 days</em></div>
+              <div><small>Locked rate</small><b>6.42%</b><em>30-yr fixed</em></div>
+            </div>
+            <div className="ms-steps"><span className="done">Application</span><span className="now">Underwriting</span><span>Closing</span></div>
+            <div className="ms-docs">
+              <div className="ms-doc"><b>Income verification</b><span className="ms-tag ok">Verified</span></div>
+              <div className="ms-doc"><b>Appraisal</b><span className="ms-tag warn">In review</span></div>
+              <div className="ms-doc"><b>Title search</b><span className="ms-tag">Pending</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+    case "supplier": return (
+      <div className="ms">
+        <MsNav name="Supplier Network" accent={accent}/>
+        <div className="ms-body">
+          <div className="ms-kpis">
+            <div><small>Annual spend</small><b>$42.5K</b></div>
+            <div><small>Active suppliers</small><b>120</b></div>
+            <div><small>On-time delivery</small><b>94%</b></div>
+          </div>
+          <div className="ms-panel"><MsBars vals={[38, 55, 42, 68, 50, 74, 60, 82]} accent={accent}/></div>
+          <div className="ms-docs">
+            <div className="ms-doc"><b>Northwind Parts</b><span className="ms-tag ok">Active</span></div>
+            <div className="ms-doc"><b>Acme Services</b><span className="ms-tag ok">Active</span></div>
+            <div className="ms-doc"><b>Globex Logistics</b><span className="ms-tag warn">Review</span></div>
+          </div>
+        </div>
+      </div>
+    );
+    case "spend": return (
+      <div className="ms">
+        <MsNav name="Spend Visibility" accent={accent}/>
+        <div className="ms-body ms-split">
+          <div className="ms-donut-card">
+            <svg viewBox="0 0 42 42" className="ms-donut">
+              <circle r="15.9" cx="21" cy="21" fill="none" stroke="#eef0f4" strokeWidth="6"/>
+              <circle r="15.9" cx="21" cy="21" fill="none" stroke={accent} strokeWidth="6" strokeDasharray="55 45" strokeDashoffset="25"/>
+              <circle r="15.9" cx="21" cy="21" fill="none" stroke="#cbd5e1" strokeWidth="6" strokeDasharray="25 75" strokeDashoffset="70"/>
+            </svg>
+            <div className="ms-legend"><span><i style={{ background: accent }}/>Direct · 55%</span><span><i style={{ background: "#cbd5e1" }}/>Indirect · 25%</span><span><i style={{ background: "#e5e7eb" }}/>Other · 20%</span></div>
+          </div>
+          <div className="ms-cat">
+            <b>Top categories</b>
+            <div className="ms-catrow"><span>IT services</span><div className="ms-prog"><i style={{ width: "78%", background: accent }}/></div></div>
+            <div className="ms-catrow"><span>Logistics</span><div className="ms-prog"><i style={{ width: "62%", background: accent }}/></div></div>
+            <div className="ms-catrow"><span>Facilities</span><div className="ms-prog"><i style={{ width: "41%", background: accent }}/></div></div>
+          </div>
+        </div>
+      </div>
+    );
+    case "segments": return (
+      <div className="ms">
+        <MsNav name="AudiencePlay" accent={accent}/>
+        <div className="ms-body ms-split">
+          <div className="ms-cat">
+            <b>Filters</b>
+            <div className="ms-pillrow col"><span className="ms-chip on">Age 18–34</span><span className="ms-chip on">Telugu</span><span className="ms-chip">Sports</span><span className="ms-chip">Business</span></div>
+            <span className="ms-btn wide">Apply filters</span>
+          </div>
+          <div className="ms-cat">
+            <b>Segments</b>
+            <div className="ms-catrow"><span>Weekend readers<em>8.2M</em></span><div className="ms-prog"><i style={{ width: "88%", background: accent }}/></div></div>
+            <div className="ms-catrow"><span>Sports followers<em>5.1M</em></span><div className="ms-prog"><i style={{ width: "62%", background: accent }}/></div></div>
+            <div className="ms-catrow"><span>Regional news<em>3.7M</em></span><div className="ms-prog"><i style={{ width: "48%", background: accent }}/></div></div>
+          </div>
+        </div>
+      </div>
+    );
+    case "feed": return (
+      <div className="ms ms--phone">
+        {status}
+        <div className="ms-mhead"><span className="ms-logo" style={{ background: accent }}/><b>Today</b><span className="ms-chip on">हिंदी</span></div>
+        <div className="ms-news"><span className="ms-img"/><b>Markets steady as spending holds</b><em>Business · 2 min read</em></div>
+        <div className="ms-news"><span className="ms-img" style={{ filter: "hue-rotate(18deg)" }}/><b>City wins green transit grant</b><em>City · 3 min read</em></div>
+        {tabs}
+      </div>
+    );
+    case "shop": return (
+      <div className="ms ms--phone">
+        {status}
+        <div className="ms-mhead"><b>Shop</b><span className="ms-search"/></div>
+        <div className="ms-grid">
+          <div className="ms-prod"><span className="ms-img"/><b>Runner Pro</b><em>$129</em><small>★ 4.8</small></div>
+          <div className="ms-prod"><span className="ms-img" style={{ filter: "hue-rotate(30deg)" }}/><b>Desk Lamp</b><em>$46</em><small>★ 4.6</small></div>
+          <div className="ms-prod"><span className="ms-img" style={{ filter: "hue-rotate(-25deg)" }}/><b>Backpack</b><em>$88</em><small>★ 4.7</small></div>
+          <div className="ms-prod"><span className="ms-img" style={{ filter: "hue-rotate(60deg)" }}/><b>Earbuds</b><em>$59</em><small>★ 4.9</small></div>
+        </div>
+        {tabs}
+      </div>
+    );
+    case "checkout": return (
+      <div className="ms ms--phone">
+        {status}
+        <div className="ms-steps2"><span className="done">Cart</span><span className="now">Payment</span><span>Done</span></div>
+        <div className="ms-order">
+          <div className="ms-doc"><b>Runner Pro × 1</b><em>$129.00</em></div>
+          <div className="ms-doc"><b>Desk Lamp × 1</b><em>$46.00</em></div>
+          <div className="ms-doc total"><b>Total</b><em>$175.00</em></div>
+        </div>
+        <div className="ms-field">Card number ···· 4242</div>
+        <div className="ms-fieldrow"><div className="ms-field">12 / 28</div><div className="ms-field">CVC</div></div>
+        <div className="ms-paybtn" style={{ background: accent }}>Pay $175.00</div>
+      </div>
+    );
+  }
+}
+
+function PhoneFrame({ children }: { children: ReactNode }) {
+  return <div className="pf"><span className="pf-notch"/><div className="pf-screen">{children}</div></div>;
+}
+
+function DesktopMock({ v, cap, accent }: { v: MockVariant; cap: string; accent: string }) {
+  return (
+    <div className="browser-frame">
+      <div className="frame-bar">
+        <span className="dot" style={{ background: accent }}/><span className="dot"/><span className="dot"/>
+        <span className="frame-url">{cap}</span>
+      </div>
+      <div className="frame-body ms-host"><MockScreen v={v} accent={accent}/></div>
+    </div>
   );
 }
 
@@ -965,12 +1147,16 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
         </section>
 
         <section className="case-sec">
-          <h2><span>02</span> Wireframes → production</h2>
-          <p className="case-body">Structure first: low-fidelity frames fixing hierarchy, states and content priority — then the shipped interface.</p>
+          <h2><span>02</span> Wireframes → high fidelity → production</h2>
+          <p className="case-body">Structure first: low-fidelity frames fixing hierarchy, states and content priority — then the high-fidelity UI — then the shipped interface.</p>
           <div className="wf-row">
             {project.wf.map(([v, cap]) => <Wireframe key={v + cap} variant={v} caption={cap}/>)}
-            <div className="wf-arrow" aria-hidden="true"><ArrowRight size={20}/><span>SHIPPED</span></div>
+            <div className="wf-arrow" aria-hidden="true"><ArrowRight size={18}/><span>HI-FI</span></div>
+            {project.hifi.slice(0, 1).map(([v, cap]) => <div className="wf-hifi" key={v}><DesktopMock v={v} cap={cap} accent={project.accent}/></div>)}
+            {project.hifi[1] && <div className="wf-hifi ph" key={project.hifi[1][0]}><PhoneFrame><MockScreen v={project.hifi[1][0]} accent={project.accent}/></PhoneFrame><span className="wf-hifi-cap">{project.hifi[1][1]}</span></div>}
+            <div className="wf-arrow" aria-hidden="true"><ArrowRight size={18}/><span>SHIPPED</span></div>
           </div>
+          {project.hifi[1] && <p className="case-body hifi-note"><Monitor size={13}/> {project.hifi[0][1]} · <Smartphone size={13}/> {project.hifi[1][1]}</p>}
         </section>
 
         <section className="case-sec">
