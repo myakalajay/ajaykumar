@@ -1,20 +1,29 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Ajay Kumar Myakala — Product Design Portfolio
 
-# Run and deploy your AI Studio app
+A visual-first product design portfolio built around systems thinking, conceptual maps, journeys, evidence and motion.
 
-This contains everything you need to run your app locally.
+## Visual direction
 
-View your app in AI Studio: https://ai.studio/apps/2b17f7e8-9c22-41ff-9e34-99b1f415eb02
+- Editorial typography using the installed Geist Variable family
+- Light / Dark theme with persistence and system fallback
+- Smooth anchor navigation + scroll progress
+- Motion-led hero with ambient systems graphics
+- Interactive Concept Lab with 8 conceptual map patterns
+- Case studies structured as Brief → Process → Journey → Evidence → Testing → AI → Visual Evidence → Takeaway
+- Responsive layouts for desktop, tablet and mobile
+- `prefers-reduced-motion` support
 
-## Run Locally
+## Run locally
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run lint
+npm run build
+npm run dev
+```
 
+## Notes
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+`public/Homepage.jpg` and `public/Dashboard.jpg` are working portfolio visuals. The HomeRatesYard case links to the live public product at `https://homeratesyard.com/`.
+
+Metrics are intentionally separated by evidence type. The only quantified case-study result presented as measured/documented is the 37% underwriting decision-time reduction stated in the supplied CV.

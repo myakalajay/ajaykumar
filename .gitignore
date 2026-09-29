@@ -1,1 +1,12 @@
 node_modules/
+dist/
+*.zip
+.DS_Store
+
+# Local working copies & internal review notes (not part of the site)
+/current/
+/references/
+/*_2026.md
+/START_HERE.md
+/REAL_WORK_IMAGE_DIMENSIONS.md
+.freebuff/

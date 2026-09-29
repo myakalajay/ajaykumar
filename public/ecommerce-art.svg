@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" fill="none">
+  <rect width="1600" height="900" fill="#FAFAF9"/>
+  <g stroke="#E7E3DF">
+    <path d="M0 120H1600M0 240H1600M0 360H1600M0 480H1600M0 600H1600M0 720H1600"/>
+    <path d="M160 0V900M320 0V900M480 0V900M640 0V900M800 0V900M960 0V900M1120 0V900M1280 0V900M1440 0V900"/>
+  </g>
+  <rect x="120" y="104" width="1360" height="692" rx="28" fill="white" stroke="#DCD8D3"/>
+  <text x="176" y="176" fill="#ED1C24" font-family="Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="3">RECENT E-COMMERCE</text>
+  <text x="176" y="232" fill="#111214" font-family="Arial, sans-serif" font-size="44" font-weight="700">Product experience / artifact preview</text>
+  <rect x="176" y="282" width="520" height="390" rx="18" fill="#F7F6F4" stroke="#E5E2DE"/>
+  <rect x="208" y="318" width="220" height="18" rx="9" fill="#111214"/>
+  <rect x="208" y="354" width="380" height="12" rx="6" fill="#D9D5D0"/>
+  <rect x="208" y="402" width="210" height="170" rx="16" fill="#FFF1F2"/>
+  <rect x="444" y="402" width="210" height="170" rx="16" fill="#F1EFEC"/>
+  <rect x="208" y="604" width="446" height="16" rx="8" fill="#ED1C24"/>
+  <rect x="748" y="282" width="676" height="390" rx="18" fill="#FFF" stroke="#E5E2DE"/>
+  <text x="796" y="340" fill="#8A8D92" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="2">JOURNEY</text>
+  <text x="796" y="392" fill="#111214" font-family="Arial, sans-serif" font-size="30" font-weight="700">Land → Browse → Evaluate</text>
+  <text x="796" y="438" fill="#111214" font-family="Arial, sans-serif" font-size="30" font-weight="700">→ Add → Checkout → Return</text>
+  <circle cx="830" cy="540" r="28" fill="#ED1C24"/>
+  <path d="M858 540H1010M1040 540H1192M1222 540H1374" stroke="#ED1C24" stroke-width="3"/>
+  <circle cx="1040" cy="540" r="18" fill="white" stroke="#ED1C24" stroke-width="3"/>
+  <circle cx="1222" cy="540" r="18" fill="white" stroke="#ED1C24" stroke-width="3"/>
+  <text x="796" y="622" fill="#777B80" font-family="Arial, sans-serif" font-size="18">Final performance / usability evidence not supplied.</text>
+</svg>
