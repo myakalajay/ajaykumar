@@ -665,6 +665,8 @@ section { padding: var(--s16) var(--s6); position: relative; }
   .sbp-label { font-size: 8.5px; }
   .wf-row .wf-figure { min-width: 100%; }
   .wf-hifi { min-width: 100%; }
+  .wf-hifi.ph { width: 200px; min-width: 0; margin-inline: auto; }
+  .wf-hifi-cap { white-space: normal; text-align: center; max-width: 200px; }
   .ms-hero { grid-template-columns: 1fr; }
   .ms-split { grid-template-columns: 1fr; }
   .ms-kpis { grid-template-columns: 1fr 1fr; }
