@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, type ReactNode } from "react";
-import "@fontsource-variable/geist";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/inter";
 import {
   AnimatePresence, motion, useMotionValue, useSpring, useTransform,
   useScroll, useReducedMotion,
@@ -337,7 +338,6 @@ function Wireframe({ variant, caption }: { variant: WfVariant; caption: string }
 /* ------------------------------ service blueprint --------------------------- */
 
 interface BlueprintLane { front: [number, string, string][]; back: [number, string, string][]; support?: [number, string, string][]; }
-
 const blueprints: Record<string, BlueprintLane> = {
   "01": {
     front: [[0, "Compare rates", "Plain-language side-by-side"], [3, "Apply", "Guided forms, jargon-free"], [4, "Track status", "Live underwriting state"]],
@@ -368,6 +368,7 @@ function BlueprintStep({ title, note }: { title: string; note: string }) {
 function ServiceBlueprint({ p }: { p: Project }) {
   const bp = blueprints[p.id];
   const [lane, setLane] = useState<"all" | "front" | "back">("all");
+  const [dep, setDep] = useState<{ lane: string; title: string; note: string } | null>(null);
   const steps = p.journey;
   if (!bp) return null;
   const rows: { key: string; label: string; cls: string; items: ([number, string, string])[] }[] = [
@@ -375,10 +376,12 @@ function ServiceBlueprint({ p }: { p: Project }) {
     { key: "back", label: "BACKSTAGE — what the system does", cls: "back", items: bp.back },
     ...(bp.support ? [{ key: "support", label: "SUPPORT — what powers it", cls: "support", items: bp.support }] : [])
   ].map(r => ({ ...r, items: lane === "all" || lane === r.key ? r.items : [] }));
+  const showDep = (r: { cls: string }, item: [number, string, string]) =>
+    setDep({ lane: r.cls, title: item[1], note: item[2] });
   return (
     <div className="sbp">
       <div className="sbp-toolbar">
-        <p className="sbp-hint">Toggle lanes to trace one interaction end-to-end.</p>
+        <p className="sbp-hint">Click a system dependency to see the design decision behind it. Lanes: <kbd>toggle</kbd> or click below.</p>
         <div className="sbp-toggle" role="group" aria-label="Blueprint lanes">
           {([["all", "All lanes"], ["front", "Frontstage"], ["back", "Backstage"]] as const).map(([k, label]) => (
             <button key={k} aria-pressed={lane === k} className={lane === k ? "on" : ""} onClick={() => setLane(k)}>{label}</button>
@@ -395,14 +398,39 @@ function ServiceBlueprint({ p }: { p: Project }) {
             <div className="sbp-cells">
               {steps.map((s, i) => {
                 const item = r.items.find(([col]) => col === i);
-                return item
-                  ? <BlueprintStep key={s} title={item[1]} note={item[2]}/>
-                  : <span className="sbp-empty" key={s} aria-hidden="true"/>;
+                return item ? (
+                  <button
+                    key={s}
+                    className="bp-step"
+                    aria-expanded={dep?.title === item[1] && dep?.lane === r.cls}
+                    onClick={() => dep?.title === item[1] && dep?.lane === r.cls ? setDep(null) : showDep(r, item)}
+                  >
+                    <b>{item[1]}</b><small>{item[2]}</small><span className="bp-pin" aria-hidden="true"/>
+                  </button>
+                ) : <span className="sbp-empty" key={s} aria-hidden="true"/>;
               })}
             </div>
           </div>
         ))}
       </div>
+      <AnimatePresence initial={false}>
+        {dep && (
+          <motion.div
+            className="dep-panel"
+            role="status"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            <div className="dep-copy">
+              <b>{dep.lane === "front" ? "FRONTSTAGE" : dep.lane === "back" ? "BACKSTAGE" : "SUPPORT"} — {dep.title.toUpperCase()}</b>
+              <p>{p.decision}</p>
+            </div>
+            <button className="dep-clear" onClick={() => setDep(null)} aria-label="Close dependency detail"><X size={14}/></button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -485,7 +513,7 @@ function TestDonut({ rows }: { rows: [string, string, string][] }) {
 
 /* ---------------------------------- chrome --------------------------------- */
 
-const NAV = [["Work", "#work"], ["Craft", "#craft"], ["Capabilities", "#capabilities"], ["Experience", "#experience"], ["FAQ", "#faq"], ["Contact", "#contact"]];
+const NAV = [["Work", "#work"], ["Craft", "#craft"], ["Practice", "#practice"], ["Journey", "#experience"], ["FAQ", "#faq"], ["Contact", "#contact"]];
 
 function Header({ active }: { active: string }) {
   const [open, setOpen] = useState(false);
@@ -520,44 +548,43 @@ function Header({ active }: { active: string }) {
 /* ----------------------------------- hero ----------------------------------- */
 
 function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const artY = useTransform(scrollYProgress, [0, 1], [0, -48]);
   return (
-    <section className="hero" id="home" ref={ref}>
-      <div className="hero-grid-bg" aria-hidden="true"/>
+    <section className="hero" id="home">
+      <div className="q-circle" aria-hidden="true"/>
+      <div className="arc" aria-hidden="true"/>
       <div className="hero-inner">
         <div className="hero-copy">
           <motion.p className="hero-eyebrow" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: EASE }}>
-            <span className="pulse-dot" aria-hidden="true"/> Staff Product Designer — AI & Agent Experience
+            <i aria-hidden="true"/> PRODUCT EXPERIENCE · AI &amp; AGENT UX
           </motion.p>
           <motion.h1 initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, delay: 0.06, ease: EASE }}>
-            Systems thinking,<br/>shipped as <span className="accent-underline">interfaces</span>.
+            I turn <span className="accent-text">complex products</span> into clear systems.
           </motion.h1>
           <motion.p className="hero-sub" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.16, ease: EASE }}>
-            Ajay Kumar Myakala — 11 years turning complex products into clear journeys, wireframes, evidence and design systems. FinTech, enterprise SaaS, GovTech, media.
+            Ajay Kumar Myakala — Staff Product Designer with 11 years across FinTech, enterprise SaaS, GovTech and media. AI-native UX, product strategy and interface craft.
           </motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.26, ease: EASE }}>
-            <button className="btn btn-primary" onClick={() => scrollTo("#work")}>Explore case studies <ArrowRight size={16}/></button>
+            <button className="btn btn-primary" onClick={() => scrollTo("#work")}>View selected work <ArrowDown size={16}/></button>
             <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer"><FileText size={15}/> View CV</a>
           </motion.div>
-          <motion.div className="hero-stats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45, duration: 0.7 }}>
-            <div><strong><Counter to={11}/></strong><span>years of product context</span></div>
-            <div><strong><Counter to={37} suffix="%"/></strong><span>documented underwriting reduction</span></div>
-            <div><strong><Counter to={6}/></strong><span>industry domains shipped</span></div>
-          </motion.div>
         </div>
-        <motion.div className="hero-art" style={{ y: artY }} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.15, ease: EASE }} aria-hidden="true">
-          <div className="hero-frames">
-            <div className="hero-frame-desktop"><Wireframe variant="web-dash" caption=""/></div>
-            <div className="hero-frame-phone"><Wireframe variant="mobile-feed" caption=""/></div>
-            <span className="float-chip fc1">✦ wireframe → production</span>
-            <span className="float-chip fc2">✦ 37% faster underwriting</span>
-            <span className="float-chip fc3">✦ 4 languages shipped</span>
+        <motion.div className="hero-art" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.15, ease: EASE }}>
+          <div className="arch">
+            <img src="/ajay_kumar.png" alt="Portrait of Ajay Kumar Myakala" loading="eager" decoding="async"/>
           </div>
+          <motion.div className="sticker" initial={{ opacity: 0, scale: 0.85, rotate: -12 }} animate={{ opacity: 1, scale: 1, rotate: -6 }} transition={{ delay: 0.55, duration: 0.6, ease: EASE }}>
+            <b>37%</b>
+            documented underwriting decision-time reduction
+          </motion.div>
         </motion.div>
       </div>
-      <Marquee items={["WIREFRAMES", "JOURNEY MAPS", "DESIGN SYSTEMS", "USER RESEARCH", "AI-NATIVE UX", "PROTOTYPING", "EVIDENCE", "FRONTEND ENGINEERING"]}/>
+      <div className="stats-band">
+        <div><strong><Counter to={11}/></strong><span>years across product, digital and design systems</span></div>
+        <div><strong><Counter to={37} suffix="%"/></strong><span>documented reduction in underwriting decision time</span></div>
+        <div><strong><Counter to={5}/></strong><span>products shipped across consumer and enterprise</span></div>
+        <div><strong><Counter to={6}/></strong><span>industry domains — fintech to govtech</span></div>
+      </div>
+      <Marquee items={["PRODUCT STRATEGY", "AI-NATIVE UX", "DESIGN SYSTEMS", "HUMAN + AI", "ENTERPRISE WORKFLOWS", "ZERO-TO-ONE", "RESEARCH", "MOTION"]}/>
     </section>
   );
 }
@@ -580,31 +607,23 @@ function Work({ onOpen }: { onOpen: (p: Project) => void }) {
   return (
     <section className="work" id="work">
       <div className="section-head">
-        <Reveal><p className="kicker">01 — SELECTED WORK</p></Reveal>
-        <Reveal delay={0.06}><h2>Shipped systems,<br/><span className="accent-text">honest evidence.</span></h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Each case opens as a full study — wireframes, journey maps, infographics and the evidence ledger. Measured outcomes stay separated from objectives; nothing invented.</p></Reveal>
+        <Reveal><p className="kicker">SELECTED WORK</p></Reveal>
+        <Reveal delay={0.06}><h2>Business challenges,<br/>translated into <span className="accent-text">design action</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">A focused set of product stories — each opening into a full study with wireframes, maps and an honest evidence ledger.</p></Reveal>
       </div>
       <div className="work-list">
         {projects.map((p, i) => (
           <Reveal key={p.id} delay={(i % 2) * 0.06}>
-            <SpotlightCard accent={p.accent} className="work-card">
+            <SpotlightCard accent={p.accent} className={`work-card ${i % 4 === 1 || i % 4 === 2 ? "dark" : ""}`}>
               <button className="work-card-btn" onClick={() => onOpen(p)} aria-label={`Open case study: ${p.title}`}>
-                <div className="work-visual"><BrowserFrame image={p.image} alt={p.title} accent={p.accent}/></div>
-                <div className="work-body">
-                  <div className="work-top">
-                    <span className="work-tag" style={{ color: p.accent, borderColor: `${p.accent}44`, background: `${p.accent}0f` }}>{p.tag}</span>
-                    <span className="work-status">{p.status}</span>
-                  </div>
-                  <h3>{p.title}</h3>
-                  <p>{p.subtitle}</p>
-                  <div className="work-impact">
-                    {p.impact.map(x => <span key={x}><Zap size={12} style={{ color: p.accent }}/>{x}</span>)}
-                  </div>
-                  <div className="work-foot">
-                    <span>{p.role} · {p.period}</span>
-                    <em>OPEN STUDY <ArrowUpRight size={13}/></em>
-                  </div>
-                </div>
+                <span className="work-num">{String(i + 1).padStart(2, "0")} · {p.tag}</span>
+                <h3>{p.title.split(" — ")[0]}</h3>
+                <p>{p.subtitle}</p>
+                <span className="work-meta">
+                  <span className="work-tags">{p.impact[0].split(":")[0].toUpperCase()}</span>
+                  <span className="card-arrow" aria-hidden="true"><ArrowUpRight size={18}/></span>
+                </span>
+                <span className="work-visual"><BrowserFrame image={p.image} alt={p.title} accent={p.accent}/></span>
               </button>
             </SpotlightCard>
           </Reveal>
@@ -702,36 +721,28 @@ function Craft() {
 
 /* ------------------------------- capabilities ------------------------------- */
 
-function Capabilities() {
+function Practice() {
   return (
-    <section className="capabilities" id="capabilities">
+    <section className="practice" id="practice">
       <div className="section-head">
-        <Reveal><p className="kicker">03 — CAPABILITIES</p></Reveal>
-        <Reveal delay={0.06}><h2>UI/UX depth,<br/><span className="accent-text">engineering rigour.</span></h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">From problem framing to production handoff — the disciplines behind every shipped system, backed by front-end execution.</p></Reveal>
+        <Reveal><p className="kicker">THE WORK BEHIND THE WORK</p></Reveal>
+        <Reveal delay={0.06}><h2>Practice that scales<br/><span className="accent-text">beyond screens</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">The disciplines that make quality repeatable — carried across every engagement.</p></Reveal>
       </div>
       <div className="cap-grid">
         {capabilities.map((c, i) => (
-          <Reveal key={c.title} delay={(i % 4) * 0.06}>
-            <SpotlightCard accent="#4f46e5" className="cap-card">
-              <c.icon size={22} strokeWidth={1.6}/>
+          <Reveal key={c.title} delay={(i % 4) * 0.05}>
+            <div className="cap-card">
+              <span className="cap-top">
+                <span className="cap-num">{String(i + 1).padStart(2, "0")}</span>
+                <c.icon size={20} strokeWidth={1.6}/>
+              </span>
               <h3>{c.title}</h3>
               <p>{c.desc}</p>
-            </SpotlightCard>
+            </div>
           </Reveal>
         ))}
       </div>
-      <Reveal delay={0.1}>
-        <div className="token-strip" role="img" aria-label="Design tokens used to build this site">
-          <span className="token-label">DESIGN TOKENS →</span>
-          <span className="token-swatch" style={{ background: "#4f46e5" }} title="--accent: #4f46e5"/>
-          <span className="token-swatch" style={{ background: "#7c3aed" }} title="--accent-2: #7c3aed"/>
-          <span className="token-swatch" style={{ background: "#0d9488" }} title="--ok: #0d9488"/>
-          <span className="token-swatch" style={{ background: "#16181d" }} title="--ink: #16181d"/>
-          <span className="token-swatch" style={{ background: "#f6f6f3", border: "1px solid #e4e4df" }} title="--bg: #f6f6f3"/>
-          <span className="token-note">8px spacing scale · modular type · this site is built on them</span>
-        </div>
-      </Reveal>
     </section>
   );
 }
@@ -743,9 +754,9 @@ function Experience() {
   return (
     <section className="experience" id="experience">
       <div className="section-head">
-        <Reveal><p className="kicker">04 — EXPERIENCE</p></Reveal>
-        <Reveal delay={0.06}><h2>11 years of<br/><span className="accent-text">product context.</span></h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Recruitment → media → adtech → govtech → enterprise → fintech. One continuous practice of reducing ambiguity.</p></Reveal>
+        <Reveal><p className="kicker">CAREER JOURNEY</p></Reveal>
+        <Reveal delay={0.06}><h2>From craft<br/>to <span className="accent-text">capability</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">A career that moved from recruitment tech, to media and adtech, to govtech, enterprise and fintech — one continuous practice of reducing ambiguity.</p></Reveal>
       </div>
       <div className="xp-timeline">
         <span className="xp-line" aria-hidden="true"/>
@@ -764,6 +775,11 @@ function Experience() {
           </Reveal>
         ))}
       </div>
+      <Reveal delay={0.1}>
+        <div className="employers" aria-label="Companies worked with">
+          <b>HomeLoc</b><b>Computech</b><b>Visual IT</b><b>Gaian</b><b>Way2News</b><b>Nitya Software</b>
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -775,7 +791,7 @@ function Faq() {
   return (
     <section className="faq" id="faq">
       <div className="section-head">
-        <Reveal><p className="kicker">05 — QUESTIONS</p></Reveal>
+        <Reveal><p className="kicker">QUESTIONS</p></Reveal>
         <Reveal delay={0.06}><h2>Answered here.<br/><span className="accent-text">More over a call.</span></h2></Reveal>
       </div>
       <div className="faq-list">
@@ -790,6 +806,23 @@ function Faq() {
           </Reveal>
         ))}
       </div>
+      <div className="about-strip">
+        <Reveal>
+          <div>
+            <h3>Beyond the job title</h3>
+            <p>I began in recruitment technology, moved through media and adtech, designed citizen services in govtech, and now lead product design for one of the highest-stakes categories — US mortgage lending. The common thread: turning complex operational systems into experiences people can actually act on.</p>
+          </div>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <div>
+            <h3>How I work</h3>
+            <p>Maps before screens. Evidence before claims. Systems before one-offs — and the front-end craft to ship what I design.</p>
+            <div className="chip-row">
+              <span>8PX GRID</span><span>TOKENS</span><span>MOTION</span><span>WCAG-MINDED</span><span>HTML/CSS/JS</span>
+            </div>
+          </div>
+        </Reveal>
+      </div>
     </section>
   );
 }
@@ -799,23 +832,25 @@ function Faq() {
 function Contact() {
   return (
     <section className="contact" id="contact">
+      <div className="contact-band" aria-hidden="true"/>
       <div className="contact-inner">
-        <Reveal><p className="kicker">06 — CONTACT</p></Reveal>
-        <Reveal delay={0.06}><h2>Have a complex<br/><span className="accent-text">product problem?</span></h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Let's turn ambiguity into a map, a wireframe, a prototype and a decision.</p></Reveal>
+        <Reveal><p className="kicker">LET'S BUILD SOMETHING CLEAR</p></Reveal>
+        <Reveal delay={0.06}><h2>Complex product?<br/>Let's make it simpler.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Open to conversations around AI-native product experiences, enterprise workflows and design systems.</p></Reveal>
         <Reveal delay={0.18}>
           <div className="contact-actions">
-            <a className="btn btn-primary btn-lg" href={`mailto:${EMAIL}`}><Mail size={17}/> {EMAIL}</a>
-            <a className="btn btn-ghost btn-lg" href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin size={16}/> LinkedIn</a>
-            <a className="btn btn-ghost btn-lg" href={CV} target="_blank" rel="noreferrer"><FileText size={16}/> Download CV</a>
+            <a className="btn btn-accent btn-lg" href={`mailto:${EMAIL}`}><Mail size={17}/> Email me <ArrowUpRight size={15}/></a>
+            <a className="btn btn-ghost on-dark btn-lg" href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin size={16}/> LinkedIn <ArrowUpRight size={15}/></a>
+            <a className="btn btn-ghost on-dark btn-lg" href={CV} target="_blank" rel="noreferrer"><FileText size={16}/> Download CV</a>
           </div>
         </Reveal>
+        <span className="contact-big-arrow" aria-hidden="true">↗</span>
       </div>
       <footer className="site-footer">
         <span>© {new Date().getFullYear()} Ajay Kumar Myakala</span>
-        <span className="footer-mid" aria-hidden="true">DESIGNED AS A SYSTEM · BUILT WITH CARE</span>
         <a href="#home" onClick={e => { e.preventDefault(); scrollTo("#home"); }}>BACK TO TOP ↑</a>
       </footer>
+      <p className="footer-legal">This is a personal portfolio. Employer and client names and trademarks are shown solely to identify the context of my work. Their inclusion does not imply endorsement. Product information reflects the time of each project and may no longer be current.</p>
     </section>
   );
 }
@@ -839,6 +874,8 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
     }
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") { onClose(); return; }
+      if (e.key === "ArrowRight") { e.preventDefault(); onNavigate(next); return; }
+      if (e.key === "ArrowLeft") { e.preventDefault(); onNavigate(prev); return; }
       if (e.key !== "Tab") return;
       const root = caseRef.current;
       if (!root) return;
@@ -850,7 +887,7 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [onClose]);
+  }, [onClose, onNavigate, next, prev]);
   useEffect(() => () => {
     document.body.style.overflow = restoreRef.current ?? "";
     openerRef.current?.focus?.();
@@ -863,6 +900,7 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
         <span className="case-bar-title">{project.title}</span>
         <div className="case-bar-actions">
           {project.link && <a className="btn btn-ghost btn-sm" href={project.link} target="_blank" rel="noreferrer">Live product <ExternalLink size={13}/></a>}
+          <span className="case-kbd" aria-hidden="true"><kbd>←</kbd><kbd>→</kbd> cases</span>
           <button ref={closeRef} className="case-close" onClick={onClose} aria-label="Close case study"><X size={17}/></button>
         </div>
       </div>
@@ -948,8 +986,8 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
         </section>
 
         <nav className="case-next" aria-label="More case studies">
-          <button onClick={() => onNavigate(prev)}><ArrowLeft size={16}/><span><small>PREVIOUS</small><b>{prev.title}</b></span></button>
-          <button onClick={() => onNavigate(next)}><span><small>NEXT</small><b>{next.title}</b></span><ArrowRight size={16}/></button>
+          <button onClick={() => onNavigate(prev)}><ArrowLeft size={16}/><span><small>PREVIOUS · ←</small><b>{prev.title}</b></span></button>
+          <button onClick={() => onNavigate(next)}><span><small>NEXT · →</small><b>{next.title}</b></span><ArrowRight size={16}/></button>
         </nav>
       </div>
     </motion.div>
@@ -981,7 +1019,7 @@ export default function App() {
         <Hero/>
         <Work onOpen={setCaseStudy}/>
         <Craft/>
-        <Capabilities/>
+        <Practice/>
         <Experience/>
         <Faq/>
         <Contact/>
