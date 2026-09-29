@@ -1152,8 +1152,8 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
           <div className="wf-row">
             {project.wf.map(([v, cap]) => <Wireframe key={v + cap} variant={v} caption={cap}/>)}
             <div className="wf-arrow" aria-hidden="true"><ArrowRight size={18}/><span>HI-FI</span></div>
-            {project.hifi.slice(0, 1).map(([v, cap]) => <div className="wf-hifi" key={v}><DesktopMock v={v} cap={cap} accent={project.accent}/></div>)}
-            {project.hifi[1] && <div className="wf-hifi ph" key={project.hifi[1][0]}><PhoneFrame><MockScreen v={project.hifi[1][0]} accent={project.accent}/></PhoneFrame><span className="wf-hifi-cap">{project.hifi[1][1]}</span></div>}
+            {project.hifi.slice(0, 1).map(([v, cap]) => <div className="wf-hifi" style={{ "--msa": project.accent } as React.CSSProperties} key={v}><DesktopMock v={v} cap={cap} accent={project.accent}/></div>)}
+            {project.hifi[1] && <div className="wf-hifi ph" style={{ "--msa": project.accent } as React.CSSProperties} key={project.hifi[1][0]}><PhoneFrame><MockScreen v={project.hifi[1][0]} accent={project.accent}/></PhoneFrame><span className="wf-hifi-cap">{project.hifi[1][1]}</span></div>}
             <div className="wf-arrow" aria-hidden="true"><ArrowRight size={18}/><span>SHIPPED</span></div>
           </div>
           {project.hifi[1] && <p className="case-body hifi-note"><Monitor size={13}/> {project.hifi[0][1]} · <Smartphone size={13}/> {project.hifi[1][1]}</p>}
