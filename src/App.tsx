@@ -35,6 +35,7 @@ interface Project {
   process: [string, string][];
   actors: string[]; journey: string[]; sentiment: number[]; pains: string[];
   wf: [WfVariant, string][];
+  maps: { map: string; mapAlt: string; title: string; desc: string; evidence: string; evidenceAlt: string }[];
   chart: Bar[];
   evidence: { label: string; value: string; note: string; kind: "measured" | "scope" | "objective" | "gap" }[];
   testing: [string, string, string][];
@@ -61,6 +62,11 @@ const projects: Project[] = [
     sentiment: [70, 55, 62, 40, 48, 78],
     pains: ["Too many rate options", "Jargon-heavy forms", "Side-by-side unclear", "Document upload anxiety", "Black-box status", "No servicing entry"],
     wf: [["web-hero", "Rate discovery — landing structure"], ["web-dash", "Borrower dashboard states"]],
+    maps: [
+      { map: "/concept-maps/concept-paper-pencil-clean.png", mapAlt: "Original paper and pencil ecosystem sketch for the mortgage product", title: "Paper ecosystem sketch", desc: "The original hand-drawn map: borrower intent on one side, operational decisions on the other — the frame the whole product was designed against.", evidence: "/real-work/homeratesyard-1600x900.jpg", evidenceAlt: "HomeRatesYard product surface the sketch informed" },
+      { map: "/concept-maps/ecosystem-map-realistic-clean.png", mapAlt: "Lending ecosystem map with actors and dependencies", title: "Lending ecosystem map", desc: "Borrower, mortgage professional, underwriting operations and engineering as one connected system — used to find the handoffs that caused black-box status.", evidence: "/real-work/homeratesyard-1600x900.jpg", evidenceAlt: "Shipped mortgage platform surface" },
+      { map: "/concept-maps/decision-tree-realistic-clean.png", mapAlt: "Underwriting decision tree with recovery paths", title: "Underwriting decision tree", desc: "High-consequence underwriting choices with explicit paths, recovery and explanation — the map behind the 37% decision-time reduction.", evidence: "/real-work/homeratesyard-1600x900.jpg", evidenceAlt: "Underwriting workflow surface in production" }
+    ],
     chart: [{ label: "Underwriting decision time", pct: 37, display: "−37%" }, { label: "Journey stages mapped", pct: 75, display: "6 stages" }, { label: "Actor groups designed for", pct: 50, display: "4 groups" }],
     evidence: [{ label: "Underwriting decision time", value: "37% faster", note: "Documented CV outcome", kind: "measured" }, { label: "Workflow clarity", value: "Objective", note: "Design objective — not a measured result", kind: "objective" }, { label: "Stakeholder alignment", value: "Objective", note: "Design objective — not a measured result", kind: "objective" }],
     testing: [["Workflow comprehension", "Task walkthrough + stakeholder review", "Documented design activity"], ["Decision-time outcome", "Production workflow observation", "Measured: 37% reduction"], ["Usability", "Moderated borrower / operator testing", "Test plan; result not supplied"]],
@@ -83,6 +89,11 @@ const projects: Project[] = [
     sentiment: [55, 48, 42, 38, 58, 70],
     pains: ["Lengthy registration", "Scattered data requests", "Unclear priorities", "Mismatched records", "Static reports", "No next action"],
     wf: [["web-table", "Supplier register — table patterns"], ["web-dash", "Spend visibility overview"]],
+    maps: [
+      { map: "/concept-maps/service-blueprint-realistic-clean.png", mapAlt: "Procurement service blueprint with frontstage and backstage lanes", title: "Procurement service blueprint", desc: "Frontstage supplier actions wired to backstage compliance and finance rules — exposed the dependencies behind scattered data requests.", evidence: "/real-work/procurement-1600x900.jpg", evidenceAlt: "Procurement platform surface in production" },
+      { map: "/concept-maps/ecosystem-map-realistic-clean.png", mapAlt: "Supplier ecosystem map across procurement roles", title: "Supplier ecosystem map", desc: "Procurement lead, supplier, compliance reviewer and finance as actors in one system — the base for role-based dashboard IA.", evidence: "/real-work/procurement-1600x900.jpg", evidenceAlt: "Enterprise dashboard surface shipped" },
+      { map: "/concept-maps/opportunity-matrix-realistic-clean.png", mapAlt: "Opportunity matrix balancing user value and delivery confidence", title: "Opportunity matrix", desc: "Workflow gaps prioritised by user value against delivery confidence — decided which of the five families shipped first.", evidence: "/real-work/procurement-1600x900.jpg", evidenceAlt: "Operational data product evidence" }
+    ],
     chart: [{ label: "Workflow families covered", pct: 83, display: "5" }, { label: "Data-heavy surfaces", pct: 66, display: "4" }, { label: "Validation streams run", pct: 50, display: "3" }],
     evidence: [{ label: "Workflow coverage", value: "5 families", note: "Procurement • supplier • compliance • spend • reconciliation", kind: "scope" }, { label: "Data-heavy surfaces", value: "4 surfaces", note: "Dashboards, reporting, reconciliation, supplier views", kind: "scope" }, { label: "Outcome metrics", value: "Not supplied", note: "No quantified result in source CV", kind: "gap" }],
     testing: [["Information findability", "Task-based usability testing", "Test plan; result not supplied"], ["Dashboard comprehension", "Scenario walkthrough + heuristic review", "Design validation"], ["Supplier onboarding", "End-to-end workflow test", "Test plan; result not supplied"]],
@@ -105,6 +116,11 @@ const projects: Project[] = [
     sentiment: [82, 74, 50, 46, 60, 66],
     pains: ["Content overload", "Weak retention hooks", "Fragmented segments", "Blind targeting", "Vanity metrics", "Unconnected revenue"],
     wf: [["mobile-feed", "Discover feed — mobile-first"], ["web-dash", "Audience segmentation console"]],
+    maps: [
+      { map: "/concept-maps/journey-map-realistic-clean.png", mapAlt: "Reader journey map across discovery and retention", title: "Reader journey map", desc: "Discover → engage → retain for four language editions — kept consumer discovery separate from the operational intelligence underneath.", evidence: "/real-work/reporting-1600x900.jpg", evidenceAlt: "Reporting product evidence" },
+      { map: "/concept-maps/research-loop-realistic-clean.png", mapAlt: "Audience research loop from observation to validation", title: "Audience research loop", desc: "Behavioural analytics feeding hypotheses and validation — how audience insights stayed connected to both consumer and enterprise surfaces.", evidence: "/real-work/reporting-1600x900.jpg", evidenceAlt: "Audience intelligence reporting surface" },
+      { map: "/concept-maps/opportunity-matrix-realistic-clean.png", mapAlt: "Monetisation opportunity matrix", title: "Monetisation opportunity matrix", desc: "Campaign and monetisation opportunities ranked by audience value and platform confidence across the five products.", evidence: "/real-work/reporting-1600x900.jpg", evidenceAlt: "Campaign and monetisation surface" }
+    ],
     chart: [{ label: "Named products designed", pct: 83, display: "5" }, { label: "Indian languages shipped", pct: 66, display: "4" }, { label: "Workflow families", pct: 66, display: "4" }],
     evidence: [{ label: "Named products", value: "5 products", note: "Way2News + AudiencePlay + AudiencePrime + DigitalKites + TheTasteCompany", kind: "scope" }, { label: "Workflow families", value: "4 families", note: "Discovery • segmentation • campaigns • monetisation", kind: "scope" }, { label: "Quantified outcomes", value: "Not supplied", note: "No metric supplied in source CV", kind: "gap" }],
     testing: [["Content discovery", "Tree test / usability task", "Test plan; result not supplied"], ["Audience segmentation", "Scenario-based workflow test", "Test plan; result not supplied"], ["Campaign management", "Prototype review + task test", "Design validation"]],
@@ -127,6 +143,11 @@ const projects: Project[] = [
     sentiment: [76, 68, 58, 52, 44, 72],
     pains: ["Unclear value", "Weak filters", "Missing trust cues", "Hidden costs", "Form friction", "No order clarity"],
     wf: [["mobile-checkout", "Checkout flow — mobile states"], ["web-hero", "Product landing structure"]],
+    maps: [
+      { map: "/concept-maps/decision-tree-realistic-clean.png", mapAlt: "Purchase decision tree with trust and recovery paths", title: "Purchase decision tree", desc: "Evaluate → trust → commit with explicit recovery at every risky step — the map that shaped checkout state coverage.", evidence: "/ecommerce-art.svg", evidenceAlt: "E-commerce experience cover" },
+      { map: "/concept-maps/service-blueprint-realistic-clean.png", mapAlt: "Checkout service blueprint with payment backstage", title: "Checkout service blueprint", desc: "Cart and payment frontstage wired to fulfilment and failure backstage — where hidden costs and error states were designed, not discovered.", evidence: "/ecommerce-art.svg", evidenceAlt: "Checkout experience cover" },
+      { map: "/concept-maps/journey-map-realistic-clean.png", mapAlt: "Shopper journey map from landing to return", title: "Shopper journey map", desc: "Land → browse → evaluate → add → checkout → return as one connected journey — the six stages the interface had to carry.", evidence: "/ecommerce-art.svg", evidenceAlt: "E-commerce journey cover" }
+    ],
     chart: [{ label: "Journey stages connected", pct: 75, display: "6" }, { label: "UI states covered", pct: 66, display: "4" }, { label: "Validation streams planned", pct: 50, display: "3" }],
     evidence: [{ label: "Journey stages", value: "6 stages", note: "Discovery → checkout defined as one connected journey", kind: "scope" }, { label: "State coverage", value: "4 states", note: "Loading • empty • error • success", kind: "scope" }, { label: "Performance metrics", value: "Not supplied", note: "No invented numbers", kind: "gap" }],
     testing: [["Product findability", "Tree test / moderated task", "Test plan; result not supplied"], ["Product comprehension", "Task-based usability test", "Test plan; result not supplied"], ["Checkout completion", "End-to-end task + analytics", "Test plan; result not supplied"]],
@@ -310,6 +331,79 @@ function Wireframe({ variant, caption }: { variant: WfVariant; caption: string }
       </div>
       <figcaption>{caption}</figcaption>
     </figure>
+  );
+}
+
+/* ------------------------------ service blueprint --------------------------- */
+
+interface BlueprintLane { front: [number, string, string][]; back: [number, string, string][]; support?: [number, string, string][]; }
+
+const blueprints: Record<string, BlueprintLane> = {
+  "01": {
+    front: [[0, "Compare rates", "Plain-language side-by-side"], [3, "Apply", "Guided forms, jargon-free"], [4, "Track status", "Live underwriting state"]],
+    back: [[0, "Rate engine", "Eligibility + pricing rules"], [4, "Underwriting rules", "Decision paths + recovery"], [5, "Status events", "Milestones pushed to borrower"]],
+    support: [[2, "Doc verification", "Third-party checks"], [4, "Ops review", "Underwriter queue"]]
+  },
+  "02": {
+    front: [[0, "Supplier onboarding", "One intake, clear asks"], [2, "Spend dashboard", "Next action surfaced"], [3, "Reconcile", "Mismatch resolution flow"]],
+    back: [[0, "Compliance rules", "Diversity + policy checks"], [3, "Data joins", "Supplier ↔ spend records"], [5, "Reporting jobs", "Scheduled aggregations"]],
+    support: [[1, "Master data", "Supplier registry"], [5, "Finance systems", "ERP integration"]]
+  },
+  "03": {
+    front: [[0, "Discover feed", "Language-first content"], [2, "Segment builder", "Audience definitions"], [3, "Campaign setup", "Targeting + budget states"]],
+    back: [[0, "Behaviour pipeline", "Events → segments"], [1, "Serving rules", "Feed ranking"], [5, "Billing", "Monetisation ledger"]],
+    support: [[2, "Content ops", "Editorial queues"], [4, "Ad platform", "Demand partners"]]
+  },
+  "04": {
+    front: [[1, "Browse + evaluate", "Trust cues at decision points"], [3, "Cart", "Honest totals, no surprises"], [4, "Checkout", "State-explicit payment flow"]],
+    back: [[4, "Pricing", "Totals + tax computation"], [3, "Inventory", "Availability + holds"], [4, "Payments", "Auth, capture, failure paths"]],
+    support: [[5, "Fulfilment", "Warehouse + shipping"], [5, "Support", "Order-issue intake"]]
+  }
+};
+
+function BlueprintStep({ title, note }: { title: string; note: string }) {
+  return <div className="bp-step"><b>{title}</b><small>{note}</small></div>;
+}
+
+function ServiceBlueprint({ p }: { p: Project }) {
+  const bp = blueprints[p.id];
+  const [lane, setLane] = useState<"all" | "front" | "back">("all");
+  const steps = p.journey;
+  if (!bp) return null;
+  const rows: { key: string; label: string; cls: string; items: ([number, string, string])[] }[] = [
+    { key: "front", label: "FRONTSTAGE — what the user sees", cls: "front", items: bp.front },
+    { key: "back", label: "BACKSTAGE — what the system does", cls: "back", items: bp.back },
+    ...(bp.support ? [{ key: "support", label: "SUPPORT — what powers it", cls: "support", items: bp.support }] : [])
+  ].map(r => ({ ...r, items: lane === "all" || lane === r.key ? r.items : [] }));
+  return (
+    <div className="sbp">
+      <div className="sbp-toolbar">
+        <p className="sbp-hint">Toggle lanes to trace one interaction end-to-end.</p>
+        <div className="sbp-toggle" role="group" aria-label="Blueprint lanes">
+          {([["all", "All lanes"], ["front", "Frontstage"], ["back", "Backstage"]] as const).map(([k, label]) => (
+            <button key={k} aria-pressed={lane === k} className={lane === k ? "on" : ""} onClick={() => setLane(k)}>{label}</button>
+          ))}
+        </div>
+      </div>
+      <div className="sbp-grid" style={{ ["--accent" as string]: p.accent } as React.CSSProperties}>
+        <div className="sbp-head" aria-hidden="true"><span/>
+          {steps.map(s => <span key={s}>{s}</span>)}
+        </div>
+        {rows.map(r => (
+          <div className={`sbp-row ${r.cls} ${r.items.length ? "" : "dim"}`} key={r.key}>
+            <span className="sbp-label">{r.label}</span>
+            <div className="sbp-cells">
+              {steps.map((s, i) => {
+                const item = r.items.find(([col]) => col === i);
+                return item
+                  ? <BlueprintStep key={s} title={item[1]} note={item[2]}/>
+                  : <span className="sbp-empty" key={s} aria-hidden="true"/>;
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -533,6 +627,46 @@ const conceptArt: [string, string, string, string, LucideIcon][] = [
   ["quality", "/concept-maps/quality-loop-realistic-clean.png", "Quality loop", "Critique, accessibility and testing as continuous loops.", ShieldCheck]
 ];
 
+interface CaseMap { map: string; mapAlt: string; title: string; desc: string; evidence: string; evidenceAlt: string; }
+
+function MapPair({ m, n }: { m: CaseMap; n: number }) {
+  return (
+    <div className="map-pair">
+      <figure className="map-frame">
+        <figcaption><span>SYSTEM MAP</span><em>{String(n).padStart(2, "0")}</em></figcaption>
+        <img src={m.map} alt={m.mapAlt} loading="lazy" decoding="async"/>
+      </figure>
+      <div className="map-copy">
+        <h4>{m.title}</h4>
+        <p>{m.desc}</p>
+        <figure className="map-evidence">
+          <figcaption><span>INFORMED THE BUILD</span></figcaption>
+          <img src={m.evidence} alt={m.evidenceAlt} loading="lazy" decoding="async"/>
+        </figure>
+      </div>
+    </div>
+  );
+}
+
+function SystemMaps({ maps, accent }: { maps: CaseMap[]; accent: string }) {
+  const [sel, setSel] = useState(0);
+  const m = maps[Math.max(0, Math.min(sel, maps.length - 1))];
+  return (
+    <div className="maps-block" style={{ ["--accent" as string]: accent } as React.CSSProperties}>
+      <div className="maps-tabs" role="tablist" aria-label="System maps for this case">
+        {maps.map((x, i) => (
+          <button key={x.title} role="tab" aria-selected={sel === i} className={sel === i ? "active" : ""} onClick={() => setSel(i)}>{x.title}</button>
+        ))}
+      </div>
+      <AnimatePresence mode="wait">
+        <motion.div key={m.title} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.4, ease: EASE }}>
+          <MapPair m={m} n={sel + 1}/>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function Craft() {
   const [sel, setSel] = useState(0);
   const [, img, title, desc, Icon] = conceptArt[sel];
@@ -541,7 +675,7 @@ function Craft() {
       <div className="section-head">
         <Reveal><p className="kicker">02 — CONCEPT MAPS</p></Reveal>
         <Reveal delay={0.06}><h2>Making the system<br/><span className="accent-text">visible first.</span></h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Working artefacts from real engagements — maps that turn people, rules and states into decisions before interface choices harden.</p></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Working artefacts from real engagements — maps that turn people, rules and states into decisions before interface choices harden. Each case study below carries its own set.</p></Reveal>
       </div>
       <Reveal>
         <div className="concept-switcher">
@@ -557,7 +691,7 @@ function Craft() {
                 <h3>{title}</h3>
                 <p>{desc}</p>
               </div>
-              <div className="concept-img-wrap"><img src={img} alt={`${title} concept map`} loading="lazy"/></div>
+              <div className="concept-img-wrap"><img src={img} alt={`${title} concept map`} loading="lazy" decoding="async"/></div>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -694,20 +828,36 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
   const prev = projects[(idx - 1 + projects.length) % projects.length];
   const next = projects[(idx + 1) % projects.length];
   const restoreRef = useRef<string | null>(null);
+  const caseRef = useRef<HTMLDivElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
     if (restoreRef.current === null) {
       restoreRef.current = document.body.style.overflow;
+      openerRef.current = document.activeElement as HTMLElement | null;
       document.body.style.overflow = "hidden";
       closeRef.current?.focus();
     }
-    const key = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+      const root = caseRef.current;
+      if (!root) return;
+      const items = Array.from(root.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")).filter(el => el.offsetParent !== null);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [onClose]);
-  useEffect(() => () => { document.body.style.overflow = restoreRef.current ?? ""; }, []);
+  useEffect(() => () => {
+    document.body.style.overflow = restoreRef.current ?? "";
+    openerRef.current?.focus?.();
+  }, []);
   useEffect(() => { document.querySelector(".case-fs")?.scrollTo({ top: 0 }); }, [project.id]);
   return (
-    <motion.div className="case-fs" role="dialog" aria-modal="true" aria-label={`${project.title} case study`} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }} transition={{ duration: 0.4, ease: EASE }}>
+    <motion.div className="case-fs" ref={caseRef} role="dialog" aria-modal="true" aria-label={`${project.title} case study`} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }} transition={{ duration: 0.4, ease: EASE }}>
       <div className="case-bar">
         <button className="case-back" onClick={onClose}><ArrowLeft size={16}/> All work</button>
         <span className="case-bar-title">{project.title}</span>
@@ -759,7 +909,19 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
         </section>
 
         <section className="case-sec">
-          <h2><span>05</span> Evidence & measurement</h2>
+          <h2><span>05</span> Service blueprint</h2>
+          <p className="case-body">Frontstage actions wired to the backstage rules and support systems that make them work — toggle a lane to isolate it.</p>
+          <ServiceBlueprint p={project}/>
+        </section>
+
+        <section className="case-sec">
+          <h2><span>06</span> System maps → production evidence</h2>
+          <p className="case-body">The maps this case was designed against, each paired with the shipped surface it informed.</p>
+          <SystemMaps maps={project.maps} accent={project.accent}/>
+        </section>
+
+        <section className="case-sec">
+          <h2><span>07</span> Evidence & measurement</h2>
           <div className="case-chart">
             {project.chart.map(b => (
               <div className="bar-row" key={b.label}>
@@ -781,7 +943,7 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
         </section>
 
         <section className="case-sec">
-          <h2><span>06</span> AI involvement</h2>
+          <h2><span>08</span> AI involvement</h2>
           <div className="case-ai">{project.ai.map((x, i) => <div key={x}><span>0{i + 1}</span><BrainCircuit size={15}/><b>{x}</b><small>{i === project.ai.length - 1 ? "Human accountability" : "Assistive workflow"}</small></div>)}</div>
         </section>
 
@@ -812,6 +974,7 @@ export default function App() {
   }, []);
   return (
     <div className="page">
+      <a className="skip-link" href="#work" onClick={e => { e.preventDefault(); scrollTo("#work"); }}>Skip to work</a>
       <div className="scroll-progress" aria-hidden="true"/>
       <Header active={active}/>
       <main>
