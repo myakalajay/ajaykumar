@@ -857,11 +857,12 @@ function Contact() {
 
 /* ------------------------------ case study page ----------------------------- */
 
-function CasePage({ project, onClose, onNavigate }: { project: Project; onClose: () => void; onNavigate: (p: Project) => void }) {
+function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir: number; onClose: () => void; onNavigate: (p: Project, dir: number) => void }) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const idx = projects.findIndex(x => x.id === project.id);
   const prev = projects[(idx - 1 + projects.length) % projects.length];
   const next = projects[(idx + 1) % projects.length];
+  const reduce = useReducedMotion();
   const restoreRef = useRef<string | null>(null);
   const caseRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
@@ -874,8 +875,8 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
     }
     const key = (e: KeyboardEvent) => {
       if (e.key === "Escape") { onClose(); return; }
-      if (e.key === "ArrowRight") { e.preventDefault(); onNavigate(next); return; }
-      if (e.key === "ArrowLeft") { e.preventDefault(); onNavigate(prev); return; }
+      if (e.key === "ArrowRight") { e.preventDefault(); onNavigate(next, 1); return; }
+      if (e.key === "ArrowLeft") { e.preventDefault(); onNavigate(prev, -1); return; }
       if (e.key !== "Tab") return;
       const root = caseRef.current;
       if (!root) return;
@@ -894,7 +895,17 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
   }, []);
   useEffect(() => { document.querySelector(".case-fs")?.scrollTo({ top: 0 }); }, [project.id]);
   return (
-    <motion.div className="case-fs" ref={caseRef} role="dialog" aria-modal="true" aria-label={`${project.title} case study`} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 24 }} transition={{ duration: 0.4, ease: EASE }}>
+    <motion.div
+      className="case-fs"
+      ref={caseRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${project.title} case study`}
+      initial={reduce ? { opacity: 0 } : dir === 1 ? { opacity: 0, x: 72 } : dir === -1 ? { opacity: 0, x: -72 } : { opacity: 0, y: 28 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      exit={{ opacity: 0, y: 16 }}
+      transition={{ duration: dir === 0 ? 0.4 : 0.42, ease: EASE }}
+    >
       <div className="case-bar">
         <button className="case-back" onClick={onClose}><ArrowLeft size={16}/> All work</button>
         <span className="case-bar-title">{project.title}</span>
@@ -986,8 +997,8 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
         </section>
 
         <nav className="case-next" aria-label="More case studies">
-          <button onClick={() => onNavigate(prev)}><ArrowLeft size={16}/><span><small>PREVIOUS · ←</small><b>{prev.title}</b></span></button>
-          <button onClick={() => onNavigate(next)}><span><small>NEXT · →</small><b>{next.title}</b></span><ArrowRight size={16}/></button>
+          <button onClick={() => onNavigate(prev, -1)}><ArrowLeft size={16}/><span><small>PREVIOUS · ←</small><b>{prev.title}</b></span></button>
+          <button onClick={() => onNavigate(next, 1)}><span><small>NEXT · →</small><b>{next.title}</b></span><ArrowRight size={16}/></button>
         </nav>
       </div>
     </motion.div>
@@ -999,6 +1010,9 @@ function CasePage({ project, onClose, onNavigate }: { project: Project; onClose:
 export default function App() {
   const [active, setActive] = useState("home");
   const [caseStudy, setCaseStudy] = useState<Project | null>(null);
+  const [caseDir, setCaseDir] = useState(0);
+  const openCase = (p: Project) => { setCaseDir(0); setCaseStudy(p); };
+  const navCase = (p: Project, dir: number) => { setCaseDir(dir); setCaseStudy(p); };
   useEffect(() => {
     document.title = "Ajay Kumar Myakala — Staff Product Designer | AI & Agent Experience";
     const ids = NAV.map(([, href]) => href.slice(1)).concat("craft");
@@ -1017,7 +1031,7 @@ export default function App() {
       <Header active={active}/>
       <main>
         <Hero/>
-        <Work onOpen={setCaseStudy}/>
+        <Work onOpen={openCase}/>
         <Craft/>
         <Practice/>
         <Experience/>
@@ -1025,7 +1039,9 @@ export default function App() {
         <Contact/>
       </main>
       <AnimatePresence>
-        {caseStudy && <CasePage key={caseStudy.id} project={caseStudy} onClose={() => setCaseStudy(null)} onNavigate={setCaseStudy}/>}
+        <AnimatePresence>
+          {caseStudy && <CasePage key={caseStudy.id} project={caseStudy} dir={caseDir} onClose={() => setCaseStudy(null)} onNavigate={navCase}/>}
+        </AnimatePresence>
       </AnimatePresence>
     </div>
   );
