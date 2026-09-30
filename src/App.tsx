@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import {
   case02Complexity, case02Decisions, case02EvidenceBoard, case02Facts, case02Hotspots, case02InsightCards,
-  case02Journey, case02Proto, case02SystemStrip,
+  case02Journey, case02Proto, case02SystemStrip, DOMAINS, THINK_STAGES, WORK_SIGNALS, ARTIFACTS,
   capabilities, CV, EMAIL, experience, LINKEDIN, methods, projects,
   type MockVariant, type Project, type WfVariant,
 } from "./data";
@@ -20,14 +20,21 @@ import {
 import { BrowserFrame, DesktopMock, MockScreen, PhoneFrame, Wireframe } from "./mocks";
 import { AiLoopDemo, caseDemo, DesignSystem, MortgageDemo, RecruiterModal, SupplierDemo } from "./interactive";
 
-const NAV = [["Work", "#work"], ["Approach", "#approach"], ["About", "#about"]] as const;
+const NAV = [["Work", "#work"], ["Approach", "#approach"], ["Capabilities", "#capabilities"], ["About", "#about"]] as const;
 
 /* --------------------------------- header ---------------------------------- */
 
 function Header({ active, onRecruiter }: { active: string; onRecruiter: () => void }) {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const el = document.scrollingElement as HTMLElement;
+    const onScroll = () => setScrolled((el?.scrollTop ?? window.scrollY) > 24);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   return (
-    <header className="site-header">
+    <header className={`site-header ${scrolled ? "shrink" : ""}`}>
       <button className="brand" onClick={() => scrollTo("#home")} aria-label="Back to top">
         <span className="brand-mark" aria-hidden="true">A</span>
         <span className="brand-word">AJAY<b>KUMAR</b></span>
@@ -38,8 +45,9 @@ function Header({ active, onRecruiter }: { active: string; onRecruiter: () => vo
         ))}
       </nav>
       <div className="header-right">
+        <a className="header-resume" href={CV} target="_blank" rel="noreferrer">Resume <ArrowUpRight size={13}/></a>
         <button className="btn btn-ghost btn-sm rv-trigger" onClick={onRecruiter}>Recruiter View</button>
-        <a className="btn btn-primary btn-sm" href={`mailto:${EMAIL}`}><Mail size={14}/> Contact</a>
+        <a className="btn btn-primary btn-sm" href={`mailto:${EMAIL}`}><Mail size={14}/> Let's talk <ArrowRight size={13}/></a>
       </div>
       <button className="menu-btn" onClick={() => setOpen(v => !v)} aria-expanded={open} aria-label="Menu">{open ? <X size={20}/> : <MenuIcon/>}</button>
       <AnimatePresence>
@@ -47,8 +55,8 @@ function Header({ active, onRecruiter }: { active: string; onRecruiter: () => vo
           <motion.div className="mobile-menu" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.25 }}>
             {NAV.map(([label, href]) => <a key={href} href={href} onClick={e => { e.preventDefault(); setOpen(false); scrollTo(href); }}>{label}<ArrowUpRight size={14}/></a>)}
             <button onClick={() => { setOpen(false); onRecruiter(); }}>Recruiter View<ArrowUpRight size={14}/></button>
-            <a href={`mailto:${EMAIL}`} onClick={() => setOpen(false)}>Contact<ArrowUpRight size={14}/></a>
-            <a href={CV} target="_blank" rel="noreferrer">Download résumé<ArrowDown size={14}/></a>
+            <a href={CV} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>Resume<ArrowDown size={14}/></a>
+            <a href={`mailto:${EMAIL}`} onClick={() => setOpen(false)}>Let's talk<ArrowUpRight size={14}/></a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -70,38 +78,42 @@ function Hero({ onRecruiter }: { onRecruiter: () => void }) {
       <div className="hero-inner">
         <div className="hero-copy">
           <motion.p className="hero-eyebrow" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: EASE }}>
-            <i aria-hidden="true"/> SENIOR PRODUCT DESIGNER
+            <i aria-hidden="true"/> SENIOR PRODUCT DESIGNER — B2B · B2C · ENTERPRISE · AI
           </motion.p>
           <motion.h1 initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, delay: 0.06, ease: EASE }}>
-            I design <span className="accent-text">complex products</span> into clear, usable systems.
+            I turn <span className="accent-text">complex</span><br/>products into<br/>clear, usable<br/><span className="accent-text">systems</span>.
           </motion.h1>
           <motion.p className="hero-sub" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.16, ease: EASE }}>
-            11+ years designing enterprise products, data-intensive workflows and AI-enabled experiences across strategy, research, interaction design and design systems.
+            11+ years designing complex workflows, data-heavy products and AI-enabled experiences — across strategy, research, interaction design and design systems.
           </motion.p>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.26, ease: EASE }}>
-            <button className="btn btn-primary" onClick={() => scrollTo("#work")}>View selected work <ArrowDown size={16}/></button>
-            <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer"><FileText size={15}/> Download résumé</a>
+            <button className="btn btn-primary" onClick={() => scrollTo("#work")}>View selected work <ArrowRight size={16}/></button>
+            <button className="btn btn-ghost" onClick={() => scrollTo("#about")}>About me <ArrowRight size={15}/></button>
+            <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer"><FileText size={15}/> Resume</a>
             <span className="hero-links">
               <a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn <ArrowUpRight size={12}/></a>
               <a href={`mailto:${EMAIL}`}>Contact <ArrowUpRight size={12}/></a>
             </span>
           </motion.div>
+          <motion.p className="hero-avail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }}>
+            <i aria-hidden="true"/> Open to senior product design opportunities and collaboration
+          </motion.p>
         </div>
         <motion.div className="hero-art" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.15, ease: EASE }}>
           <div className="arch">
             <img src="/ajay_kumar.png" alt="Portrait of Ajay Kumar Myakala" loading="eager" decoding="async"/>
           </div>
           <motion.div className="sticker" initial={{ opacity: 0, scale: 0.85, rotate: -12 }} animate={{ opacity: 1, scale: 1, rotate: -6 }} transition={{ delay: 0.55, duration: 0.6, ease: EASE }}>
-            <b>37%</b>
-            documented underwriting decision-time reduction
+            <b>11+ yrs</b>
+            designing complex workflows, data-heavy products and AI experiences
           </motion.div>
         </motion.div>
       </div>
       <div className="proof-strip" role="list" aria-label="Credibility summary">
-        <div role="listitem"><b>11+ YEARS</b><span>Product &amp; UX</span></div>
-        <div role="listitem"><b>ENTERPRISE</b><span>Complex workflows</span></div>
-        <div role="listitem"><b>AI + DATA</b><span>Intelligent experiences</span></div>
-        <div role="listitem"><b>DESIGN SYSTEMS</b><span>Scalable UI</span></div>
+        <div role="listitem"><b>11+ YEARS</b><span>Product &amp; UX experience</span></div>
+        <div role="listitem"><b>B2B / B2C</b><span>Product experience</span></div>
+        <div role="listitem"><b>AI + DATA</b><span>Complex systems</span></div>
+        <div role="listitem"><b>END-TO-END</b><span>Product design</span></div>
       </div>
       <Marquee items={["PRODUCT STRATEGY", "AI-NATIVE UX", "DESIGN SYSTEMS", "HUMAN + AI", "ENTERPRISE WORKFLOWS", "ZERO-TO-ONE", "RESEARCH", "MOTION"]}/>
     </section>
@@ -110,38 +122,184 @@ function Hero({ onRecruiter }: { onRecruiter: () => void }) {
 
 /* ----------------------------------- work ---------------------------------- */
 
-function Work({ onOpen }: { onOpen: (p: Project) => void }) {
+const WORK_FILTERS = ["ALL", "B2B", "B2C", "D2C", "ENTERPRISE", "FINTECH", "MADTECH", "AI / DATA", "E-COMMERCE"] as const;
+
+function domainMatches(p: Project, f: string) { return f === "ALL" || p.domains.includes(f); }
+
+function Work({ onOpen, onQuickView, filterSignal }: { onOpen: (p: Project) => void; onQuickView: (p: Project) => void; filterSignal: { d: string; n: number } | null }) {
+  const [filter, setFilter] = useState<string>(() => {
+    const q = new URLSearchParams(window.location.search).get("domain");
+    const up = q ? q.toUpperCase() : null;
+    return up && WORK_FILTERS.includes(up as (typeof WORK_FILTERS)[number]) ? up : "ALL";
+  });
+  useEffect(() => {
+    if (filterSignal) setFilter(WORK_FILTERS.includes(filterSignal.d as (typeof WORK_FILTERS)[number]) ? filterSignal.d : "ALL");
+  }, [filterSignal]);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    if (filter === "ALL") url.searchParams.delete("domain"); else url.searchParams.set("domain", filter.toLowerCase());
+    window.history.replaceState(null, "", url);
+  }, [filter]);
+  const shown = projects.filter(p => domainMatches(p, filter));
+  const featured = shown[0];
+  const rest = shown.slice(1);
   return (
     <section className="work" id="work">
       <div className="section-head">
         <Reveal><p className="kicker">SELECTED WORK</p></Reveal>
         <Reveal delay={0.06}><h2>Complex products.<br/><span className="accent-text">Real constraints.</span> Measurable outcomes.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Four product stories — each opens into a full study with research, design decisions, evidence and honest boundaries.</p></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Each project opens into a full study with research, design decisions, evidence and honest boundaries.</p></Reveal>
       </div>
-      <div className="work-list">
-        {projects.map((p, i) => (
-          <Reveal key={p.id} delay={(i % 2) * 0.06}>
-            <SpotlightCard accent={p.accent} className={`work-card ${i % 4 === 1 || i % 4 === 2 ? "dark" : ""}`}>
-              <button className="work-card-btn" onClick={() => onOpen(p)} aria-label={`Open case study: ${p.short}`}>
-                <span className="work-num">{p.id} · {p.domain.toUpperCase()}</span>
-                <h3>{p.short}</h3>
-                <p>{p.subtitle}</p>
-                <span className="card-facts">
-                  <span><b>ROLE</b>{p.role.split(" / ")[0]}</span>
-                  <span><b>SCOPE</b>{p.scope.join(" · ")}</span>
-                  <span><b>DOMAIN</b>{p.domain}</span>
-                </span>
-                <span className="work-meta">
-                  <span className="work-cta">View case study <ArrowRight size={15}/></span>
-                  <span className="card-arrow" aria-hidden="true"><ArrowUpRight size={18}/></span>
-                </span>
-                <span className="work-visual"><BrowserFrame image={p.image} alt={p.title} accent={p.accent}/></span>
+      <Reveal>
+        <div className="work-filters" role="group" aria-label="Filter projects by domain">
+          {WORK_FILTERS.map(f => (
+            <button key={f} className={filter === f ? "on" : ""} aria-pressed={filter === f}
+              onClick={() => setFilter(f)}>
+              {f}
+              <small>{f === "ALL" ? projects.length : projects.filter(p => domainMatches(p, f)).length}</small>
+            </button>
+          ))}
+        </div>
+      </Reveal>
+      {featured && (
+        <Reveal>
+          <SpotlightCard accent={featured.accent} className="work-card featured">
+            <div className="work-visual"><BrowserFrame image={featured.image} alt={featured.title} accent={featured.accent}/></div>
+            <div className="featured-copy">
+              <span className="work-num">{featured.id} · FEATURED</span>
+              <h3>{featured.short}</h3>
+              <p className="featured-line">{featured.subtitle}</p>
+              <span className="domain-tags">{featured.domains.map(d => <em key={d}>{d}</em>)}<em className="quiet">{featured.domain}</em></span>
+              <p className="featured-outcome"><b>OUTCOME</b>{featured.outcomeLine}</p>
+              <span className="card-facts">
+                <span><b>ROLE</b>{featured.role.split(" / ")[0]}</span>
+                <span><b>SCOPE</b>{featured.scope.join(" · ")}</span>
+              </span>
+              <span className="work-meta">
+                <button className="work-cta" onClick={() => onOpen(featured)}>View case study <ArrowRight size={15}/></button>
+                <button className="work-quick" onClick={() => onQuickView(featured)}>Quick view</button>
+              </span>
+            </div>
+          </SpotlightCard>
+        </Reveal>
+      )}
+      <motion.div className="work-grid" layout>
+        <AnimatePresence mode="popLayout">
+          {rest.map(p => (
+            <motion.div key={p.id} layout initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.4, ease: EASE }}>
+              <SpotlightCard accent={p.accent} className="work-card">
+                <div className="work-visual hoverable">
+                  <BrowserFrame image={p.image} alt={p.title} accent={p.accent}/>
+                  <span className="hover-overlay" aria-hidden="true">VIEW CASE STUDY →</span>
+                </div>
+                <div className="card-copy">
+                  <span className="work-num">{p.id}</span>
+                  <h3>{p.short}</h3>
+                  <span className="domain-tags">{p.domains.map(d => <em key={d}>{d}</em>)}<em className="quiet">{p.domain}</em></span>
+                  <p className="card-line">{p.subtitle}</p>
+                  <span className="work-meta">
+                    <button className="work-cta" onClick={() => onOpen(p)}>View case study <ArrowRight size={15}/></button>
+                    <button className="work-quick" onClick={() => onQuickView(p)}>Quick view</button>
+                  </span>
+                </div>
+              </SpotlightCard>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
+      {shown.length === 0 && <p className="work-empty">No projects in this domain yet.</p>}
+    </section>
+  );
+}
+
+/* ----------------------------- domain experience ---------------------------- */
+
+function Domains({ onFilter }: { onFilter: (d: string) => void }) {
+  return (
+    <section className="domains" id="domains">
+      <div className="section-head">
+        <Reveal><p className="kicker">PRODUCTS ACROSS DOMAINS</p></Reveal>
+        <Reveal delay={0.06}><h2>Designing across business models,<br/><span className="accent-text">industries and contexts</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Click a domain to see the real projects behind it.</p></Reveal>
+      </div>
+      <div className="domain-matrix">
+        {DOMAINS.map((d, i) => {
+          const matches = projects.filter(p => p.domains.some(x => x === d.label));
+          return (
+            <Reveal key={d.key} delay={(i % 4) * 0.05} className="dm-cell">
+              <button className={`dm-card ${matches.length ? "" : "empty"}`}
+                disabled={!matches.length}
+                onClick={() => matches.length && onFilter(d.label)}
+                aria-label={`Show ${d.label} projects`}
+              >
+                <b>{d.label}</b>
+                <small>{d.tagline}</small>
+                <span className="dm-areas">{d.areas.map(a => <em key={a}>{a}</em>)}</span>
+                <span className="dm-count">{matches.length} {matches.length === 1 ? "project" : "projects"}</span>
               </button>
-            </SpotlightCard>
-          </Reveal>
-        ))}
+            </Reveal>
+          );
+        })}
       </div>
     </section>
+  );
+}
+
+/* ------------------------------- quick view --------------------------------- */
+
+function QuickView({ p, onClose, onOpenCase }: { p: Project | null; onClose: () => void; onOpenCase: (p: Project) => void }) {
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!p) return;
+    openerRef.current = document.activeElement as HTMLElement;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+      const root = dialogRef.current; if (!root) return;
+      const items = Array.from(root.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")).filter(el => el.offsetParent !== null);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
+    window.addEventListener("keydown", key);
+    return () => { window.removeEventListener("keydown", key); document.body.style.overflow = ""; openerRef.current?.focus?.(); };
+  }, [p, onClose]);
+  return (
+    <AnimatePresence>
+      {p && (
+        <motion.div className="qv-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.22 }}
+          onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <motion.div ref={dialogRef} className="qv" role="dialog" aria-modal="true" aria-label={`${p.short} quick view`}
+            style={{ ["--accent" as string]: p.accent } as React.CSSProperties}
+            initial={{ opacity: 0, y: 28, scale: 0.985 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.99 }} transition={{ duration: 0.35, ease: EASE }}>
+            <button ref={closeRef} className="qv-close" onClick={onClose} aria-label="Close quick view"><X size={16}/></button>
+            <div className="qv-media"><BrowserFrame image={p.image} alt={p.title} accent={p.accent}/></div>
+            <div className="qv-body">
+              <span className="work-num">{p.id} · {p.status}</span>
+              <h3>{p.title}</h3>
+              <span className="domain-tags">{p.domains.map(d => <em key={d}>{d}</em>)}<em className="quiet">{p.domain}</em></span>
+              <dl className="qv-facts">
+                <div><dt>ROLE</dt><dd>{p.role}</dd></div>
+                <div><dt>PERIOD</dt><dd>{p.period}</dd></div>
+                <div><dt>CLIENT</dt><dd>{p.client}</dd></div>
+              </dl>
+              <p className="qv-challenge"><b>THE PROBLEM</b>{p.challenge[2] ?? p.challenge[0]}</p>
+              <p className="qv-contrib"><b>KEY CONTRIBUTION</b>{p.decisions[0]?.what}</p>
+              <p className="qv-outcome"><b>OUTCOME</b>{p.outcomeLine}</p>
+              <div className="qv-actions">
+                <button className="btn btn-primary" onClick={() => { onClose(); onOpenCase(p); }}>View full case study <ArrowRight size={15}/></button>
+                {p.link && <a className="btn btn-ghost" href={p.link} target="_blank" rel="noreferrer">Live product <ExternalLink size={14}/></a>}
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -190,10 +348,23 @@ function HowIWork() {
   return (
     <section className="approach" id="approach">
       <div className="section-head">
-        <Reveal><p className="kicker">HOW I WORK</p></Reveal>
-        <Reveal delay={0.06}><h2>The right method for the problem —<br/><span className="accent-text">not a fixed process</span>.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Every method is tied to a real project, real evidence and the design decision it changed. No framework theatre.</p></Reveal>
+        <Reveal><p className="kicker">HOW I THINK</p></Reveal>
+        <Reveal delay={0.06}><h2>Complex problems require<br/><span className="accent-text">systems thinking</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Every stage connects to real portfolio evidence — no generic process theatre.</p></Reveal>
       </div>
+      <Reveal>
+        <ol className="think-rail">
+          {THINK_STAGES.map((s, i) => (
+            <li key={s.stage} className="think-stage">
+              <span className="think-num">{String(i + 1).padStart(2, "0")}</span>
+              <b>{s.stage}</b>
+              <span className="think-items">{s.items.join(" · ")}</span>
+              <span className="think-link" aria-hidden="true">↓</span>
+              <small>{s.project}</small>
+            </li>
+          ))}
+        </ol>
+      </Reveal>
       <Reveal>
         <div className="method-switcher">
           <div className="method-tabs" role="tablist" aria-label="Working methods">
@@ -221,6 +392,51 @@ function HowIWork() {
   );
 }
 
+/* ------------------------------- real artifacts ----------------------------- */
+
+function Artifacts() {
+  return (
+    <section className="artifacts" aria-label="Real artifacts from the case studies">
+      <div className="section-head">
+        <Reveal><p className="kicker">REAL ARTIFACTS</p></Reveal>
+        <Reveal delay={0.06}><h2>From the actual studies —<br/><span className="accent-text">not decoration</span>.</h2></Reveal>
+      </div>
+      <div className="artifact-row">
+        {ARTIFACTS.map((a, i) => (
+          <Reveal key={a.src} delay={i * 0.05} className="artifact-cell">
+            <figure className="artifact">
+              <img src={a.src} alt={a.alt} loading="lazy" decoding="async"/>
+              <figcaption><b>{a.label}</b><small>{a.kind}</small></figcaption>
+            </figure>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------ seniority signals ---------------------------- */
+
+function Signals() {
+  return (
+    <section className="signals" aria-label="How I work with teams">
+      <div className="signals-head">
+        <Reveal><h2>How I work</h2></Reveal>
+      </div>
+      <div className="signals-grid">
+        {WORK_SIGNALS.map((s, i) => (
+          <Reveal key={s.title} delay={i * 0.06} className="signal-cell">
+            <div className="signal">
+              <b>{s.title}</b>
+              <p>{s.desc}</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ---------------------------------- about ---------------------------------- */
 
 function About() {
@@ -229,8 +445,8 @@ function About() {
     <section className="about" id="about">
       <div className="section-head">
         <Reveal><p className="kicker">ABOUT</p></Reveal>
-        <Reveal delay={0.06}><h2>Designing between<br/><span className="accent-text">complexity and clarity</span>.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">I'm a Senior Product Designer with 11+ years of experience designing enterprise products, data-intensive workflows and AI-enabled experiences.</p></Reveal>
+        <Reveal delay={0.06}><h2>A designer who thinks<br/><span className="accent-text">beyond screens</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">11+ years across product design, systems thinking, AI / data and enterprise + consumer platforms.</p></Reveal>
       </div>
       <div className="cap-grid">
         {capabilities.map((c, i) => {
@@ -271,32 +487,87 @@ function About() {
           <b>HomeLoc</b><b>Computech</b><b>Visual IT</b><b>Gaian</b><b>Way2News</b><b>Nitya Software</b>
         </div>
       </Reveal>
+      <Reveal delay={0.15}>
+        <div className="about-more">
+          <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer">Full background — résumé <ArrowUpRight size={14}/></a>
+        </div>
+      </Reveal>
     </section>
   );
 }
 
 /* --------------------------------- contact --------------------------------- */
 
+function DeepDives({ onOpen, onQuickView }: { onOpen: (p: Project) => void; onQuickView: (p: Project) => void }) {
+  const picks = [projects[1], projects[0], projects[2]];
+  return (
+    <section className="deepdives" id="deepdives">
+      <div className="section-head">
+        <Reveal><p className="kicker">DEEP DIVES</p></Reveal>
+        <Reveal delay={0.06}><h2>Three studies worth<br/><span className="accent-text">your next 15 minutes</span>.</h2></Reveal>
+      </div>
+      <div className="dd-grid">
+        {picks.map((p, i) => (
+          <Reveal key={p.id} delay={i * 0.06} className="dd-cell">
+            <article className="dd-card" style={{ ["--accent" as string]: p.accent } as React.CSSProperties}>
+              <button className="dd-media" onClick={() => onOpen(p)} aria-label={`Open case study: ${p.short}`}>
+                <img src={p.image} alt={`${p.short} product interface`} loading="lazy" decoding="async"/>
+              </button>
+              <div className="dd-copy">
+                <span className="dd-num">{String(i + 1).padStart(2, "0")}</span>
+                <h3>{p.short}</h3>
+                <span className="domain-tags">{p.domains.map(d => <em key={d}>{d}</em>)}</span>
+                <p className="dd-line"><b>PROBLEM</b>{p.challenge[2] ?? p.challenge[0]}</p>
+                <p className="dd-line"><b>ROLE</b>{p.role.split(" / ")[0]}</p>
+                <p className="dd-line"><b>OUTCOME</b>{p.outcomeLine}</p>
+                <span className="dd-actions">
+                  <button className="work-cta" onClick={() => onOpen(p)}>Read the study <ArrowRight size={15}/></button>
+                  <button className="work-quick" onClick={() => onQuickView(p)}>Quick view</button>
+                </span>
+              </div>
+            </article>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Contact({ onRecruiter }: { onRecruiter: () => void }) {
   return (
     <section className="contact" id="contact">
-      <div className="contact-band" aria-hidden="true"/>
       <div className="contact-inner">
         <Reveal><p className="kicker">LET'S BUILD SOMETHING CLEAR</p></Reveal>
         <Reveal delay={0.06}><h2>Have a complex product problem?</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Let's turn the complexity into something people can actually use.</p></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Let's turn complexity into something people can understand, use and trust.</p></Reveal>
         <Reveal delay={0.18}>
           <div className="contact-actions">
-            <a className="btn btn-accent btn-lg" href={`mailto:${EMAIL}`}><Mail size={17}/> Start a conversation <ArrowUpRight size={15}/></a>
-            <a className="btn btn-ghost on-dark btn-lg" href={CV} target="_blank" rel="noreferrer"><FileText size={16}/> View résumé <ArrowUpRight size={15}/></a>
+            <a className="btn btn-accent btn-lg" href={`mailto:${EMAIL}`}><Mail size={17}/> Let's work together <ArrowRight size={15}/></a>
+            <a className="btn btn-ghost on-dark btn-lg" href={CV} target="_blank" rel="noreferrer"><FileText size={16}/> View resume <ArrowUpRight size={15}/></a>
             <button className="btn btn-ghost on-dark btn-lg" onClick={onRecruiter}>Recruiter View</button>
           </div>
         </Reveal>
         <span className="contact-big-arrow" aria-hidden="true">↗</span>
       </div>
       <footer className="site-footer">
-        <span>© {new Date().getFullYear()} Ajay Kumar Myakala</span>
-        <a href="#home" onClick={e => { e.preventDefault(); scrollTo("#home"); }}>BACK TO TOP ↑</a>
+        <div className="footer-grid">
+          <div className="footer-id">
+            <span className="brand-mark" aria-hidden="true">A</span>
+            <div><b>Ajay Kumar Myakala</b><small>Senior Product Designer</small></div>
+          </div>
+          <nav className="footer-links" aria-label="Footer">
+            <a href="#work" onClick={e => { e.preventDefault(); scrollTo("#work"); }}>Work</a>
+            <a href="#about" onClick={e => { e.preventDefault(); scrollTo("#about"); }}>About</a>
+            <a href={CV} target="_blank" rel="noreferrer">Resume</a>
+            <a href={LINKEDIN} target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href={`mailto:${EMAIL}`}>Contact</a>
+          </nav>
+          <span className="footer-meta">Bangalore, India</span>
+        </div>
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} Ajay Kumar Myakala</span>
+          <a href="#home" onClick={e => { e.preventDefault(); scrollTo("#home"); }}>BACK TO TOP ↑</a>
+        </div>
       </footer>
       <p className="footer-legal">This is a personal portfolio. Employer and client names and trademarks are shown solely to identify the context of my work. Their inclusion does not imply endorsement. Interactive demos are labelled conceptual prototypes; product information reflects the time of each project and may no longer be current.</p>
     </section>
@@ -604,11 +875,17 @@ export default function App() {
   const [caseStudy, setCaseStudy] = useState<Project | null>(null);
   const [caseDir, setCaseDir] = useState(0);
   const [recruiter, setRecruiter] = useState(false);
+  const [quick, setQuick] = useState<Project | null>(null);
+  const [workFilterSignal, setWorkFilterSignal] = useState<{ d: string; n: number } | null>(null);
   const openCase = (p: Project) => { setCaseDir(0); setCaseStudy(p); };
   const navCase = (p: Project, dir: number) => { setCaseDir(dir); setCaseStudy(p); };
+  const filterTo = (d: string) => {
+    setWorkFilterSignal({ d, n: (workFilterSignal?.n ?? 0) + 1 });
+    setTimeout(() => scrollTo("#work"), 60);
+  };
   useEffect(() => {
     document.title = "Ajay Kumar Myakala — Senior Product Designer | Enterprise & AI Product Design";
-    const ids = ["home", "work", "demos", "approach", "systems", "about", "contact"];
+    const ids = ["home", "work", "demos", "approach", "capabilities", "about", "contact"];
     const nodes = ids.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     const obs = new IntersectionObserver(entries => {
       const vis = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -624,15 +901,20 @@ export default function App() {
       <Header active={active} onRecruiter={() => setRecruiter(true)}/>
       <main>
         <Hero onRecruiter={() => setRecruiter(true)}/>
-        <Work onOpen={openCase}/>
+        <Work onOpen={openCase} onQuickView={setQuick} filterSignal={workFilterSignal}/>
+        <Domains onFilter={filterTo}/>
         <Demos/>
         <HowIWork/>
+        <Artifacts/>
+        <Signals/>
         <DesignSystem/>
         <About/>
+        <DeepDives onOpen={openCase} onQuickView={setQuick}/>
         <Contact onRecruiter={() => setRecruiter(true)}/>
       </main>
       <AnimatePresence>
         {caseStudy && <CasePage key={caseStudy.id} project={caseStudy} dir={caseDir} onClose={() => setCaseStudy(null)} onNavigate={navCase}/>}
+        {quick && <QuickView p={quick} onClose={() => setQuick(null)} onOpenCase={openCase}/>}
       </AnimatePresence>
       <RecruiterModal open={recruiter} onClose={() => setRecruiter(false)}/>
     </div>

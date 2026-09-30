@@ -309,7 +309,7 @@ export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () =
 export function DesignSystem() {
   const [tab, setTab] = useState<"components" | "states" | "scale">("components");
   return (
-    <section className="ds" id="systems">
+    <section className="ds" id="capabilities">
       <div className="section-head">
         <p className="kicker">DESIGN SYSTEMS</p>
         <h2>Components, states<br/>and <span className="accent-text">how the system scales</span>.</h2>

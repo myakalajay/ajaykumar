@@ -23,6 +23,8 @@ export interface Project {
   id: string; tag: string; domain: string; title: string; short: string; subtitle: string;
   role: string; client: string; period: string; status: string;
   image: string; link?: string; accent: string;
+  domains: string[];
+  outcomeLine: string;
   scope: string[];
   overview: string;
   challenge: string[];
@@ -61,6 +63,8 @@ export const projects: Project[] = [
     image: "/Homepage.jpg",
     link: "https://homeratesyard.com/",
     accent: "#e4572e",
+    domains: ["B2C", "FINTECH"],
+    outcomeLine: "Unified borrower journey from rate discovery to servicing — with a documented 37% reduction in underwriting decision time (CV-documented).",
     scope: ["UX Strategy", "IA", "Interaction", "UI", "Prototype"],
     overview: "A mortgage and lending ecosystem spanning origination, underwriting, onboarding, servicing and lending operations — design direction that connected borrower intent to operational decisions instead of treating rate discovery and underwriting as separate experiences.",
     challenge: [
@@ -135,6 +139,8 @@ export const projects: Project[] = [
     status: "ENTERPRISE PRODUCT",
     image: "/Dashboard.jpg",
     accent: "#2563eb",
+    domains: ["B2B", "ENTERPRISE", "AI / DATA"],
+    outcomeLine: "Five workflow families shipped as one system across four data-heavy surfaces; outcome metrics not supplied — marked honestly.",
     scope: ["UX Strategy", "Research", "IA", "Interaction", "UI", "Design System"],
     overview: "Procurement, supplier diversity, compliance, spend visibility and reconciliation brought together through service experiences, onboarding workflows, reporting and dashboards — five workflow families and four data-heavy surfaces designed as one system.",
     challenge: [
@@ -208,6 +214,8 @@ export const projects: Project[] = [
     status: "MULTI-PRODUCT",
     image: "/way2news/product-screens.svg",
     accent: "#7c3aed",
+    domains: ["B2B", "MADTECH", "AI / DATA"],
+    outcomeLine: "Five products across discovery, segmentation, campaigns and monetisation — one connected audience-signal system.",
     scope: ["Product UX", "Research", "IA", "Interaction", "Data Viz"],
     overview: "Experiences across Way2News, AudiencePlay, AudiencePrime, DigitalKites and TheTasteCompany — content discovery, segmentation, campaign management and monetisation. Five products, four Indian languages, one connected audience-signal system.",
     challenge: [
@@ -281,6 +289,8 @@ export const projects: Project[] = [
     status: "NEW CHAPTER",
     image: "/ecommerce-art.svg",
     accent: "#0d9488",
+    domains: ["D2C", "E-COMMERCE"],
+    outcomeLine: "Six journey stages — discovery, evaluation, cart, checkout, fulfilment, support — defined as one connected flow.",
     scope: ["UX Strategy", "IA", "Interaction", "UI", "Prototype"],
     overview: "A new portfolio chapter focused on product discovery, evaluation, cart, checkout and responsive states — six journey stages defined as one connected flow, with honest evidence boundaries where results were not supplied.",
     challenge: [
@@ -341,6 +351,42 @@ export const projects: Project[] = [
     testing: [["Product findability", "Tree test / moderated task", "Test plan; result not supplied"], ["Product comprehension", "Task-based usability test", "Test plan; result not supplied"], ["Checkout completion", "End-to-end task + analytics", "Test plan; result not supplied"]],
     improve: ["Instrument analytics to quantify checkout completion and return rates.", "A/B test checkout step sequencing.", "Extend state coverage to multi-address and split-shipment scenarios."]
   }
+];
+
+/* ------------------------------ domain taxonomy ------------------------------ */
+
+export const DOMAINS: { key: string; label: string; tagline: string; areas: string[] }[] = [
+  { key: "b2b", label: "B2B", tagline: "Enterprise workflows", areas: ["Procurement", "Operations", "Compliance"] },
+  { key: "b2c", label: "B2C", tagline: "Consumer platforms", areas: ["Decision journeys", "Self-service"] },
+  { key: "d2c", label: "D2C", tagline: "Commerce", areas: ["Conversion", "Retention"] },
+  { key: "fintech", label: "FINTECH", tagline: "Financial workflows", areas: ["Decision support", "Trust"] },
+  { key: "madtech", label: "MADTECH", tagline: "Audience intelligence", areas: ["Data platforms", "Campaign workflows"] },
+  { key: "aidata", label: "AI / DATA", tagline: "AI-assisted workflows", areas: ["Analytics", "Decision systems"] },
+  { key: "enterprise", label: "ENTERPRISE", tagline: "Operational systems", areas: ["Complex workflows", "Role-based surfaces"] },
+  { key: "ecommerce", label: "E-COMMERCE", tagline: "Commerce journeys", areas: ["Discovery", "Product detail", "Cart", "Checkout"] },
+];
+
+export const THINK_STAGES: { stage: string; items: string[]; project: string }[] = [
+  { stage: "DISCOVER", items: ["Research", "Context", "Constraints"], project: "Procurement — comparison observation → delivery-risk insight" },
+  { stage: "DEFINE", items: ["Problem framing", "Opportunity"], project: "Procurement — opportunity matrix ranked five workflow families" },
+  { stage: "DESIGN", items: ["Flows", "Systems", "Interfaces"], project: "HomeRatesYard — one journey across discovery, application, underwriting" },
+  { stage: "VALIDATE", items: ["Prototype", "Testing", "Evidence"], project: "HomeRatesYard — 37% decision-time reduction (CV-documented)" },
+  { stage: "SCALE", items: ["Design system", "Governance", "Measurement"], project: "Procurement — patterns reused across five workflow families" },
+];
+
+export const WORK_SIGNALS: { title: string; desc: string }[] = [
+  { title: "Strategy", desc: "Align product, business and user needs before interface decisions." },
+  { title: "Systems", desc: "Build reusable patterns rather than isolated screens." },
+  { title: "Collaboration", desc: "Work closely with product, engineering and stakeholders." },
+  { title: "Execution", desc: "Move from ambiguity to production-ready interfaces." },
+];
+
+export const ARTIFACTS: { src: string; alt: string; label: string; kind: string }[] = [
+  { src: "/concept-maps/service-blueprint-realistic-clean.png", alt: "Procurement service blueprint", label: "Service blueprint", kind: "Procurement case" },
+  { src: "/concept-maps/journey-map-realistic-clean.png", alt: "Reader journey map", label: "Journey map", kind: "Audience Intelligence case" },
+  { src: "/concept-maps/decision-tree-realistic-clean.png", alt: "Underwriting decision tree", label: "Decision tree", kind: "HomeRatesYard case" },
+  { src: "/concept-maps/research-loop-realistic-clean.png", alt: "Research loop", label: "Research synthesis", kind: "Audience Intelligence case" },
+  { src: "/real-work/procurement-1600x900.jpg", alt: "Procurement platform dashboard", label: "Production dashboard", kind: "Shipped product" },
 ];
 
 /* -------------------------- case-02 editorial upgrade -------------------------- */
