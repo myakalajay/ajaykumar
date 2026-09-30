@@ -21,8 +21,9 @@ import {
 } from "./blocks";
 import { BrowserFrame, DesktopMock } from "./mocks";
 import { AiLoopDemo, caseDemo, CommerceDemo, DesignSystem, MortgageDemo, RecruiterModal, SupplierDemo } from "./interactive";
+import { AiSystems, SystemsPage } from "./systems";
 
-const NAV = [["Work", "#work"], ["Approach", "#approach"], ["System", "#capabilities"], ["About", "#about"]] as const;
+const NAV = [["Work", "#work"], ["Systems", "#capabilities"], ["About", "#about"]] as const;
 
 /* --------------------------------- header ---------------------------------- */
 
@@ -85,9 +86,12 @@ function Hero({ onRecruiter }: { onRecruiter: () => void }) {
           <motion.h1 initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, delay: 0.06, ease: EASE }}>
             I turn <span className="accent-text">complex</span><br/>products into<br/>clear, usable systems.
           </motion.h1>
-          <motion.p className="hero-sub" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.16, ease: EASE }}>
-            11+ years designing complex workflows, data-heavy products and AI-enabled experiences — across strategy, research, interaction design and design systems.
+          <motion.p className="hero-sub" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.16, ease: EASE }}>
+            Senior Product Designer focused on enterprise products, design systems, AI-enabled experiences and measurable product outcomes — 11+ years across B2B, B2C and D2C platforms.
           </motion.p>
+          <motion.ul className="hero-tags" aria-label="Core capabilities" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.24, ease: EASE }}>
+            {["Product Design", "Design Systems", "Enterprise UX", "AI Products", "UX Strategy", "Design-to-Code"].map(t => <li key={t}>{t}</li>)}
+          </motion.ul>
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.26, ease: EASE }}>
             <button className="btn btn-primary" onClick={() => scrollTo("#work")}>View selected work <ArrowRight size={16}/></button>
             <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer"><FileText size={15}/> View résumé</a>
@@ -108,9 +112,10 @@ function Hero({ onRecruiter }: { onRecruiter: () => void }) {
       </div>
       <div className="proof-strip" role="list" aria-label="Credibility summary">
         <div role="listitem"><b>11+ YEARS</b><span>Product Design</span></div>
-        <div role="listitem"><b>MULTIPLE DOMAINS</b><span>B2B · B2C · D2C · SaaS</span></div>
-        <div role="listitem"><b>SYSTEMS</b><span>Design Systems · UX Architecture</span></div>
-        <div role="listitem"><b>AI</b><span>AI-enabled Product Experiences</span></div>
+        <div role="listitem"><b>DESIGN SYSTEMS</b><span>Built &amp; scaled</span></div>
+        <div role="listitem"><b>ENTERPRISE</b><span>B2B · B2C · D2C</span></div>
+        <div role="listitem"><b>AI</b><span>Product &amp; workflow design</span></div>
+        <div role="listitem"><b>CROSS-PLATFORM</b><span>Web + Mobile</span></div>
       </div>
     </section>
   );
@@ -798,7 +803,7 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
             <div className="esec-split">
               <div className="esec-left">
                 <p className="case-body">{project.systemNote}</p>
-                <p className="case-body">The full specimen — components, states and scaling model — lives in the <a href="#systems" onClick={e => { e.preventDefault(); onClose(); setTimeout(() => scrollTo("#systems"), 80); }} style={{ textDecoration: "underline" }}>design systems section</a>.</p>
+                <p className="case-body">The full specimen — components, states and scaling model — lives in the <a href="#systems" onClick={e => { e.preventDefault(); onClose(); setTimeout(() => { window.location.hash = "systems"; window.dispatchEvent(new HashChangeEvent("hashchange")); }, 80); }} style={{ textDecoration: "underline" }}>design systems documentation</a>.</p>
               </div>
               <div className="esec-right">
                 <ComponentStrip items={case02SystemStrip} accent={project.accent}/>
@@ -854,7 +859,21 @@ export default function App() {
   const [caseDir, setCaseDir] = useState(0);
   const [recruiter, setRecruiter] = useState(false);
   const [quick, setQuick] = useState<Project | null>(null);
+  const [sysOpen, setSysOpen] = useState(() => window.location.hash === "#systems");
   const [workFilterSignal, setWorkFilterSignal] = useState<{ d: string; n: number } | null>(null);
+  useEffect(() => {
+    const onHash = () => setSysOpen(window.location.hash === "#systems");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  const openSystems = () => {
+    window.location.hash = "systems";
+    setSysOpen(true);
+  };
+  const closeSystems = () => {
+    if (window.location.hash === "#systems") history.replaceState(null, "", window.location.pathname + window.location.search);
+    setSysOpen(false);
+  };
   const openCase = (p: Project) => { setCaseDir(0); setCaseStudy(p); };
   const navCase = (p: Project, dir: number) => { setCaseDir(dir); setCaseStudy(p); };
   useEffect(() => {
@@ -876,9 +895,10 @@ export default function App() {
       <main>
         <Hero onRecruiter={() => setRecruiter(true)}/>
         <Work onOpen={openCase} onQuickView={setQuick} filterSignal={workFilterSignal}/>
+        <AiSystems/>
         <Demos/>
         <HowIWork/>
-        <DesignSystem/>
+        <DesignSystem onOpenSystems={openSystems}/>
         <About/>
         <Contact onRecruiter={() => setRecruiter(true)}/>
       </main>
@@ -886,6 +906,7 @@ export default function App() {
         {caseStudy && <CasePage key={caseStudy.id} project={caseStudy} dir={caseDir} onClose={() => setCaseStudy(null)} onNavigate={navCase}/>}
         {quick && <QuickView p={quick} onClose={() => setQuick(null)} onOpenCase={openCase}/>}
       </AnimatePresence>
+      {sysOpen && <SystemsPage onClose={closeSystems}/>}
       <RecruiterModal open={recruiter} onClose={() => setRecruiter(false)}/>
     </div>
   );

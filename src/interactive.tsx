@@ -295,6 +295,12 @@ export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () =
               <div className="rv-chips">{RECRUITER.tools.map(t => <span key={t}>{t}</span>)}</div>
             </section>
             <section className="rv-sec">
+              <h4>WHY THIS PORTFOLIO</h4>
+              <div className="rv-why">
+                {RECRUITER.whyThis.map((w, i) => <div key={i}><b>{String(i + 1).padStart(2, "0")}</b><span>{w}</span></div>)}
+              </div>
+            </section>
+            <section className="rv-sec">
               <h4>QUICK LINKS</h4>
               <div className="rv-links">
                 {rvLinks(onClose).map(l => l.action
@@ -401,7 +407,7 @@ export function CommerceDemo() {
 
 /* ------------------------- 5. Design system section ------------------------ */
 
-export function DesignSystem() {
+export function DesignSystem({ onOpenSystems }: { onOpenSystems: () => void }) {
   const [tab, setTab] = useState<"components" | "states" | "scale">("components");
   return (
     <section className="ds" id="capabilities">
@@ -409,6 +415,10 @@ export function DesignSystem() {
         <p className="kicker">DESIGN SYSTEM</p>
         <h2>One system, carried from case studies<br/>to <span className="accent-text">this site itself</span>.</h2>
         <p className="section-sub">The tokens, components and states used inside the case studies — reused to build this portfolio.</p>
+        <div className="ds-open" style={{ gridColumn: "1 / -1" }}>
+          <button className="btn btn-primary" onClick={onOpenSystems}>Open the full documentation <ArrowUpRight size={15}/></button>
+          <span style={{ fontSize: "13px", color: "var(--muted)" }}>Foundations · tokens · components · states · patterns · governance · AI readiness</span>
+        </div>
       </div>
       <div className="ds-tabs" role="tablist" aria-label="Design system views">
         {([["components", "Components"], ["states", "States"], ["scale", "How it scales"]] as const).map(([k, label]) => (

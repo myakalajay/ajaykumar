@@ -24,6 +24,8 @@ export interface Project {
   role: string; client: string; period: string; status: string;
   image: string; link?: string; accent: string;
   domains: string[];
+  platforms: string[];
+  systemRole: string;
   outcomeLine: string;
   scope: string[];
   overview: string;
@@ -64,6 +66,8 @@ export const projects: Project[] = [
     link: "https://homeratesyard.com/",
     accent: "#e4572e",
     domains: ["B2C", "FINTECH"],
+    platforms: ["Web", "Mobile web", "Borrower portal"],
+    systemRole: "Rate cards, status milestones and form patterns systematized for new loan products",
     outcomeLine: "Unified borrower journey from rate discovery to servicing — with a documented 37% reduction in underwriting decision time (CV-documented).",
     scope: ["UX Strategy", "IA", "Interaction", "UI", "Prototype"],
     overview: "A mortgage and lending ecosystem spanning origination, underwriting, onboarding, servicing and lending operations — design direction that connected borrower intent to operational decisions instead of treating rate discovery and underwriting as separate experiences.",
@@ -140,6 +144,8 @@ export const projects: Project[] = [
     image: "/Dashboard.jpg",
     accent: "#2563eb",
     domains: ["B2B", "ENTERPRISE", "AI / DATA"],
+    platforms: ["Web app", "Reporting", "Reconciliation"],
+    systemRole: "Table, filter, status and dashboard patterns reused across five workflow families",
     outcomeLine: "Five workflow families shipped as one system across four data-heavy surfaces; outcome metrics not supplied — marked honestly.",
     scope: ["UX Strategy", "Research", "IA", "Interaction", "UI", "Design System"],
     overview: "Procurement, supplier diversity, compliance, spend visibility and reconciliation brought together through service experiences, onboarding workflows, reporting and dashboards — five workflow families and four data-heavy surfaces designed as one system.",
@@ -215,6 +221,8 @@ export const projects: Project[] = [
     image: "/way2news/product-screens.svg",
     accent: "#7c3aed",
     domains: ["B2B", "ADTECH", "AI / DATA"],
+    platforms: ["Mobile app", "Web console", "4 languages"],
+    systemRole: "Feed cards, segment builders and campaign states sharing one pattern language",
     outcomeLine: "Five products across discovery, segmentation, campaigns and monetisation — one connected audience-signal system.",
     scope: ["Product UX", "Research", "IA", "Interaction", "Data Viz"],
     overview: "Experiences across Way2News, AudiencePlay, AudiencePrime, DigitalKites and TheTasteCompany — content discovery, segmentation, campaign management and monetisation. Five products, four Indian languages, one connected audience-signal system.",
@@ -290,6 +298,8 @@ export const projects: Project[] = [
     image: "/ecommerce-art.svg",
     accent: "#0d9488",
     domains: ["D2C", "E-COMMERCE"],
+    platforms: ["Mobile-first web", "Cart", "Checkout"],
+    systemRole: "Product cards, cart rows, form fields and status pills as one small system",
     outcomeLine: "Six journey stages — discovery, evaluation, cart, checkout, fulfilment, support — defined as one connected flow.",
     scope: ["UX Strategy", "IA", "Interaction", "UI", "Prototype"],
     overview: "A new portfolio chapter focused on product discovery, evaluation, cart, checkout and responsive states — six journey stages defined as one connected flow, with honest evidence boundaries where results were not supplied.",
@@ -362,9 +372,10 @@ export const DOMAINS: { key: string; label: string; tagline: string; areas: stri
   { key: "aidata", label: "AI / DATA", tagline: "AI-assisted workflows", areas: ["Analytics", "Decision systems"] },
   { key: "enterprise", label: "ENTERPRISE", tagline: "Operational systems", areas: ["Complex workflows", "Role-based surfaces"] },
   { key: "ecommerce", label: "E-COMMERCE", tagline: "Commerce journeys", areas: ["Discovery", "Product detail", "Cart", "Checkout"] },
+  { key: "design-systems", label: "DESIGN SYSTEMS", tagline: "Foundations, tokens, governance", areas: ["Components", "States", "Documentation"] },
 ];
 
-export const WORK_FILTERS: readonly string[] = ["ALL", "B2B", "B2C", "D2C", "ENTERPRISE", "FINTECH", "ADTECH", "AI / DATA", "E-COMMERCE"];
+export const WORK_FILTERS: readonly string[] = ["ALL", "B2B", "B2C", "D2C", "ENTERPRISE", "FINTECH", "ADTECH", "AI / DATA", "E-COMMERCE", "DESIGN SYSTEMS"];
 
 export const THINK_STAGES: { stage: string; items: string[]; project: string }[] = [
   { stage: "DISCOVER", items: ["Research", "Context", "Constraints"], project: "Procurement — comparison observation → delivery-risk insight" },
@@ -378,6 +389,11 @@ export const THINK_STAGES: { stage: string; items: string[]; project: string }[]
 
 export const RECRUITER = {
   availability: "Open to opportunities",
+  whyThis: [
+    "Complex enterprise products — procurement, mortgage and audience-data platforms shipped at scale.",
+    "Scalable design systems — tokens, components, states and documentation reused across products.",
+    "AI-assisted design workflows — AI-readable specifications with human-owned decisions.",
+  ],
   specialization: [
     ["Complex product UX", "Enterprise platforms"],
     ["AI-enabled experiences", "Design systems"],
