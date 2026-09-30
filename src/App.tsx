@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
-  ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, BarChart3, BrainCircuit, ChevronDown, Compass,
-  ExternalLink, FileText, Linkedin, Mail, Monitor, Network, Target, Workflow, X,
+  ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown,
+  ExternalLink, FileText, Linkedin, Mail, X,
 } from "lucide-react";
 import {
   case01Facts, case01Hotspots, case01InsightCards, case01Proto, case01SystemStrip,
@@ -10,7 +10,7 @@ import {
   case02Journey, case02Proto, case02SystemStrip,
   case03Facts, case03Hotspots, case03InsightCards, case03Proto, case03SystemStrip,
   case04Facts, case04Proto, case04SystemStrip,
-  THINK_STAGES, WORK_FILTERS, capabilities, CV, EMAIL, experience, LINKEDIN, methods, projects,
+  THINK_STAGES, WORK_FILTERS, CV, EMAIL, experience, LINKEDIN, methods, projects,
   type Project,
 } from "./data";
 import {
@@ -314,10 +314,6 @@ function Demos() {
 
 /* -------------------------------- how I work ------------------------------- */
 
-const capIcons: Record<string, typeof Target> = {
-  target: Target, brain: BrainCircuit, layers: Workflow, workflow: Workflow,
-  compass: Compass, network: Network, monitor: Monitor, chart: BarChart3,
-};
 
 function HowIWork() {
   const [sel, setSel] = useState(0);
@@ -377,25 +373,56 @@ function About() {
     <section className="about" id="about">
       <div className="section-head">
         <Reveal><p className="kicker">ABOUT</p></Reveal>
-        <Reveal delay={0.06}><h2>A designer who thinks<br/><span className="accent-text">beyond screens</span>.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">11+ years across product design, systems thinking, AI / data and enterprise + consumer platforms.</p></Reveal>
+        <Reveal delay={0.06}><h2>The designer behind<br/><span className="accent-text">the systems</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Staff product designer working at the intersection of enterprise complexity, AI-assisted workflows and design-system scale.</p></Reveal>
       </div>
-      <div className="cap-grid">
-        {capabilities.map((c, i) => {
-          const Icon = capIcons[c.icon] ?? Target;
-          return (
-            <Reveal key={c.title} delay={(i % 4) * 0.05}>
-              <div className="cap-card">
-                <span className="cap-top"><span className="cap-num">{String(i + 1).padStart(2, "0")}</span><Icon size={20} strokeWidth={1.6}/></span>
-                <h3>{c.title}</h3>
-                <p>{c.desc}</p>
+      <div className="about-profile">
+        <div className="about-lead">
+          <Reveal>
+            <p className="about-big">I work where products are hardest to use — enterprise platforms, dense data, regulated workflows and emerging AI — and turn them into systems people can act on with confidence.</p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <div className="about-cols">
+              <div>
+                <h3 className="about-h">HOW I WORK</h3>
+                <p>Strategy before screens: I frame the problem, map the actors and constraints, then design the system — IA, workflows, interaction and UI — with engineering in the room from the start. Evidence over opinion: every decision carries its research trail, and every metric on this site is documented or declared a gap.</p>
               </div>
-            </Reveal>
-          );
-        })}
+              <div>
+                <h3 className="about-h">WHAT I CARE ABOUT</h3>
+                <p>Clarity that survives contact with real operations — role-scoped surfaces, recoverable states, and design systems that make the right thing the fast thing. Accessibility is a build standard, not a review step, and AI earns its place only when a human owns the decision.</p>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <div className="about-stats" role="list" aria-label="Career facts">
+              <div role="listitem"><b>11+</b><span>years in product design</span></div>
+              <div role="listitem"><b>6</b><span>companies, 2016 → today</span></div>
+              <div role="listitem"><b>5</b><span>workflow families shipped as one system</span></div>
+              <div role="listitem"><b>4</b><span>languages in one mobile product</span></div>
+            </div>
+          </Reveal>
+        </div>
+        <aside className="about-side">
+          <Reveal delay={0.1}>
+            <h3 className="about-h">PRINCIPLES I DESIGN BY</h3>
+            <ol className="principles">
+              {[
+                ["Clarity is a feature", "Complexity belongs in the system, not the interface."],
+                ["Evidence over opinion", "Claims carry sources; gaps stay declared."],
+                ["Systems before screens", "IA and patterns first — pixels follow the structure."],
+                ["Ship with engineering", "Specs mirror props; design is done with code in the room."],
+              ].map(([t, d]) => (
+                <li key={t}><b>{t}</b><span>{d}</span></li>
+              ))}
+            </ol>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <a className="btn btn-ghost about-cv" href={CV} target="_blank" rel="noreferrer">Full background — résumé <ArrowUpRight size={14}/></a>
+          </Reveal>
+        </aside>
       </div>
       <div className="xp-head">
-        <Reveal><h3 className="xp-title">Experience timeline</h3></Reveal>
+        <Reveal><h3 className="xp-title">Career progression <em>— designer → senior → lead consultant</em></h3></Reveal>
       </div>
       <div className="xp-timeline">
         <span className="xp-line" aria-hidden="true"/>
@@ -417,11 +444,6 @@ function About() {
       <Reveal delay={0.1}>
         <div className="employers" aria-label="Companies worked with">
           <b>HomeLoc</b><b>Computech</b><b>Visual IT</b><b>Gaian</b><b>Way2News</b><b>Nitya Software</b>
-        </div>
-      </Reveal>
-      <Reveal delay={0.15}>
-        <div className="about-more">
-          <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer">Full background — résumé <ArrowUpRight size={14}/></a>
         </div>
       </Reveal>
     </section>

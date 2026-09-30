@@ -1653,3 +1653,38 @@ section { padding: var(--s10) var(--gutter); position: relative; }
   .xp-dot, .xp-domain, .xp-line { display: none; }
   .xp-timeline { padding-left: 0; }
 }
+
+/* ====== about redesign: editorial profile ====== */
+.about-profile { max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 64px; align-items: start; }
+.about-big { margin: 0 0 32px; font-family: "Bricolage Grotesque Variable", sans-serif; font-size: clamp(22px, 2.4vw, 30px); line-height: 1.32; letter-spacing: -0.02em; font-weight: 620; color: var(--ink); max-width: 640px; }
+.about-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px; }
+.about-cols p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--body); }
+.about-h { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.22em; color: var(--muted); margin: 0 0 12px; }
+.about-stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.about-stats > div { padding: 20px 16px 0 0; display: grid; gap: 4px; }
+.about-stats > div + div { border-left: 1px solid var(--line); padding-left: 16px; }
+.about-stats b { font-family: "Bricolage Grotesque Variable", sans-serif; font-size: clamp(26px, 2.6vw, 36px); font-weight: 750; letter-spacing: -0.03em; line-height: 1; color: var(--ink); }
+.about-stats span { font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+.about-side { border-left: 1px solid var(--line); padding-left: 40px; display: grid; gap: 24px; }
+.principles { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: pr; }
+.principles li { counter-increment: pr; display: grid; grid-template-columns: 30px 1fr; gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.principles li:first-child { padding-top: 4px; }
+.principles li:last-child { border-bottom: 0; }
+.principles li::before { content: counter(pr, decimal-leading-zero); font-family: var(--mono); font-size: 11px; font-weight: 700; color: var(--accent); }
+.principles b { grid-column: 2; display: block; font-size: 14.5px; margin-bottom: 3px; }
+.principles span { grid-column: 2; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.about-cv { justify-self: start; }
+.xp-title { font-family: "Bricolage Grotesque Variable", sans-serif; font-size: 22px; letter-spacing: -0.015em; margin: 0; font-weight: 720; }
+.xp-title em { font-style: normal; font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; margin-left: 10px; }
+@media (max-width: 1024px) {
+  .about-profile { grid-template-columns: 1fr; gap: 40px; }
+  .about-side { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 32px; }
+}
+@media (max-width: 640px) {
+  .about-cols { grid-template-columns: 1fr; gap: 24px; margin-bottom: 32px; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
+  .about-stats > div { padding: 16px 0 0 0; }
+  .about-stats > div:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .about-stats > div:nth-child(-n+2) { border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+  .xp-title em { display: block; margin: 6px 0 0; }
+}
