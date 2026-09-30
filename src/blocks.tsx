@@ -356,7 +356,7 @@ export function CaseHero({ p, meta, image, imageAlt }: { p: Project; meta: { lab
     <header className="chero" style={{ ["--accent" as string]: p.accent } as React.CSSProperties}>
       <motion.div initial={reduce ? false : { opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, ease: EASE }}>
         <div className="chero-tags">
-          {["B2B", "ENTERPRISE", "PROCUREMENT", "DATA / WORKFLOW"].map(t => <span key={t}>{t}</span>)}
+          {[...p.domains, p.tag.split(" / ")[0]].filter((t, i, a) => a.indexOf(t) === i).slice(0, 4).map(t => <span key={t}>{t}</span>)}
         </div>
         <h1>{p.title}</h1>
         <p className="chero-sub">{p.subtitle}</p>

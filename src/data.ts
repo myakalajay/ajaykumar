@@ -214,7 +214,7 @@ export const projects: Project[] = [
     status: "MULTI-PRODUCT",
     image: "/way2news/product-screens.svg",
     accent: "#7c3aed",
-    domains: ["B2B", "MADTECH", "AI / DATA"],
+    domains: ["B2B", "ADTECH", "AI / DATA"],
     outcomeLine: "Five products across discovery, segmentation, campaigns and monetisation — one connected audience-signal system.",
     scope: ["Product UX", "Research", "IA", "Interaction", "Data Viz"],
     overview: "Experiences across Way2News, AudiencePlay, AudiencePrime, DigitalKites and TheTasteCompany — content discovery, segmentation, campaign management and monetisation. Five products, four Indian languages, one connected audience-signal system.",
@@ -351,20 +351,20 @@ export const projects: Project[] = [
     testing: [["Product findability", "Tree test / moderated task", "Test plan; result not supplied"], ["Product comprehension", "Task-based usability test", "Test plan; result not supplied"], ["Checkout completion", "End-to-end task + analytics", "Test plan; result not supplied"]],
     improve: ["Instrument analytics to quantify checkout completion and return rates.", "A/B test checkout step sequencing.", "Extend state coverage to multi-address and split-shipment scenarios."]
   }
-];
-
-/* ------------------------------ domain taxonomy ------------------------------ */
+];/* ------------------------------ domain taxonomy ------------------------------ */
 
 export const DOMAINS: { key: string; label: string; tagline: string; areas: string[] }[] = [
   { key: "b2b", label: "B2B", tagline: "Enterprise workflows", areas: ["Procurement", "Operations", "Compliance"] },
   { key: "b2c", label: "B2C", tagline: "Consumer platforms", areas: ["Decision journeys", "Self-service"] },
   { key: "d2c", label: "D2C", tagline: "Commerce", areas: ["Conversion", "Retention"] },
   { key: "fintech", label: "FINTECH", tagline: "Financial workflows", areas: ["Decision support", "Trust"] },
-  { key: "madtech", label: "MADTECH", tagline: "Audience intelligence", areas: ["Data platforms", "Campaign workflows"] },
+  { key: "adtech", label: "ADTECH", tagline: "Audience intelligence", areas: ["Data platforms", "Campaign workflows"] },
   { key: "aidata", label: "AI / DATA", tagline: "AI-assisted workflows", areas: ["Analytics", "Decision systems"] },
   { key: "enterprise", label: "ENTERPRISE", tagline: "Operational systems", areas: ["Complex workflows", "Role-based surfaces"] },
   { key: "ecommerce", label: "E-COMMERCE", tagline: "Commerce journeys", areas: ["Discovery", "Product detail", "Cart", "Checkout"] },
 ];
+
+export const WORK_FILTERS: readonly string[] = ["ALL", "B2B", "B2C", "D2C", "ENTERPRISE", "FINTECH", "ADTECH", "AI / DATA", "E-COMMERCE"];
 
 export const THINK_STAGES: { stage: string; items: string[]; project: string }[] = [
   { stage: "DISCOVER", items: ["Research", "Context", "Constraints"], project: "Procurement — comparison observation → delivery-risk insight" },
@@ -374,12 +374,24 @@ export const THINK_STAGES: { stage: string; items: string[]; project: string }[]
   { stage: "SCALE", items: ["Design system", "Governance", "Measurement"], project: "Procurement — patterns reused across five workflow families" },
 ];
 
-export const WORK_SIGNALS: { title: string; desc: string }[] = [
-  { title: "Strategy", desc: "Align product, business and user needs before interface decisions." },
-  { title: "Systems", desc: "Build reusable patterns rather than isolated screens." },
-  { title: "Collaboration", desc: "Work closely with product, engineering and stakeholders." },
-  { title: "Execution", desc: "Move from ambiguity to production-ready interfaces." },
-];
+/* ---------------------------- recruiter / hiring manager -------------------- */
+
+export const RECRUITER = {
+  availability: "Open to opportunities",
+  specialization: [
+    ["Complex product UX", "Enterprise platforms"],
+    ["AI-enabled experiences", "Design systems"],
+    ["Data-heavy workflows", "B2B · B2C · D2C"],
+  ],
+  domains: ["Fintech", "B2B", "SaaS", "E-commerce", "AdTech", "MediaTech", "EdTech", "Enterprise"],
+  tools: ["Figma", "FigJam", "Prototyping", "Design Systems", "UX Research", "AI-assisted Design"],
+  links: [
+    { label: "Selected work", kind: "work" },
+    { label: "Résumé", kind: "resume" },
+    { label: "LinkedIn", kind: "linkedin" },
+    { label: "Contact", kind: "contact" },
+  ] as { label: string; kind: string }[],
+};
 
 export const ARTIFACTS: { src: string; alt: string; label: string; kind: string }[] = [
   { src: "/concept-maps/service-blueprint-realistic-clean.png", alt: "Procurement service blueprint", label: "Service blueprint", kind: "Procurement case" },
@@ -452,14 +464,106 @@ export const case02SystemStrip: { name: string; kind: string }[] = [
   { name: "Notifications", kind: "Inline, actionable, quiet" },
 ];
 
+/* case 04 — commerce */
+export const case04Facts: { label: string; value: string }[] = [
+  { label: "ROLE", value: "Product Designer" },
+  { label: "PERIOD", value: "2025 – 26" },
+  { label: "PRODUCT", value: "End-to-end D2C storefront" },
+  { label: "FOCUS", value: "Journey · Trust · Checkout states" },
+];
+
+/* case 04 — commerce */
+export const case04Proto: ProtoFrame[] = [
+  { stage: "01", caption: "Storefront — value and filters up front", mock: "shop" },
+  { stage: "02", caption: "Product page — trust cues at the decision point", mock: "checkout" },
+  { stage: "03", caption: "Checkout — honest totals, explicit states", mock: "checkout" },
+  { stage: "04", caption: "Order state — clarity after payment", mock: "checkout" },
+];
+
+export const case04SystemStrip: { name: string; kind: string }[] = [
+  { name: "Product cards", kind: "Value, price, rating, trust cues" },
+  { name: "Cart rows", kind: "Quantity, remove, honest totals" },
+  { name: "Checkout form", kind: "Sequenced certainty before commitment" },
+  { name: "Status pills", kind: "Loading · empty · error · success" },
+];
+
+/* case 03 — audience intelligence */
+export const case03Facts: { label: string; value: string }[] = [
+  { label: "ROLE", value: "Senior Product Designer" },
+  { label: "PERIOD", value: "2018 – 21" },
+  { label: "PRODUCT", value: "Five products · 4 languages" },
+  { label: "FOCUS", value: "Discovery · Segments · Campaigns" },
+];
+
+export const case03InsightCards: InsightCard[] = [
+  { title: "Static segments go stale", insight: "Segments defined as fixed lists stop matching live behaviour.", implication: "Segments defined by behaviour, refreshed from the signal system." },
+  { title: "Blind targeting is a connectivity problem", insight: "Targeting failed where discovery signals never reached campaign surfaces.", implication: "One behavioural signal system wired into every surface." },
+  { title: "Flattening fails both jobs", insight: "Enterprise consoles for readers, feed thinking for analysts — both failed.", implication: "Separate products for discovery and intelligence, one shared signal core." },
+  { title: "Vanity metrics misdirect investment", insight: "Content investment tracked numbers that never reached revenue reality.", implication: "Monetisation traceable to audience signals, not vanity counters." },
+];
+
+export const case03Hotspots: Hotspot[] = [
+  { x: 22, y: 26, label: "Language-first discovery", text: "The feed leads with the reader's language — retention structure for four editions." },
+  { x: 70, y: 26, label: "Live segments", text: "Behaviour-defined segments replace stale static lists in the console." },
+  { x: 22, y: 70, label: "Campaign states", text: "Targeting, budget and measurement states made explicit per campaign." },
+  { x: 70, y: 70, label: "Monetisation trail", text: "Revenue traceable back to the audience signals that produced it." },
+];
+
+export const case03Proto: ProtoFrame[] = [
+  { stage: "01", caption: "Discover feed — language-first, zero friction", mock: "feed", phone: true },
+  { stage: "02", caption: "Audience console — live segments", mock: "segments" },
+  { stage: "03", caption: "Campaigns — explicit targeting states", mock: "dash" },
+  { stage: "04", caption: "AI recommendation — evidence + human review", mock: "supplier" },
+];
+
+export const case03SystemStrip: { name: string; kind: string }[] = [
+  { name: "Feed cards", kind: "Language-first, image-led, minimal chrome" },
+  { name: "Segment builder", kind: "Behaviour-defined, live refresh" },
+  { name: "Campaign states", kind: "Draft · targeting · live · measured" },
+  { name: "Signal chips", kind: "Source, freshness, confidence" },
+];
+
+/* case 01 — mortgage */
+export const case01Facts: { label: string; value: string }[] = [
+  { label: "ROLE", value: "Lead Product Design Consultant" },
+  { label: "PERIOD", value: "2024 – 26" },
+  { label: "PRODUCT", value: "Mortgage origination → servicing" },
+  { label: "FOCUS", value: "Trust · Underwriting · Status clarity" },
+];
+
+export const case01InsightCards: InsightCard[] = [
+  { title: "Black-box status is the trust failure", insight: "Silence between application and closing reads as risk to borrowers.", implication: "Live underwriting milestones with plain-language explanation." },
+  { title: "Jargon creates passive compliance", insight: "Borrowers completed dense forms without understanding them.", implication: "One guided form language anchored on total cost." },
+  { title: "Comparison needs operational context", insight: "Rate options in lender language could not be acted on.", implication: "Differences framed operationally, not just numerically." },
+  { title: "The journey ended at closing", insight: "No servicing entry meant the relationship stopped at the loan.", implication: "Servicing continuation designed into the journey." },
+];
+
+export const case01Hotspots: Hotspot[] = [
+  { x: 22, y: 26, label: "Rate discovery", text: "Options anchored on total cost, not lender jargon — decision-ready comparison." },
+  { x: 70, y: 26, label: "Live milestones", text: "Underwriting state visible in plain language beside the rate choice." },
+  { x: 22, y: 70, label: "Guided forms", text: "One form language replacing per-lender jargon across the application." },
+  { x: 70, y: 70, label: "Servicing entry", text: "The journey continues after closing instead of ending at it." },
+];
+
+export const case01Proto: ProtoFrame[] = [
+  { stage: "01", caption: "Rate discovery — total-cost-anchored options", mock: "rates" },
+  { stage: "02", caption: "Borrower dashboard — live underwriting milestones", mock: "dash" },
+  { stage: "03", caption: "Decision — affordability read beside the payment", mock: "rates" },
+];
+
+export const case01SystemStrip: { name: string; kind: string }[] = [
+  { name: "Rate cards", kind: "Total-cost anchor, term tradeoffs" },
+  { name: "Status milestones", kind: "Plain-language underwriting states" },
+  { name: "Guided forms", kind: "One language across lenders" },
+  { name: "Evidence panel", kind: "What changed and why, at each step" },
+];
+
+/* --------------------------------- about ---------------------------------- */
+
 export const capabilities: { icon: string; title: string; desc: string }[] = [
-  { icon: "target", title: "Product Strategy", desc: "Problem framing through validation and delivery — ambiguous problems made directional." },
-  { icon: "brain", title: "AI Product Design", desc: "Human-in-the-loop and intelligent interfaces: evidence, confidence, accountability." },
   { icon: "layers", title: "Design Systems", desc: "Scalable components, tokens, variants and governance." },
   { icon: "workflow", title: "Complex Workflows", desc: "Enterprise and operational systems designed for clarity and recovery." },
-  { icon: "compass", title: "UX Research", desc: "Interviews, journey mapping and validation trails tied to decisions." },
-  { icon: "network", title: "Information Architecture", desc: "Roles, surfaces and dependencies structured before interface." },
-  { icon: "monitor", title: "Interaction & UI", desc: "Editorial craft: hierarchy, states, motion and detail at production quality." },
+  { icon: "brain", title: "AI Product Design", desc: "Human-in-the-loop and intelligent interfaces: evidence, confidence, accountability." },
   { icon: "chart", title: "Data Visualization", desc: "Dense operational data made decision-ready." }
 ];
 

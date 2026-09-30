@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
-  ArrowRight, Check, ChevronDown, Download, FileText, Linkedin, Mail, ShieldCheck,
+  ArrowRight, ArrowUpRight, Check, ChevronDown, Download, FileText, LayoutGrid, Linkedin, Mail, ShieldCheck,
   Sparkles, X,
 } from "lucide-react";
-import { CV, EMAIL, LINKEDIN, projects, type Project } from "./data";
+import { CV, EMAIL, LINKEDIN, RECRUITER, projects, type Project } from "./data";
+import { scrollTo } from "./blocks";
+
+const MSA = {
+  "01": "#e4572e", "02": "#2563eb", "03": "#7c3aed", "04": "#0d9488",
+} as Record<string, string>;
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const ru = (n: number) => "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
@@ -226,13 +231,12 @@ export function AiLoopDemo() {
 
 /* ---------------------------- 4. Recruiter View ---------------------------- */
 
-const STRENGTHS = [
-  ["Enterprise Product Design", "Complex workflows and operational systems."],
-  ["AI Product Design", "Human-in-the-loop and intelligent interfaces."],
-  ["Design Systems", "Scalable components and governance."],
-  ["Product Strategy", "Problem framing through validation and delivery."],
+const rvLinks = (onClose: () => void): { label: string; href: string; action?: () => void; icon: ReactNode }[] => [
+  { label: "Selected work", href: "#work", action: () => { onClose(); setTimeout(() => scrollTo("#work"), 80); }, icon: <LayoutGrid size={14}/> },
+  { label: "Résumé", href: CV, icon: <FileText size={14}/> },
+  { label: "LinkedIn", href: LINKEDIN, icon: <Linkedin size={14}/> },
+  { label: "Contact", href: `mailto:${EMAIL}`, icon: <Mail size={14}/> },
 ];
-const SKILLS = ["Product Strategy", "UX Research", "Information Architecture", "Interaction Design", "UI Design", "Design Systems", "AI UX", "Data Visualization", "Prototyping", "Design Leadership"];
 
 export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -272,35 +276,126 @@ export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () =
             <button ref={closeRef} className="rv-close" onClick={onClose} aria-label="Close recruiter view"><X size={18}/></button>
             <header className="rv-head">
               <h3>AJAY KUMAR MYAKALA</h3>
-              <p className="rv-role">Senior Product Designer · 11+ years</p>
-              <p className="rv-line">Designing enterprise products, complex workflows and AI-enabled experiences.</p>
+              <p className="rv-role">Senior Product Designer / UX Designer · 11+ years</p>
+              <p className="rv-line">Complex product UX · Enterprise platforms · AI-enabled experiences · Design systems · Data-heavy workflows · B2B / B2C / D2C</p>
+              <p className="rv-avail"><i aria-hidden="true"/> Open to opportunities</p>
             </header>
             <section className="rv-sec">
-              <h4>KEY STRENGTHS</h4>
-              <div className="rv-strengths">
-                {STRENGTHS.map(([t, d]) => <div key={t}><b>{t}</b><span>{d}</span></div>)}
+              <h4>SPECIALIZATION</h4>
+              <div className="rv-grid2">
+                {RECRUITER.specialization.map(([t, d]) => <div key={t} className="rv-spec"><b>{t}</b><span>{d}</span></div>)}
               </div>
             </section>
             <section className="rv-sec">
-              <h4>SELECTED EXPERIENCE</h4>
-              <div className="rv-xp">
-                {projects.slice(0, 3).map(p => <div key={p.id}><b>{p.short}</b><span>{p.domain}</span></div>)}
-              </div>
+              <h4>DOMAINS</h4>
+              <div className="rv-chips">{RECRUITER.domains.map(d => <span key={d}>{d}</span>)}</div>
             </section>
             <section className="rv-sec">
-              <h4>CORE SKILLS</h4>
-              <div className="rv-skills">{SKILLS.map(s => <span key={s}>{s}</span>)}</div>
+              <h4>TOOLS</h4>
+              <div className="rv-chips">{RECRUITER.tools.map(t => <span key={t}>{t}</span>)}</div>
+            </section>
+            <section className="rv-sec">
+              <h4>QUICK LINKS</h4>
+              <div className="rv-links">
+                {rvLinks(onClose).map(l => l.action
+                  ? <button key={l.label} onClick={l.action}>{l.icon}{l.label} <ArrowRight size={12}/></button>
+                  : <a key={l.label} href={l.href} target={l.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">{l.icon}{l.label} <ArrowUpRight size={12}/></a>
+                )}
+              </div>
             </section>
             <section className="rv-actions">
               <a className="btn btn-primary" href={CV} target="_blank" rel="noreferrer"><Download size={15}/> Download Résumé</a>
-              <a className="btn btn-ghost" href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin size={15}/> LinkedIn</a>
-              <a className="btn btn-ghost" href={`mailto:${EMAIL}`}><Mail size={15}/> Email</a>
-              <button className="btn btn-ghost" onClick={onClose}>View Selected Work <ArrowRight size={14}/></button>
+              <a className="btn btn-ghost" href={`mailto:${EMAIL}`}><Mail size={15}/> Start a conversation</a>
             </section>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+/* --------------------------- 4b. commerce demo ----------------------------- */
+
+const STORE = [
+  { id: "p1", name: "Aer Press Coffee Maker", price: 89, tag: "Bestseller", rating: "4.8", reviews: 1240, ship: "Free returns · 30 days" },
+  { id: "p2", name: "Ceramic Pour-Over Set", price: 54, tag: "New", rating: "4.6", reviews: 86, ship: "Free returns · 30 days" },
+  { id: "p3", name: "Stainless Carafe 1L", price: 32, tag: null, rating: "4.7", reviews: 431, ship: "Free returns · 30 days" },
+  { id: "p4", name: "Hand Grinder Pro", price: 76, tag: "Bestseller", rating: "4.9", reviews: 2107, ship: "Free returns · 30 days" },
+];
+
+export function CommerceDemo() {
+  const [cart, setCart] = useState<{ id: string; qty: number }[]>([]);
+  const count = cart.reduce((n, c) => n + c.qty, 0);
+  const total = cart.reduce((n, c) => n + c.qty * (STORE.find(s => s.id === c.id)?.price ?? 0), 0);
+  const add = (id: string) => setCart(c => {
+    const hit = c.find(x => x.id === id);
+    return hit ? c.map(x => x.id === id ? { ...x, qty: x.qty + 1 } : x) : [...c, { id, qty: 1 }];
+  });
+  const setQty = (id: string, d: 1 | -1) => setCart(c => c
+    .map(x => x.id === id ? { ...x, qty: x.qty + d } : x)
+    .filter(x => x.qty > 0));
+
+  return (
+    <div className="demo" role="group" aria-label="Interactive commerce demo — illustrative prototype">
+      <div className="demo-tag"><Sparkles size={12}/> ILLUSTRATIVE PROTOTYPE · LIVE INTERACTION</div>
+      <div className="cd-frame">
+        <div className="cd-grid">
+          <div className="cd-shop" aria-label="Storefront">
+            <div className="cd-shop-head">
+              <b>Daily Goods</b>
+              <span className="cd-cartbtn" aria-live="polite">Cart · {count}</span>
+            </div>
+            <div className="cd-products">
+              {STORE.map(p => (
+                <button key={p.id} className="cd-product" onClick={() => add(p.id)} aria-label={`Add ${p.name} to cart, $${p.price}`}>
+                  <span className="cd-thumb" style={{ background: "linear-gradient(140deg, #0d9488 0%, #c9a227 130%)", opacity: 0.16 }} aria-hidden="true"/>
+                  <b>{p.name}</b>
+                  <em>{p.rating} ★ · {p.reviews.toLocaleString("en-US")} reviews</em>
+                  {p.tag && <i>{p.tag}</i>}
+                  <small>${p.price} · {p.ship}</small>
+                  <span className="cd-add">Add to cart <ArrowRight size={12}/></span>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="cd-side">
+            {cart.length === 0 ? (
+              <div className="cd-empty">
+                <b>Your cart is empty</b>
+                <span>Every state is designed — this is the empty state.</span>
+              </div>
+            ) : (
+              <>
+                <div className="cd-cart">
+                  {cart.map(c => {
+                    const p = STORE.find(s => s.id === c.id)!;
+                    return (
+                      <div className="cd-row" key={c.id}>
+                        <b>{p.name}</b>
+                        <span className="cd-qty">
+                          <button onClick={() => setQty(c.id, -1)} aria-label={`Remove one ${p.name}`}>−</button>
+                          {c.qty}
+                          <button onClick={() => setQty(c.id, 1)} aria-label={`Add one ${p.name}`}>+</button>
+                        </span>
+                        <em>${p.price * c.qty}</em>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="cd-totals">
+                  <span><small>Subtotal</small><b>${total}</b></span>
+                  <span><small>Shipping</small><b>Free</b></span>
+                  <span className="cd-total"><small>Total</small><b>${total}</b></span>
+                  <p>The total is honest from the cart — no surprise costs at payment.</p>
+                </div>
+                <button className="cd-checkout">Checkout · ${total}</button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+      <p className="demo-note">Concept demo of the commerce journey from the E-commerce case — cart and totals logic is real, catalogue is conceptual.</p>
+    </div>
   );
 }
 
@@ -311,9 +406,9 @@ export function DesignSystem() {
   return (
     <section className="ds" id="capabilities">
       <div className="section-head">
-        <p className="kicker">DESIGN SYSTEMS</p>
-        <h2>Components, states<br/>and <span className="accent-text">how the system scales</span>.</h2>
-        <p className="section-sub">A working specimen of the patterns this portfolio is built from — the same tokens, components and states used inside the case studies.</p>
+        <p className="kicker">DESIGN SYSTEM</p>
+        <h2>One system, carried from case studies<br/>to <span className="accent-text">this site itself</span>.</h2>
+        <p className="section-sub">The tokens, components and states used inside the case studies — reused to build this portfolio.</p>
       </div>
       <div className="ds-tabs" role="tablist" aria-label="Design system views">
         {([["components", "Components"], ["states", "States"], ["scale", "How it scales"]] as const).map(([k, label]) => (
@@ -355,7 +450,7 @@ export function DesignSystem() {
             </div>
             <div className="ds-cell wide"><small>DATA VIZ — CHART</small>
               <div className="ds-bars" aria-hidden="true">
-                {[38, 55, 42, 68, 50, 74, 60, 82].map((h, i) => <i key={i} style={{ height: `${h}%` }}/>)}
+                {[38, 55, 42, 68, 50, 74].map((h, i) => <i key={i} style={{ height: `${h}%` }}/>)}
               </div>
             </div>
           </div>
@@ -376,7 +471,7 @@ export function DesignSystem() {
               <div className="ds-ai"><span className="ds-ai-badge">AI</span><p>Recommended: <b>Northwind Parts</b> — lowest blended cost within Low delivery risk. <em>Evidence: on-time 97% · price file · ISO 9001.</em></p><span className="ds-pill ok">86% confidence</span></div>
             </div>
             <div className="ds-cell wide"><small>RESPONSIVE BEHAVIOUR</small>
-              <p className="ds-note">Tables collapse to stacked cards below 768px, chart panels reflow to single column, and diagrams switch to horizontal scroll — never shrink text below 13px.</p>
+              <p className="ds-note">Tables collapse to stacked cards below 768px, chart panels reflow to single column, diagrams switch to horizontal scroll — 8px grid, 44px touch targets, no text below 13px.</p>
             </div>
           </div>
         )}
@@ -401,5 +496,6 @@ export function caseDemo(p: Project): ReactNode {
   if (p.id === "01") return <MortgageDemo/>;
   if (p.id === "02") return <SupplierDemo/>;
   if (p.id === "03") return <AiLoopDemo/>;
+  if (p.id === "04") return <CommerceDemo/>;
   return null;
 }
