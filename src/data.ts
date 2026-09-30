@@ -11,6 +11,14 @@ export interface ResearchChain { observation: string; pattern: string; insight: 
 
 export interface CaseMap { map: string; mapAlt: string; title: string; desc: string; evidence: string; evidenceAlt: string; }
 
+/* -------- case-02 editorial upgrade: all content grounded in existing copy ------- */
+
+export interface InsightCard { title: string; insight: string; implication: string; }
+export interface JourneyStage { stage: string; goal: string; response: string; pain: string; }
+export interface DecisionUi { what: string; why: string; evidence: string; result: string; mock: MockVariant; ui: string; }
+export interface Hotspot { x: number; y: number; label: string; text: string; }
+export interface ProtoFrame { stage: string; caption: string; mock: MockVariant; phone?: boolean; }
+
 export interface Project {
   id: string; tag: string; domain: string; title: string; short: string; subtitle: string;
   role: string; client: string; period: string; status: string;
@@ -335,7 +343,68 @@ export const projects: Project[] = [
   }
 ];
 
-/* ------------------------------- capabilities ------------------------------ */
+/* -------------------------- case-02 editorial upgrade -------------------------- */
+
+export const case02Facts: { label: string; value: string }[] = [
+  { label: "ROLE", value: "Senior Product Designer" },
+  { label: "DOMAIN", value: "B2B / Enterprise" },
+  { label: "PRODUCT", value: "Procurement platform" },
+  { label: "FOCUS", value: "Workflow / Data / Operations" },
+];
+
+export const case02Complexity = ["MULTIPLE SYSTEMS", "SUPPLIER DATA", "OPERATIONAL DECISIONS", "PROCUREMENT ACTION"];
+
+export const case02EvidenceBoard: { key: string; icon: string; title: string; desc: string }[] = [
+  { key: "OBSERVE", icon: "observe", title: "Scattered comparison", desc: "Users compared supplier attributes — price, lead time, certifications, delivery history — across views that didn't talk to each other." },
+  { key: "PATTERN", icon: "pattern", title: "Delivery confidence outweighs price", desc: "A cheaper supplier with uncertain delivery lost to a pricier, reliable one — repeatedly." },
+  { key: "INSIGHT", icon: "insight", title: "Risk belongs beside cost", desc: "Operational risk visible alongside price is what makes a supplier decision complete." },
+  { key: "DESIGN RESPONSE", icon: "response", title: "Risk beside cost, everywhere", desc: "Delivery risk surfaced beside supplier cost in every comparison and recommendation surface." },
+];
+
+export const case02InsightCards: InsightCard[] = [
+  { title: "Dashboards became wallpaper", insight: "Dashboards without a next action get checked once, then ignored.", implication: "Every surface leads with the next operational action for the role viewing it." },
+  { title: "Mismatched records erode trust", insight: "When supplier and spend records don't match, users stop trusting every number downstream.", implication: "Reconciliation designed as a guided mismatch-resolution flow, not a static report." },
+  { title: "Compliance became a bottleneck", insight: "Unclear review priorities turned compliance from a gate into a queue with no order.", implication: "Review priorities made explicit inside the workflow at the point of action." },
+  { title: "Static reports shift the burden", insight: "Reports that require manual interpretation move analytical work onto the reader.", implication: "Reporting surfaces carry interpretation — status, exception and next step together." },
+];
+
+export const case02Journey: JourneyStage[] = [
+  { stage: "Onboard", goal: "Register as a supplier without chasing scattered data requests.", response: "One intake flow with clear, staged asks.", pain: "Lengthy registration stalled onboarding before value." },
+  { stage: "Collect", goal: "See supplier records and spend data in one place.", response: "Role-based dashboards grounded in one supplier registry.", pain: "Data arrived scattered across roles and systems." },
+  { stage: "Review", goal: "Know which reviews matter now.", response: "Priorities and compliance state at the point of action.", pain: "Unclear priorities turned compliance into a bottleneck." },
+  { stage: "Reconcile", goal: "Resolve mismatches between supplier and spend records.", response: "Guided mismatch-resolution flow with both records side by side.", pain: "Mismatches surfaced late, eroding trust in numbers." },
+  { stage: "Report", goal: "Interpret spend without manual analysis.", response: "Status, exception and next step carried inside reporting surfaces.", pain: "Static reports shifted analysis onto the reader." },
+  { stage: "Act", goal: "Take the next procurement action with confidence.", response: "Next action surfaced first on every dashboard.", pain: "No signal for what to do next became wallpaper." },
+];
+
+export const case02Decisions: DecisionUi[] = [
+  { what: "Role-based dashboard IA — each role lands on its decisions, next action first.", why: "Undifferentiated dashboards made everything visible and nothing prioritised.", evidence: "Stakeholder interviews mapped jobs per role; the opportunity matrix ranked gaps by user value and delivery confidence.", result: "Five workflow families shipped as one system across four data-heavy surfaces (scope, documented).", mock: "supplier", ui: "Supplier Network — role landing surface" },
+  { what: "Delivery risk displayed beside supplier cost in comparisons and recommendations.", why: "Price was an incomplete decision input without operational risk context.", evidence: "Comparison observation: delivery confidence influenced decisions more than expected.", result: "Users identified preferred suppliers faster in walkthroughs (qualitative).", mock: "segments", ui: "Comparison states — risk beside cost" },
+  { what: "Reconciliation as a mismatch-resolution flow, not a static report.", why: "Mismatched records eroded trust in every downstream number.", evidence: "Blueprint exposed where supplier and spend data joins failed silently.", result: "Mismatch review became an actionable workflow; objective — no fabricated metric attached.", mock: "spend", ui: "Spend visibility — reconciliation states" },
+];
+
+export const case02Hotspots: Hotspot[] = [
+  { x: 21, y: 24, label: "Supplier performance", text: "On-time delivery and risk states visible beside cost — the core comparison input." },
+  { x: 68, y: 24, label: "Next action", text: "Each role's surface leads with the next operational step, not raw data." },
+  { x: 21, y: 68, label: "Exception states", text: "Records in review or mismatched are flagged inline, not buried in reports." },
+  { x: 68, y: 68, label: "Operational trend", text: "Delivery and spend trends framed as decisions to make, not charts to read." },
+];
+
+export const case02Proto: ProtoFrame[] = [
+  { stage: "01", caption: "Supplier discovery — register and performance at a glance", mock: "supplier" },
+  { stage: "02", caption: "Comparison — risk displayed beside cost", mock: "segments" },
+  { stage: "03", caption: "Reconciliation — guided mismatch resolution", mock: "spend" },
+];
+
+export const case02SystemStrip: { name: string; kind: string }[] = [
+  { name: "Buttons", kind: "Primary / ghost / destructive" },
+  { name: "Inputs & selects", kind: "Field, search, filter chips" },
+  { name: "Tables", kind: "Sortable, selectable, expandable" },
+  { name: "Status", kind: "Active · review · mismatch" },
+  { name: "Charts", kind: "Trend, donut, category bars" },
+  { name: "Navigation", kind: "Role-based landing rails" },
+  { name: "Notifications", kind: "Inline, actionable, quiet" },
+];
 
 export const capabilities: { icon: string; title: string; desc: string }[] = [
   { icon: "target", title: "Product Strategy", desc: "Problem framing through validation and delivery — ambiguous problems made directional." },

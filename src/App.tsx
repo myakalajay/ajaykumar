@@ -5,11 +5,16 @@ import {
   ExternalLink, FileText, Linkedin, Mail, Monitor, Network, Target, Workflow, X,
 } from "lucide-react";
 import {
+  case02Complexity, case02Decisions, case02EvidenceBoard, case02Facts, case02Hotspots, case02InsightCards,
+  case02Journey, case02Proto, case02SystemStrip,
   capabilities, CV, EMAIL, experience, LINKEDIN, methods, projects,
   type MockVariant, type Project, type WfVariant,
 } from "./data";
 import {
-  BeforeAfter, Counter, DecisionsBlock, EASE, JourneyMap, Marquee, Reveal, ResearchChainBlock,
+  BeforeAfter, CaseHero, ComponentStrip, ComplexityChain, ConstraintExplorer, Counter, DecisionsBlock,
+  EASE, EditorialSection, EvidenceBoard, FactsBar, HotspotImage, InsightCards, JourneyMap, JourneyRail,
+  CaseSectionNav,
+  Lightbox, Marquee, ProtoPlayer, Reveal, ResearchChainBlock, RoleQuad,
   scrollTo, ServiceBlueprint, SpotlightCard, SystemMaps, TestDonut,
 } from "./blocks";
 import { BrowserFrame, DesktopMock, MockScreen, PhoneFrame, Wireframe } from "./mocks";
@@ -389,100 +394,172 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
           <button ref={closeRef} className="case-close" onClick={onClose} aria-label="Close case study"><X size={17}/></button>
         </div>
       </div>
-
-      <div className="case-wrap">
-        <header className="case-hero">
-          <span className="case-kicker" style={{ color: project.accent }}>{project.tag} · {project.status}</span>
-          <h1>{project.title}</h1>
-          <p>{project.subtitle}</p>
-          <div className="case-meta">
-            <span><b>ROLE</b>{project.role}</span>
-            <span><b>CLIENT</b>{project.client}</span>
-            <span><b>PERIOD</b>{project.period}</span>
-            <span><b>DOMAIN</b>{project.domain}</span>
-          </div>
-        </header>
-
-        <CaseSection n="01" title="Overview">
-          <p className="case-body">{project.overview}</p>
-          <div className="case-pills">{project.scope.map(x => <span key={x}>{x}</span>)}</div>
-        </CaseSection>
-
-        <CaseSection n="02" title="The challenge">
-          {project.challenge.map((c, i) => <p className={`case-body ${i === 0 ? "case-problem" : ""}`} key={i}>{c}</p>)}
-        </CaseSection>
-
-        <CaseSection n="03" title="My role">
-          <div className="role-grid">
-            <div className="role-col">
-              <small>I OWNED</small>
-              <ul>{project.rolePoints.map(x => <li key={x}>{x}</li>)}</ul>
+      <div className={`case-wrap ${project.id === "02" ? "case-wrap--editorial" : ""}`}>
+        {project.id === "02" ? (
+          <>
+            <CaseHero p={project} meta={[{ label: "ROLE", value: project.role }, { label: "SCOPE", value: project.scope.join(" · ") }, { label: "PRODUCT", value: "Enterprise procurement platform" }]} image={project.image} imageAlt={project.short}/>
+            <FactsBar facts={case02Facts}/>
+          </>
+        ) : (
+          <header className="case-hero">
+            <span className="case-kicker" style={{ color: project.accent }}>{project.tag} · {project.status}</span>
+            <h1>{project.title}</h1>
+            <p>{project.subtitle}</p>
+            <div className="case-meta">
+              <span><b>ROLE</b>{project.role}</span>
+              <span><b>CLIENT</b>{project.client}</span>
+              <span><b>PERIOD</b>{project.period}</span>
+              <span><b>DOMAIN</b>{project.domain}</span>
             </div>
-            <div className="role-col">
-              <small>COLLABORATED WITH</small>
-              <ul className="soft">{project.collaborated.map(x => <li key={x}>{x}</li>)}</ul>
+          </header>
+        )}
+
+        {project.id === "02" ? (
+          <>
+          <CaseSectionNav labels={[["c2-overview", "Overview"], ["c2-challenge", "Challenge"], ["c2-research", "Research"], ["c2-journey", "Journey"], ["c2-decisions", "Decisions"], ["c2-proto", "Prototype"], ["c2-product", "Product"], ["c2-outcome", "Outcome"]]}/>
+          <EditorialSection n="01" label="OVERVIEW" title="One system, not five products" id="c2-overview">
+            <div className="esec-split">
+              <div className="esec-left">
+                <p className="case-body">{project.overview.split(" — ")[0]}.</p>
+              </div>
+              <div className="esec-right">
+                <p className="case-body">{project.overview.split(" — ")[1] ?? project.overview}</p>
+                <div className="case-pills">{project.scope.map(x => <span key={x}>{x}</span>)}</div>
+              </div>
+  </div>
+          </EditorialSection>
+
+          <EditorialSection n="02" label="CHALLENGE" title="Everything visible, nothing prioritised" id="c2-challenge">
+            <div className="esec-split">
+              <div className="esec-left">
+                <p className="case-body case-problem">{project.challenge[2]}</p>
+                {project.challenge.slice(0, 2).map((c, i) => <p className="case-body" key={i}>{c}</p>)}
+              </div>
+              <div className="esec-right">
+                <p className="esec-caption">THE COMPLEXITY SNAPSHOT</p>
+                <ComplexityChain steps={case02Complexity} accent={project.accent}>
+                </ComplexityChain>
+              </div>
+ </div>
+          </EditorialSection>
+
+          <EditorialSection n="03" label="MY ROLE" title="What I owned">
+            <RoleQuad owned={project.rolePoints} collaborated={project.collaborated} accent={project.accent}/>
+          </EditorialSection>
+
+          <EditorialSection n="04" label="CONSTRAINTS" title="Working within the real boundaries">
+            <ConstraintExplorer items={project.constraints} accent={project.accent}/>
+          </EditorialSection>
+
+          <EditorialSection n="05" label="RESEARCH" title="What the evidence showed" id="c2-research">
+            <div className="esec-split">
+              <div className="esec-left">
+                <p className="case-body">The research chain ran from raw observation to the design response — every step traceable, no invented numbers.</p>
+              </div>
+              <div className="esec-right">
+                <p className="esec-caption">EVIDENCE BOARD</p>
+                <EvidenceBoard items={case02EvidenceBoard} accent={project.accent}/>
+              </div>
             </div>
-          </div>
-        </CaseSection>
+          </EditorialSection>
 
-        <CaseSection n="04" title="Constraints">
-          <ul className="constraint-list">
-            {project.constraints.map((c, i) => <li key={i}><b>C{i + 1}</b>{c}</li>)}
-          </ul>
-        </CaseSection>
+          <EditorialSection n="06" label="INSIGHTS" title="What we learned">
+            <InsightCards cards={case02InsightCards} accent={project.accent}/>
+          </EditorialSection>
 
-        <CaseSection n="05" title="Research">
-          <ResearchChainBlock p={project}/>
-        </CaseSection>
+          <EditorialSection n="07" label="JOURNEY" title="From request to resolution" id="c2-journey">
+            <JourneyRail stages={case02Journey} accent={project.accent}/>
+            <h3 className="sub-head">Service blueprint</h3>
+            <ServiceBlueprint p={project}/>
+            <h3 className="sub-head">System maps → production evidence</h3>
+            <SystemMaps maps={project.maps} accent={project.accent}/>
+          </EditorialSection>
 
-        <CaseSection n="06" title="Key insights">
-          <ol className="insight-list">
-            {project.insights.map((x, i) => <li key={i}><span>{String(i + 1).padStart(2, "0")}</span>{x}</li>)}
-          </ol>
-        </CaseSection>
+          <EditorialSection n="08" label="DESIGN DECISIONS" title="Key design decisions" id="c2-decisions">
+            <div className="dec-ui-list">
+              {case02Decisions.map((d, i) => (
+                <Reveal key={d.what} delay={i * 0.05}>
+                  <article className="dec-ui">
+                    <div className="dec-ui-copy">
+                      <span className="dec-ui-num">{String(i + 1).padStart(2, "0")}</span>
+                      <h3>{d.what}</h3>
+                      <div className="dec-ui-grid">
+                        <div><small>WHY</small><p>{d.why}</p></div>
+                        <div><small>EVIDENCE</small><p>{d.evidence}</p></div>
+                        <div><small>DESIGN</small><p>{d.ui}</p></div>
+                        <div><small>RESULT</small><p>{d.result}</p></div>
+                      </div>
+                    </div>
+                    <div className="dec-ui-visual wf-hifi" style={{ ["--msa" as string]: project.accent } as React.CSSProperties}>
+                      <DesktopMock v={d.mock} cap={d.ui} accent={project.accent}/>
+                    </div>
+                  </article>
+                </Reveal>
+              ))}
+            </div>
+            <h3 className="sub-head">Before / after</h3>
+            <BeforeAfter p={project}/>
+          </EditorialSection>
 
-        <CaseSection n="07" title="Journey / workflow">
-          <JourneyMap p={project}/>
-          <h3 className="sub-head">Service blueprint</h3>
-          <ServiceBlueprint p={project}/>
-          <h3 className="sub-head">System maps → production evidence</h3>
-          <SystemMaps maps={project.maps} accent={project.accent}/>
-        </CaseSection>
+          <EditorialSection n="09" label="PROTOTYPE" title="The flow, interactive" id="c2-proto">
+            <p className="case-body">Structure first: low-fidelity frames fixing hierarchy, states and content priority — then the high-fidelity UI. {project.prototypeNote}</p>
+            <ProtoPlayer frames={case02Proto} accent={project.accent}/>
+            {demo && (
+              <>
+                <h3 className="sub-head">Try the pattern</h3>
+                {demo}
+              </>
+            )}
+          </EditorialSection>
 
-        <CaseSection n="08" title="Design decisions">
-          <DecisionsBlock p={project}/>
-          <h3 className="sub-head">Before / after</h3>
-          <BeforeAfter p={project}/>
-        </CaseSection>
+          <EditorialSection n="10" label="FINAL PRODUCT" title="The final product" id="c2-product">
+            <HotspotImage src={project.image} alt={`${project.title} production dashboard`} hotspots={case02Hotspots} accent={project.accent}/>
+            <p className="esec-caption">CLICK A MARKER TO EXPLORE THE INTERFACE</p>
+            {project.link && <a className="case-live-link" href={project.link} target="_blank" rel="noreferrer">Open the live product <ExternalLink size={14}/></a>}
+          </EditorialSection>
 
-        <CaseSection n="09" title="Prototype">
-          <p className="case-body">Structure first: low-fidelity frames fixing hierarchy, states and content priority — then the high-fidelity UI. {project.prototypeNote}</p>
-          <div className="wf-row">
-            {project.wf.map(([v, cap]) => <Wireframe key={v + cap} variant={v as WfVariant} caption={cap}/>)}
-            <div className="wf-arrow" aria-hidden="true"><ArrowRight size={18}/><span>HI-FI</span></div>
-            {project.hifi.slice(0, 1).map(([v, cap]) => <div className="wf-hifi" style={{ ["--msa" as string]: project.accent } as React.CSSProperties} key={v}><DesktopMock v={v as MockVariant} cap={cap} accent={project.accent}/></div>)}
-            {project.hifi[1] && <div className="wf-hifi ph" style={{ ["--msa" as string]: project.accent } as React.CSSProperties} key={project.hifi[1][0]}><PhoneFrame><MockScreen v={project.hifi[1][0] as MockVariant} accent={project.accent}/></PhoneFrame><span className="wf-hifi-cap">{project.hifi[1][1]}</span></div>}
-            <div className="wf-arrow" aria-hidden="true"><ArrowRight size={18}/><span>SHIPPED</span></div>
-          </div>
-          {demo && (
-            <>
-              <h3 className="sub-head">Try the pattern</h3>
-              {demo}
-            </>
-          )}
-        </CaseSection>
+          <EditorialSection n="11" label="DESIGN SYSTEM" title="Built once, reused everywhere">
+            <div className="esec-split">
+              <div className="esec-left">
+                <p className="case-body">{project.systemNote}</p>
+                <p className="case-body">The full specimen — components, states and scaling model — lives in the <a href="#systems" onClick={e => { e.preventDefault(); onClose(); setTimeout(() => scrollTo("#systems"), 80); }} style={{ textDecoration: "underline" }}>design systems section</a>.</p>
+              </div>
+              <div className="esec-right">
+                <ComponentStrip items={case02SystemStrip} accent={project.accent}/>
+              </div>
+            </div>
+          </EditorialSection>
 
-        <CaseSection n="10" title="Final product">
-          <div className="case-figure"><BrowserFrame image={project.image} alt={project.title} accent={project.accent} eager/></div>
-          {project.link && <a className="case-live-link" href={project.link} target="_blank" rel="noreferrer">Open the live product <ExternalLink size={14}/></a>}
-        </CaseSection>
+          <EditorialSection n="12" label="OUTCOME" title="Outcome" id="c2-outcome">
+            <div className="case-chart">
+              {project.chart.map(b => (
+                <div className="bar-row" key={b.label}>
+                  <span className="bar-label">{b.label}</span>
+                  <span className="bar-track"><i style={{ width: `${b.pct}%`, background: project.accent }}/></span>
+                  <b className="bar-val">{b.display}</b>
+                </div>
+              ))}
+            </div>
+            <div className="case-evidence">
+              {project.evidence.map(x => <div key={x.label} className={`ev-row k-${x.kind}`}><div><b>{x.label}</b><small>{x.note}</small></div><strong>{x.value}</strong></div>)}
+            </div>
+            <div className="case-testing-grid">
+              <TestDonut rows={project.testing}/>
+              <div className="case-testing">
+                {project.testing.map(([a, b, c]) => <div key={a}><b>{a}</b><span>{b}</span><em className={c.startsWith("Measured") ? "m" : c.startsWith("Test") ? "p" : "d"}>{c}</em></div>)}
+              </div>
+            </div>
+          </EditorialSection>
 
-        <CaseSection n="11" title="Design system">
-          <p className="case-body">{project.systemNote}</p>
-          <p className="case-body">The full specimen — components, states and scaling model — lives in the <a href="#systems" onClick={e => { e.preventDefault(); onClose(); setTimeout(() => scrollTo("#systems"), 80); }} style={{ textDecoration: "underline" }}>design systems section</a>.</p>
-        </CaseSection>
-
-        <CaseSection n="12" title="Outcome">
+          <EditorialSection n="13" label="NEXT" title="What I would improve next">
+            <ul className="improve-list">
+              {project.improve.map((x, i) => <li key={i}><ArrowUpRight size={14}/>{x}</li>)}
+            </ul>
+          </EditorialSection>
+          </>
+        ) : (
+          <>
+          <CaseSection n="12" title="Outcome">
           <div className="case-chart">
             {project.chart.map(b => (
               <div className="bar-row" key={b.label}>
@@ -504,10 +581,12 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
         </CaseSection>
 
         <CaseSection n="13" title="What I would improve next">
-          <ul className="improve-list">
-            {project.improve.map((x, i) => <li key={i}><ArrowUpRight size={14}/>{x}</li>)}
-          </ul>
-        </CaseSection>
+            <ul className="improve-list">
+              {project.improve.map((x, i) => <li key={i}><ArrowUpRight size={14}/>{x}</li>)}
+            </ul>
+          </CaseSection>
+          </>
+        )}
 
         <nav className="case-next" aria-label="More case studies">
           <button onClick={() => onNavigate(prev, -1)}><ArrowLeft size={16}/><span><small>PREVIOUS · ←</small><b>{prev.title}</b></span></button>
