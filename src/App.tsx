@@ -21,7 +21,7 @@ import {
 } from "./blocks";
 import { BrowserFrame, DesktopMock } from "./mocks";
 import { AiLoopDemo, caseDemo, CommerceDemo, DesignSystem, MortgageDemo, RecruiterModal, SupplierDemo } from "./interactive";
-import { AiSystems, SystemsPage } from "./systems";
+import { AiSystems, SharedWorkplaces, SystemsPage } from "./systems";
 
 const NAV = [["Work", "#work"], ["Systems", "#capabilities"], ["About", "#about"]] as const;
 
@@ -80,14 +80,14 @@ function Hero({ onRecruiter }: { onRecruiter: () => void }) {
       <div className="arc" aria-hidden="true"/>
       <div className="hero-inner">
         <div className="hero-copy">
-          <motion.p className="hero-eyebrow" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: EASE }}>
-            <i aria-hidden="true"/> SENIOR PRODUCT DESIGNER — B2B · B2C · ENTERPRISE · AI
+          <motion.p className="hero-eyebrow" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE }}>
+            <i aria-hidden="true"/> STAFF PRODUCT DESIGNER<br/>AI &amp; AGENT EXPERIENCE · PRODUCT STRATEGY
           </motion.p>
           <motion.h1 initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, delay: 0.06, ease: EASE }}>
-            I turn <span className="accent-text">complex</span><br/>products into<br/>clear, usable systems.
+            I turn complex products into clear, usable systems.
           </motion.h1>
           <motion.p className="hero-sub" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.16, ease: EASE }}>
-            Senior Product Designer focused on enterprise products, design systems, AI-enabled experiences and measurable product outcomes — 11+ years across B2B, B2C and D2C platforms.
+            11 years designing enterprise, consumer and data-intensive products across FinTech, mortgage, procurement, media, AdTech, MarTech and emerging AI experiences.
           </motion.p>
           <motion.ul className="hero-tags" aria-label="Core capabilities" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.24, ease: EASE }}>
             {["Product Design", "Design Systems", "Enterprise UX", "AI Products", "UX Strategy", "Design-to-Code"].map(t => <li key={t}>{t}</li>)}
@@ -97,7 +97,7 @@ function Hero({ onRecruiter }: { onRecruiter: () => void }) {
             <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer"><FileText size={15}/> View résumé</a>
           </motion.div>
           <motion.p className="hero-avail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }}>
-            <i aria-hidden="true"/> Open to senior product design opportunities and collaboration
+            <i aria-hidden="true"/> Open to Staff / Principal product design opportunities
           </motion.p>
         </div>
         <motion.div className="hero-art" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.15, ease: EASE }}>
@@ -281,9 +281,8 @@ function Demos() {
   return (
     <section className="demos" id="demos">
       <div className="section-head">
-        <Reveal><p className="kicker">REAL PRODUCT EVIDENCE</p></Reveal>
-        <Reveal delay={0.06}><h2>Don't just view —<br/><span className="accent-text">use the patterns</span>.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Working prototypes of the interaction patterns from each case study. Real logic, conceptual data, clearly labelled.</p></Reveal>
+        <Reveal><p className="kicker">REAL PRODUCT EVIDENCE — USE THE PATTERNS</p></Reveal>
+        <Reveal delay={0.12}><p className="section-sub" style={{ maxWidth: 620 }}>Working prototypes of the interaction patterns from each case study. Real logic, conceptual data, clearly labelled.</p></Reveal>
       </div>
       <Reveal>
         <article className="demo-block">
@@ -449,7 +448,7 @@ function Contact({ onRecruiter }: { onRecruiter: () => void }) {
         <div className="footer-grid">
           <div className="footer-id">
             <span className="brand-mark" aria-hidden="true">A</span>
-            <div><b>Ajay Kumar Myakala</b><small>Senior Product Designer</small></div>
+            <div><b>Ajay Kumar Myakala</b><small>Staff Product Designer — AI &amp; Agent Experience</small></div>
           </div>
           <nav className="footer-links" aria-label="Footer">
             <a href="#work" onClick={e => { e.preventDefault(); scrollTo("#work"); }}>Work</a>
@@ -900,6 +899,7 @@ export default function App() {
         <HowIWork/>
         <DesignSystem onOpenSystems={openSystems}/>
         <About/>
+        <SharedWorkplaces/>
         <Contact onRecruiter={() => setRecruiter(true)}/>
       </main>
       <AnimatePresence>
@@ -907,7 +907,7 @@ export default function App() {
         {quick && <QuickView p={quick} onClose={() => setQuick(null)} onOpenCase={openCase}/>}
       </AnimatePresence>
       {sysOpen && <SystemsPage onClose={closeSystems}/>}
-      <RecruiterModal open={recruiter} onClose={() => setRecruiter(false)}/>
+      <RecruiterModal open={recruiter} onClose={() => setRecruiter(false)} onOpenCase={openCase}/>
     </div>
   );
 }

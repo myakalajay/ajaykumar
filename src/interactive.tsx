@@ -4,7 +4,7 @@ import {
   ArrowRight, ArrowUpRight, Check, ChevronDown, Download, FileText, LayoutGrid, Linkedin, Mail, ShieldCheck,
   Sparkles, X,
 } from "lucide-react";
-import { CV, EMAIL, LINKEDIN, RECRUITER, projects, type Project } from "./data";
+import { CV, EMAIL, LINKEDIN, RECRUITER, experience, projects, type Project } from "./data";
 import { scrollTo } from "./blocks";
 
 const MSA = {
@@ -238,10 +238,12 @@ const rvLinks = (onClose: () => void): { label: string; href: string; action?: (
   { label: "Contact", href: `mailto:${EMAIL}`, icon: <Mail size={14}/> },
 ];
 
-export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function RecruiterModal({ open, onClose, onOpenCase }: { open: boolean; onClose: () => void; onOpenCase?: (p: Project) => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
+  const [tab, setTab] = useState<"profile" | "work" | "capabilities" | "experience" | "contact">("profile");
+  useEffect(() => { if (open) setTab("profile"); }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -276,12 +278,19 @@ export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () =
             <button ref={closeRef} className="rv-close" onClick={onClose} aria-label="Close recruiter view"><X size={18}/></button>
             <header className="rv-head">
               <h3>AJAY KUMAR MYAKALA</h3>
-              <p className="rv-role">Senior Product Designer / UX Designer · 11+ years</p>
-              <p className="rv-line">Complex product UX · Enterprise platforms · AI-enabled experiences · Design systems · Data-heavy workflows · B2B / B2C / D2C</p>
+              <p className="rv-role">Staff Product Designer · AI & Agent Experience · Product Strategy</p>
+              <p className="rv-line">11+ years · Enterprise + consumer · AI + complex workflows · Product strategy + systems</p>
               <p className="rv-avail"><i aria-hidden="true"/> Open to opportunities</p>
             </header>
+            <div className="rv-tabs" role="tablist" aria-label="Hiring view sections">
+              {([["profile", "30 sec"], ["work", "Work"], ["capabilities", "Capabilities"], ["experience", "Experience"], ["contact", "Contact"]] as const).map(([k, label]) => (
+                <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{label}</button>
+              ))}
+            </div>
+            {tab === "profile" && (
+              <>
             <section className="rv-sec">
-              <h4>SPECIALIZATION</h4>
+              <h4>SELECTED CAPABILITIES</h4>
               <div className="rv-grid2">
                 {RECRUITER.specialization.map(([t, d]) => <div key={t} className="rv-spec"><b>{t}</b><span>{d}</span></div>)}
               </div>
@@ -289,10 +298,6 @@ export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () =
             <section className="rv-sec">
               <h4>DOMAINS</h4>
               <div className="rv-chips">{RECRUITER.domains.map(d => <span key={d}>{d}</span>)}</div>
-            </section>
-            <section className="rv-sec">
-              <h4>TOOLS</h4>
-              <div className="rv-chips">{RECRUITER.tools.map(t => <span key={t}>{t}</span>)}</div>
             </section>
             <section className="rv-sec">
               <h4>WHY THIS PORTFOLIO</h4>
@@ -309,6 +314,49 @@ export function RecruiterModal({ open, onClose }: { open: boolean; onClose: () =
                 )}
               </div>
             </section>
+              </>
+            )}
+            {tab === "work" && (
+              <section className="rv-sec">
+                <h4>SELECTED WORK</h4>
+                <div className="rv-links">
+                  {projects.map(p => (
+                    <button key={p.id} onClick={() => { onClose(); setTimeout(() => onOpenCase?.(p), 60); }}>
+                      <FileText size={14}/>{p.short}
+                      <em style={{ marginLeft: "auto", fontStyle: "normal", fontSize: 11, color: "var(--muted)" }}>{p.domains[0]}</em>
+                    </button>
+                  ))}
+                </div>
+                <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 12 }}>Opens the full case study — research, decisions, evidence and honest boundaries.</p>
+              </section>
+            )}
+            {tab === "capabilities" && (
+              <section className="rv-sec">
+                <h4>CAPABILITIES</h4>
+                <div className="rv-grid2">
+                  {[["Product Strategy", "Ambiguity → direction"], ["Enterprise UX", "Complex workflows at scale"], ["AI / Agent Experience", "Human-AI interaction patterns"], ["Design Systems", "Tokens → components → governance"], ["Complex Workflows", "Multi-actor operational surfaces"], ["Research", "Evidence trails tied to decisions"], ["Product Discovery", "Framing before interface"], ["Data-heavy Products", "Dense data made decision-ready"], ["Growth", "Activation through clarity"], ["Design Leadership", "Governance + mentoring"]].map(([t, d]) => <div key={t} className="rv-spec"><b>{t}</b><span>{d}</span></div>)}
+                </div>
+              </section>
+            )}
+            {tab === "experience" && (
+              <section className="rv-sec">
+                <h4>EXPERIENCE — 11+ YEARS</h4>
+                <div className="rv-xp2">
+                  {experience.map(x => <div key={x.org}><b>{x.period}</b><span><em>{x.role}</em>{x.org} · {x.domain}</span></div>)}
+                </div>
+              </section>
+            )}
+            {tab === "contact" && (
+              <section className="rv-sec">
+                <h4>CONTACT</h4>
+                <div className="rv-links">
+                  <a href={CV} target="_blank" rel="noreferrer"><Download size={14}/> View resume</a>
+                  <a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin size={14}/> LinkedIn</a>
+                  <a href={`mailto:${EMAIL}`}><Mail size={14}/> Email</a>
+                </div>
+                <p className="rv-avail" style={{ marginTop: 16 }}><i aria-hidden="true"/> Open to opportunities</p>
+              </section>
+            )}
             <section className="rv-actions">
               <a className="btn btn-primary" href={CV} target="_blank" rel="noreferrer"><Download size={15}/> Download Résumé</a>
               <a className="btn btn-ghost" href={`mailto:${EMAIL}`}><Mail size={15}/> Start a conversation</a>

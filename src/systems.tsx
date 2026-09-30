@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Accessibility, ArrowLeft, ArrowUpRight, Bot, BookOpen, Boxes, Check, FileCode, GitBranch, Laptop,
+  Accessibility, ArrowLeft, ArrowUpRight, BarChart3, Bot, BookOpen, Boxes, Check, FileCode, GitBranch, Laptop,
   Layers, Monitor, Smartphone, Tablet, X,
 } from "lucide-react";
 import { Reveal, scrollTo } from "./blocks";
@@ -83,96 +83,117 @@ const GOV = [
 /* homepage: AI-ready systems showcase                                 */
 /* ------------------------------------------------------------------ */
 
-const PIPELINE = [
-  { k: "Design token", v: <>Semantic names, not values — <code>color.action.primary</code>, <code>space.3</code>.</>, tag: "HUMAN" },
-  { k: "Component spec", v: <>Props, states, a11y and usage rules written beside the component.</>, tag: "HUMAN" },
-  { k: "Figma component", v: <>Variants mirror the spec one-to-one — no parallel truths.</>, tag: "HUMAN" },
-  { k: "AI-readable documentation", v: <>Specs structured so an assistant can read intent, constraints and tokens.</>, tag: "HUMAN+AI" },
-  { k: "Generated iteration", v: <>Assistant drafts states and responsive variants from the spec.</>, tag: "AI" },
-  { k: "Human review", v: <>A designer approves, modifies or rejects — the call is owned and attributed.</>, tag: "HUMAN" },
-  { k: "Production code", v: <>Approved spec lands as tokens + components engineering can implement directly.</>, tag: "SHIPPED" },
+const ARCHETYPES = [
+  { n: "01", icon: GitBranch, t: "WORKFLOW SYSTEMS", line: "Complex processes → clear actions", d: "Procurement's five workflow families ship as one pattern system: role-based landing surfaces, guided reconciliation, next action first.", ev: "5 workflow families · 4 data-heavy surfaces", k: "procurement" },
+  { n: "02", icon: BarChart3, t: "DECISION SYSTEMS", line: "Data → context → confident decisions", d: "Risk displayed beside cost, live underwriting milestones beside rates — dense data is only useful when the decision it serves is visible.", ev: "Documented 37% decision-time reduction", k: "mortgage" },
+  { n: "03", icon: Bot, t: "AI EXPERIENCE SYSTEMS", line: "Human intent → AI assistance → human control", d: "Evidence and confidence shown beside every AI output; a person owns the approve, modify or reject call — attributed and auditable.", ev: "7-stage human-review loop, demonstrable below", k: "ai" },
+  { n: "04", icon: Layers, t: "DESIGN SYSTEMS", line: "Patterns → governance → scalable delivery", d: "Tokens, components, states and documentation shared across products, platforms and this site itself — full documentation on this page.", ev: "Cross-platform: web · mobile · shared surfaces", k: "systems" },
 ];
 
-const AI_PANEL = {
-  prompt: "Create a procurement approval state using the existing system.",
-  rows: [
-    { k: "COMPONENT", v: <><code>ApprovalCard</code> — evidence list, decision actions, audit line.</> },
-    { k: "TOKENS", v: <><code>color.action.primary</code> · <code>space.3</code> · <code>radius.md</code> · <code>dur.norm</code></> },
-    { k: "SPACING", v: <>16px padding · 8px action gap · 24px evidence block separation</> },
-    { k: "STATES", v: <>Default · hover · pending review · approved · modified · rejected</> },
-    { k: "A11Y", v: <>aria-live on verdict · 44px actions · focus ring on decision buttons</> },
-    { k: "RESPONSIVE", v: <>Actions stack below 560px; evidence list collapses to summary + expand</> },
-  ],
-};
+const AI_FLOW = ["USER INTENT", "AI INTERPRETATION", "CONTEXT", "RECOMMENDATION", "USER CONTROL", "ACTION", "FEEDBACK"];
+
+/* Independent concept — identity for shared workplaces. Not client work. */
+const SHARED_FLOW = [
+  { t: "Authenticate", d: "Badge tap at the device — no password entry on a shared surface." },
+  { t: "Verify identity", d: "Factor strength and policy checked against role and location." },
+  { t: "Access device", d: "Session opens with only the entitlements the role allows." },
+  { t: "Perform task", d: "Work happens inside role-scoped apps; actions log to the session." },
+  { t: "Session attribution", d: "Every action attributable to the worker, not the device account." },
+  { t: "Handoff", d: "Timeout or tap-out closes the session cleanly for the next worker." },
+  { t: "Audit trail", d: "Session, actions and factors recorded for compliance review." },
+];
+
+export function SharedWorkplaces() {
+  return (
+    <section className="demos" id="concept" aria-label="Independent concept — identity for shared workplaces">
+      <div className="section-head">
+        <Reveal><p className="kicker">INDEPENDENT CONCEPT — NOT CLIENT WORK</p></Reveal>
+        <Reveal delay={0.06}><h2>Identity for shared workplaces.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">An exploratory enterprise problem: how frontline workers sign in to shared devices without passwords — session-scoped, role-scoped and audit-ready. Illustrative UI, no production claims.</p></Reveal>
+      </div>
+      <Reveal>
+        <div className="swp-grid">
+          <ol className="swp-flow" aria-label="Shared-device identity flow">
+            {SHARED_FLOW.map((s, i) => (
+              <li key={s.t} className={i === SHARED_FLOW.length - 1 ? "end" : ""}>
+                <span className="swp-step">{String(i + 1).padStart(2, "0")}</span>
+                <div><b>{s.t}</b><p>{s.d}</p></div>
+              </li>
+            ))}
+          </ol>
+          <div className="swp-panel" role="img" aria-label="Shared-device login concept — badge tap, session scoped to role">
+            <div className="swp-head"><b>Line 4 · Shared workstation</b><span className="ds-pill muted">Device W-114</span></div>
+            <div className="swp-screen">
+              <div className="swp-idle">
+                <span className="swp-tap" aria-hidden="true"/>
+                <b>Tap badge to begin</b>
+                <small>Badge · NFC · PIN fallback</small>
+              </div>
+              <div className="swp-session">
+                <div className="swp-session-head">
+                  <span className="swp-avatar" aria-hidden="true">RM</span>
+                  <div><b>R. Menon</b><small>Line lead · Shift A</small></div>
+                  <span className="ds-pill ok">Session active</span>
+                </div>
+                <div className="swp-apps">
+                  <span className="on">Line dashboard</span>
+                  <span>Quality checks</span>
+                  <span className="lock" aria-label="Locked — not in role">Maintenance</span>
+                </div>
+                <div className="swp-meta">
+                  <span>Authenticated <b>Badge · 14:02</b></span>
+                  <span>Entitlements <b>3 of 7 apps</b></span>
+                  <span>Auto-lock <b>2:00 idle</b></span>
+                </div>
+              </div>
+            </div>
+            <p className="swp-note">Illustrative UI — demonstrates the interaction model, not a shipped product.</p>
+          </div>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
 
 export function AiSystems() {
   return (
-    <section className="demos" id="ai-systems" style={{ background: "var(--bg-2)" }}>
+    <section className="sysbuild" id="systems-build">
       <div className="section-head">
-        <Reveal><p className="kicker">AI + DESIGN SYSTEMS</p></Reveal>
+        <Reveal><p className="kicker">SYSTEMS I BUILD</p></Reveal>
         <Reveal delay={0.06}><h2>Systems built for humans —<br/><span className="accent-text">and readable by AI</span>.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">A working specification workflow: tokens and specs written once, AI drafts from them, a designer owns every decision, and approved output lands in code.</p></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Four system archetypes, each traceable to shipped products — plus the interaction model that makes AI trustworthy inside them.</p></Reveal>
+      </div>
+      <div className="arch-list">
+        {ARCHETYPES.map((a, i) => (
+          <Reveal key={a.n} delay={i * 0.04}>
+            <article className="arch-row">
+              <span className="arch-num">{a.n}</span>
+              <span className="arch-icon" aria-hidden="true"><a.icon size={20} strokeWidth={1.6}/></span>
+              <div className="arch-main">
+                <h3>{a.t} <em>{a.line}</em></h3>
+                <p>{a.d}</p>
+              </div>
+              <span className="arch-ev">{a.ev}</span>
+            </article>
+          </Reveal>
+        ))}
       </div>
       <Reveal>
-        <div className="aispec">
-          <div className="sysflow" role="list" aria-label="Design-to-code pipeline">
-            {PIPELINE.map((s, i) => (
-              <div role="listitem" key={s.k}>
-                <div className={`sysflow-row ${s.tag === "AI" ? "ai" : s.tag === "HUMAN" ? "human" : ""}`}>
-                  <i className="sysflow-dot" aria-hidden="true"/>
-                  <span className="sysflow-k">{s.k}</span>
-                  <span className="sysflow-v">{s.v}</span>
-                  <span className="sysflow-tag">{s.tag}</span>
-                </div>
-                {i < PIPELINE.length - 1 && <i className="sysflow-link" aria-hidden="true"/>}
-              </div>
+        <div className="aiflow-card">
+          <div className="aiflow-head">
+            <Bot size={16} aria-hidden="true"/>
+            <b>AI EXPERIENCE — INTERACTION MODEL</b>
+            <span className="aiflow-note">Confidence · explainability · control · fallback · approval · audit</span>
+          </div>
+          <ol className="aiflow" aria-label="AI interaction model">
+            {AI_FLOW.map(s => (
+              <li key={s} className={s === "USER CONTROL" ? "control" : ""}><i aria-hidden="true"/><b>{s}</b></li>
             ))}
-          </div>
-          <div className="aispec-panel" role="group" aria-label="AI assistant generating a component from the system spec">
-            <div className="aispec-head">
-              <Bot size={15} aria-hidden="true"/>
-              <b>Design assistant</b>
-              <span className="aispec-badge">SPEC-GROUNDED</span>
-            </div>
-            <p className="aispec-prompt"><span className="who">PROMPT</span><q>{AI_PANEL.prompt}</q></p>
-            <div className="aispec-body">
-              {AI_PANEL.rows.map(r => (
-                <div className="aispec-kv" key={r.k}><small>{r.k}</small><span>{r.v}</span></div>
-              ))}
-              <div className="aispec-states" aria-hidden="true">
-                <span className="ds-btn primary">Approve</span>
-                <span className="ds-btn ghost">Modify</span>
-                <span className="ds-btn ghost">Reject</span>
-              </div>
-              <div className="aispec-a11y"><Check size={14} aria-hidden="true"/> Contrast, focus and target size validated against the spec</div>
-              <div className="aispec-review">
-                <b style={{ fontWeight: 700, color: "var(--ink)" }}>HUMAN REVIEW</b>
-                <span className="chip">Approve → Figma</span>
-                <span className="chip">Modify → spec diff</span>
-                <span className="chip">Reject → log reason</span>
-              </div>
-            </div>
-          </div>
+          </ol>
         </div>
       </Reveal>
       <Reveal>
-        <p className="aispec-note">Demonstrated workflow — the pipeline and panel illustrate how I structure systems for AI assistance; human decisions stay attributed at every step.</p>
-      </Reveal>
-      <Reveal>
-        <div className="pt-row" role="list" aria-label="Cross-platform evidence">
-          {[
-            { icon: Monitor, t: "Web app", d: "Procurement platform — dense tables, role-based dashboards, reconciliation flows.", s: "5 workflow families · 4 surfaces" },
-            { icon: Smartphone, t: "Mobile app", d: "Way2News discovery feed in four Indian languages — one pattern language across scripts.", s: "4 languages · mobile-first" },
-            { icon: Tablet, t: "Shared surfaces", d: "Borrower portal and reporting states designed for kiosk-to-desktop continuity.", s: "Mortgage origination → servicing" },
-            { icon: Laptop, t: "Responsive web", d: "Commerce journey designed mobile-up — cart, checkout and states inherit one system.", s: "6 stages · 4 states" },
-          ].map(c => (
-            <div className="pt-cell" role="listitem" key={c.t}>
-              <b><c.icon size={16} aria-hidden="true"/>{c.t}</b>
-              <span>{c.d}</span>
-              <small>{c.s}</small>
-            </div>
-          ))}
-        </div>
+        <p className="aispec-note">The interactive pattern demos below put these models in your hands — including the human-review loop.</p>
       </Reveal>
     </section>
   );
@@ -385,7 +406,7 @@ export function SystemsPage({ onClose }: { onClose: () => void }) {
                   </tbody>
                 </table>
               </div>
-              <p className="sys-note">The <button onClick={() => { onClose(); setTimeout(() => scrollTo("#ai-systems"), 80); }} style={{ background: "none", border: 0, padding: 0, textDecoration: "underline", fontWeight: 650, color: "var(--ink)", cursor: "pointer" }}>AI + design systems section</button> on the homepage demonstrates this workflow end-to-end.</p>
+              <p className="sys-note">The <button onClick={() => { onClose(); setTimeout(() => scrollTo("#systems-build"), 80); }} style={{ background: "none", border: 0, padding: 0, textDecoration: "underline", fontWeight: 650, color: "var(--ink)", cursor: "pointer" }}>Systems I build section</button> on the homepage shows the AI interaction model in context.</p>
             </section>
 
             <section className="sys-sec" aria-label="Where this system shipped">
