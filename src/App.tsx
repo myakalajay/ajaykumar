@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown,
-  ExternalLink, FileText, Mail, X,
+  ExternalLink, FileText, Mail, Search, X,
 } from "lucide-react";
 import {
   case01Facts, case01Hotspots, case01InsightCards, case01Proto, case01SystemStrip,
@@ -10,7 +10,7 @@ import {
   case02Journey, case02Proto, case02SystemStrip,
   case03Facts, case03Hotspots, case03InsightCards, case03Proto, case03SystemStrip,
   case04Facts, case04Proto, case04SystemStrip,
-  THINK_STAGES, WORK_FILTERS, CV, EMAIL, experience, LINKEDIN, methods, projects,
+  DESIGN_OS, DOMAIN_FILTERS, MODEL_FILTERS, CV, EMAIL, experience, LINKEDIN, projects,
   type Project,
 } from "./data";
 import {
@@ -20,14 +20,14 @@ import {
   scrollTo, ServiceBlueprint, SpotlightCard, SystemMaps, TestDonut,
 } from "./blocks";
 import { BrowserFrame, DesktopMock } from "./mocks";
-import { AiLoopDemo, caseDemo, CommerceDemo, DesignSystem, MortgageDemo, RecruiterModal, SupplierDemo } from "./interactive";
+import { AiLoopDemo, caseDemo, CommandPalette, CommerceDemo, DesignSystem, MortgageDemo, RecruiterModal, SupplierDemo } from "./interactive";
 import { AiSystems, SharedWorkplaces, SystemsPage } from "./systems";
 
-const NAV = [["Work", "#work"], ["Systems", "#capabilities"], ["About", "#about"]] as const;
+const NAV = [["Work", "#work"], ["Systems", "#capabilities"], ["AI", "#systems-build"], ["About", "#about"]] as const;
 
 /* --------------------------------- header ---------------------------------- */
 
-function Header({ active, onRecruiter }: { active: string; onRecruiter: () => void }) {
+function Header({ active, onRecruiter, onCommand }: { active: string; onRecruiter: () => void; onCommand: () => void }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -48,6 +48,7 @@ function Header({ active, onRecruiter }: { active: string; onRecruiter: () => vo
         ))}
       </nav>
       <div className="header-right">
+        <button className="cmd-trigger" onClick={onCommand} aria-label="Open command menu (Ctrl K or /)"><Search size={14} aria-hidden="true"/><kbd>/</kbd></button>
         <a className="header-resume" href={CV} target="_blank" rel="noreferrer">Resume <ArrowUpRight size={13}/></a>
         <button className="btn btn-ghost btn-sm rv-trigger" onClick={onRecruiter}>Recruiter View</button>
         <a className="btn btn-primary btn-sm" href={`mailto:${EMAIL}`}><Mail size={14}/> Let's talk <ArrowRight size={13}/></a>
@@ -73,7 +74,7 @@ function MenuIcon() {
 
 /* ---------------------------------- hero ----------------------------------- */
 
-function Hero() {
+function Hero({ onRecruiter }: { onRecruiter: () => void }) {
   return (
     <section className="hero" id="home">
       <div className="q-circle" aria-hidden="true"/>
@@ -95,6 +96,7 @@ function Hero() {
           <motion.div className="hero-actions" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.26, ease: EASE }}>
             <button className="btn btn-primary" onClick={() => scrollTo("#work")}>View selected work <ArrowRight size={16}/></button>
             <a className="btn btn-ghost" href={CV} target="_blank" rel="noreferrer"><FileText size={15}/> View résumé</a>
+            <button className="btn btn-ghost" onClick={onRecruiter}>Recruiter View</button>
           </motion.div>
           <motion.p className="hero-avail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.4 }}>
             <i aria-hidden="true"/> Open to Staff / Principal product design opportunities
@@ -121,6 +123,56 @@ function Hero() {
   );
 }
 
+/* ------------------ complexity → clarity (signature interaction) ------------------ */
+
+const C2_NODES = [
+  { k: "ROLES", items: ["Borrower", "Loan officer", "Underwriter", "Processor"] },
+  { k: "DATA", items: ["Rates", "Records", "Statuses", "Documents"] },
+  { k: "RULES", items: ["Compliance", "Policies", "Thresholds"] },
+  { k: "DECISIONS", items: ["Approvals", "Exceptions", "Handoffs"] },
+];
+
+function ComplexityClarity() {
+  const [scattered, setScattered] = useState(true);
+  return (
+    <section className="c2c" id="c2c" aria-label="Complexity to clarity — how I work">
+      <div className="section-head">
+        <Reveal><p className="kicker">COMPLEXITY → CLARITY</p></Reveal>
+        <Reveal delay={0.06}><h2>I didn't simplify the interface first.<br/><span className="accent-text">I simplified the system behind it.</span></h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Every engagement starts the same way: roles, data, rules and decisions arrive fragmented. The work is modelling them into one system people can act on. Toggle to see the move.</p></Reveal>
+      </div>
+      <Reveal>
+        <div className="c2c-stage">
+          <div className="c2c-side">
+            {C2_NODES.map(n => (
+              <div key={n.k} className={`c2c-node ${scattered ? "messy" : "ordered"}`}>
+                <b>{n.k}</b>
+                <span>{scattered ? n.items.join(" · ") : `${n.items.length} modelled inputs`}</span>
+                {scattered && <i aria-hidden="true"/>}
+              </div>
+            ))}
+          </div>
+          <div className="c2c-arrow" aria-hidden="true"><span>{scattered ? "↓" : "↓"}</span><em>{scattered ? "unmodelled" : "modelled"}</em></div>
+          <div className={`c2c-product ${scattered ? "messy" : ""}`}>
+            <small>{scattered ? "FRAGMENTED SURFACES" : "ONE PRODUCT SYSTEM"}</small>
+            <b>{scattered ? "4 disconnected views" : "1 journey · 1 system"}</b>
+            <p>{scattered
+              ? "Every actor re-interprets the same underlying data in their own surface."
+              : "Roles see role-scoped views of one modelled system — decisions carry context, states are recoverable."}
+            </p>
+          </div>
+        </div>
+        <div className="c2c-ctrl">
+          <button className="btn btn-ghost btn-sm" onClick={() => setScattered(v => !v)} aria-pressed={!scattered}>
+            {scattered ? "Simplify the system →" : "← Back to complexity"}
+          </button>
+          <span className="c2c-note">The pattern behind all four case studies — demonstrated with the mortgage platform's actor model.</span>
+        </div>
+      </Reveal>
+    </section>
+  );
+}
+
 /* ---------------------------------- work ---------------------------------- */
 
 function domainMatches(p: Project, f: string) { return f === "ALL" || p.domains.includes(f); }
@@ -129,10 +181,10 @@ function Work({ onOpen, onQuickView, filterSignal }: { onOpen: (p: Project) => v
   const [filter, setFilter] = useState<string>(() => {
     const q = new URLSearchParams(window.location.search).get("domain");
     const up = q ? q.toUpperCase() : null;
-    return up && WORK_FILTERS.includes(up) ? up : "ALL";
+    return up && [...MODEL_FILTERS, ...DOMAIN_FILTERS].includes(up) ? up : "ALL";
   });
   useEffect(() => {
-    if (filterSignal) setFilter(WORK_FILTERS.includes(filterSignal.d) ? filterSignal.d : "ALL");
+    if (filterSignal) setFilter([...MODEL_FILTERS, ...DOMAIN_FILTERS].includes(filterSignal.d) ? filterSignal.d : "ALL");
   }, [filterSignal]);
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -142,21 +194,30 @@ function Work({ onOpen, onQuickView, filterSignal }: { onOpen: (p: Project) => v
   const shown = projects.filter(p => domainMatches(p, filter));
   const featured = shown[0];
   const rest = shown.slice(1);
+  const modelFilters = MODEL_FILTERS.filter(f => f === "ALL" || projects.some(p => p.domains.includes(f)));
+  const domainFilters = DOMAIN_FILTERS.filter(f => projects.some(p => p.domains.includes(f)));
+  const pill = (f: string) => (
+    <button key={f} className="work-filter" aria-pressed={filter === f} onClick={() => setFilter(f)}>
+      {f}{f !== "ALL" && <em>{projects.filter(p => domainMatches(p, f)).length}</em>}
+    </button>
+  );
   return (
     <section className="work" id="work">
       <div className="section-head">
-        <Reveal><p className="kicker">SELECTED WORK</p></Reveal>
+        <Reveal><p className="kicker">PRODUCT ATLAS</p></Reveal>
         <Reveal delay={0.06}><h2>Complex products.<br/><span className="accent-text">Real constraints.</span> Measurable outcomes.</h2></Reveal>
         <Reveal delay={0.12}><p className="section-sub">Each project opens into a full study with research, design decisions, evidence and honest boundaries.</p></Reveal>
-      </div>      <Reveal>
-        <div className="work-filters" role="group" aria-label="Filter projects by domain">
-          {WORK_FILTERS.map(f => (
-            <button key={f} className={filter === f ? "on" : ""} aria-pressed={filter === f}
-              onClick={() => setFilter(f)}>
-              {f}
-              <small>{f === "ALL" ? projects.length : projects.filter(p => domainMatches(p, f)).length}</small>
-            </button>
-          ))}
+      </div>
+      <Reveal>
+        <div className="atlas-filters" role="group" aria-label="Filter projects — two rows: product model, then domain">
+          <div className="atlas-row" aria-label="Product model">
+            <small>MODEL</small>
+            <div className="work-filters">{modelFilters.map(pill)}</div>
+          </div>
+          <div className="atlas-row" aria-label="Domain">
+            <small>DOMAIN</small>
+            <div className="work-filters">{domainFilters.map(pill)}</div>
+          </div>
         </div>
       </Reveal>
       {featured && (
@@ -317,48 +378,35 @@ function Demos() {
 
 function HowIWork() {
   const [sel, setSel] = useState(0);
-  const m = methods[sel];
+  const s = DESIGN_OS[sel];
   return (
     <section className="approach" id="approach">
       <div className="section-head">
-        <Reveal><p className="kicker">HOW I THINK</p></Reveal>
-        <Reveal delay={0.06}><h2>Complex problems require<br/><span className="accent-text">systems thinking</span>.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Every stage connects to real portfolio evidence — no generic process theatre.</p></Reveal>
+        <Reveal><p className="kicker">DESIGN OS</p></Reveal>
+        <Reveal delay={0.06}><h2>Method as evidence,<br/><span className="accent-text">not process theatre</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Nine operating steps. Each one is anchored to a real portfolio example — click through.</p></Reveal>
       </div>
       <Reveal>
-        <ol className="think-rail">
-          {THINK_STAGES.map((s, i) => (
-            <li key={s.stage} className="think-stage">
-              <span className="think-num">{String(i + 1).padStart(2, "0")}</span>
-              <b>{s.stage}</b>
-              <span className="think-items">{s.items.join(" · ")}</span>
-              <span className="think-link" aria-hidden="true">↓</span>
-              <small>{s.project}</small>
-            </li>
+        <div className="dos-rail" role="tablist" aria-label="Design OS steps">
+          {DESIGN_OS.map((x, i) => (
+            <button key={x.n} role="tab" aria-selected={sel === i} className={`dos-step ${sel === i ? "on" : ""}`} onClick={() => setSel(i)}>
+              <span className="dos-num">{x.n}</span>
+              <b>{x.t}</b>
+            </button>
           ))}
-        </ol>
+        </div>
       </Reveal>
       <Reveal>
-        <div className="method-switcher">
-          <div className="method-tabs" role="tablist" aria-label="Working methods">
-            {methods.map((x, i) => (
-              <button key={x.id} role="tab" aria-selected={sel === i} className={sel === i ? "on" : ""} onClick={() => setSel(i)}>{x.label}</button>
-            ))}
+        <div className="dos-detail" role="tabpanel">
+          <div className="dos-copy">
+            <span className="dos-big">{s.n}</span>
+            <h3>{s.t.charAt(0) + s.t.slice(1).toLowerCase()}</h3>
+            <p>{s.d}</p>
           </div>
-          <AnimatePresence mode="wait">
-            <motion.div key={m.id} className="method-stage" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.45, ease: EASE }}>
-              <div className="method-copy">
-                <p className="method-line"><b>METHOD</b>{m.method}</p>
-                <p className="method-line"><b>REAL PROJECT</b>{m.project}</p>
-                <p className="method-line"><b>REAL EVIDENCE</b>{m.evidence}</p>
-                <p className="method-line decision"><b>DESIGN DECISION</b>{m.decision}</p>
-              </div>
-              <figure className="method-map">
-                <img src={m.map} alt={m.mapAlt} loading="lazy" decoding="async"/>
-                <figcaption>{m.label} pattern — applied, not framed</figcaption>
-              </figure>
-            </motion.div>
-          </AnimatePresence>
+          <div className="dos-ex">
+            <small>FROM THE PORTFOLIO</small>
+            <p>{s.ex}</p>
+          </div>
         </div>
       </Reveal>
     </section>
@@ -390,6 +438,17 @@ function About() {
               <div>
                 <h3 className="about-h">WHAT I CARE ABOUT</h3>
                 <p>Clarity that survives contact with real operations — role-scoped surfaces, recoverable states, and design systems that make the right thing the fast thing. Accessibility is a build standard, not a review step, and AI earns its place only when a human owns the decision.</p>
+              </div>
+            </div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <div className="lead-band" aria-label="Leadership, expressed as working practice">
+              <small className="about-h">LEADERSHIP — EVIDENCE, NOT CLAIMS</small>
+              <div className="lead-grid">
+                {["STRATEGY|Problem framing · product direction · prioritization", "ALIGNMENT|Stakeholders · product · engineering · business", "SYSTEMS|Design systems · governance · reusable patterns", "TEAM|Critique · mentoring · design quality", "DELIVERY|Prototype · validation · handoff · iteration"].map(row => {
+                  const [t, items] = row.split("|");
+                  return <div key={t}><b>{t}</b><span>{items}</span></div>;
+                })}
               </div>
             </div>
           </Reveal>
@@ -457,7 +516,7 @@ function Contact({ onRecruiter }: { onRecruiter: () => void }) {
     <section className="contact" id="contact">
       <div className="contact-inner">
         <Reveal><p className="kicker">CONTACT</p></Reveal>
-        <Reveal delay={0.06}><h2>Have a complex product problem?<br/>Let's make it simpler.</h2></Reveal>
+        <Reveal delay={0.06}><h2>Have a complex product?<br/>Let's make the system clearer.</h2></Reveal>
         <Reveal delay={0.18}>
           <div className="contact-actions">
             <a className="btn btn-accent btn-lg" href={`mailto:${EMAIL}`}><Mail size={17}/> Start a conversation <ArrowRight size={15}/></a>
@@ -876,6 +935,7 @@ function CasePage({ project, dir, onClose, onNavigate }: { project: Project; dir
 export default function App() {
   const [active, setActive] = useState("home");
   const [caseStudy, setCaseStudy] = useState<Project | null>(null);
+  const [cmdOpen, setCmdOpen] = useState(false);
   const [caseDir, setCaseDir] = useState(0);
   const [recruiter, setRecruiter] = useState(false);
   const [quick, setQuick] = useState<Project | null>(null);
@@ -897,8 +957,18 @@ export default function App() {
   const openCase = (p: Project) => { setCaseDir(0); setCaseStudy(p); };
   const navCase = (p: Project, dir: number) => { setCaseDir(dir); setCaseStudy(p); };
   useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement)?.isContentEditable) return;
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setCmdOpen(v => !v); }
+      else if (e.key === "/" && !e.metaKey && !e.ctrlKey) { e.preventDefault(); setCmdOpen(true); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  useEffect(() => {
     document.title = "Ajay Kumar Myakala — Senior Product Designer | Enterprise & AI Product Design";
-    const ids = ["home", "work", "demos", "approach", "capabilities", "about", "contact"];
+    const ids = ["home", "work", "c2c", "systems-build", "approach", "capabilities", "about", "contact"];
     const nodes = ids.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     const obs = new IntersectionObserver(entries => {
       const vis = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -911,10 +981,11 @@ export default function App() {
     <div className="page">
       <a className="skip-link" href="#work" onClick={e => { e.preventDefault(); scrollTo("#work"); }}>Skip to work</a>
       <div className="scroll-progress" aria-hidden="true"/>
-      <Header active={active} onRecruiter={() => setRecruiter(true)}/>
+      <Header active={active} onRecruiter={() => setRecruiter(true)} onCommand={() => setCmdOpen(true)}/>
       <main>
-        <Hero/>
+        <Hero onRecruiter={() => setRecruiter(true)}/>
         <Work onOpen={openCase} onQuickView={setQuick} filterSignal={workFilterSignal}/>
+        <ComplexityClarity/>
         <AiSystems/>
         <Demos/>
         <HowIWork/>
@@ -929,6 +1000,7 @@ export default function App() {
       </AnimatePresence>
       {sysOpen && <SystemsPage onClose={closeSystems}/>}
       <RecruiterModal open={recruiter} onClose={() => setRecruiter(false)} onOpenCase={openCase}/>
+      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} onRecruiter={() => setRecruiter(true)}/>
     </div>
   );
 }

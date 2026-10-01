@@ -90,7 +90,7 @@ const ARCHETYPES = [
   { n: "04", icon: Layers, t: "DESIGN SYSTEMS", line: "Patterns → governance → scalable delivery", d: "Tokens, components, states and documentation shared across products, platforms and this site itself — full documentation on this page.", ev: "Cross-platform: web · mobile · shared surfaces", k: "systems" },
 ];
 
-const AI_FLOW = ["USER INTENT", "AI INTERPRETATION", "CONTEXT", "RECOMMENDATION", "USER CONTROL", "ACTION", "FEEDBACK"];
+const AI_FLOW = ["USER INTENT", "CONTEXT", "AI INTERPRETATION", "RECOMMENDATION", "CONFIDENCE", "HUMAN REVIEW", "ACTION", "FEEDBACK"];
 
 /* Independent concept — identity for shared workplaces. Not client work. */
 const SHARED_FLOW = [
@@ -159,9 +159,9 @@ export function AiSystems() {
   return (
     <section className="sysbuild" id="systems-build">
       <div className="section-head">
-        <Reveal><p className="kicker">SYSTEMS I BUILD</p></Reveal>
-        <Reveal delay={0.06}><h2>Systems built for humans —<br/><span className="accent-text">and readable by AI</span>.</h2></Reveal>
-        <Reveal delay={0.12}><p className="section-sub">Four system archetypes, each traceable to shipped products — plus the interaction model that makes AI trustworthy inside them.</p></Reveal>
+        <Reveal><p className="kicker">AI · HUMAN + MACHINE</p></Reveal>
+        <Reveal delay={0.06}><h2>Designing the space between<br/><span className="accent-text">human intent and machine intelligence</span>.</h2></Reveal>
+        <Reveal delay={0.12}><p className="section-sub">Four system archetypes, each traceable to shipped products — plus the interaction model that keeps a human in control when AI is uncertain.</p></Reveal>
       </div>
       <div className="arch-list">
         {ARCHETYPES.map((a, i) => (
@@ -183,7 +183,7 @@ export function AiSystems() {
           <div className="aiflow-head">
             <Bot size={16} aria-hidden="true"/>
             <b>AI EXPERIENCE — INTERACTION MODEL</b>
-            <span className="aiflow-note">Confidence · explainability · control · fallback · approval · audit</span>
+            <span className="aiflow-note">The model shows confidence; the human owns the decision.</span>
           </div>
           <ol className="aiflow" aria-label="AI interaction model">
             {AI_FLOW.map(s => (
@@ -366,6 +366,25 @@ export function SystemsPage({ onClose }: { onClose: () => void }) {
                 </div>
               </div>
               <p className="sys-note muted">Every state above is keyboard-operable with a visible focus ring; interactive targets hold 44px on touch.</p>
+              <div className="uikit-specs" role="list" aria-label="Component documentation — anatomy, behavior, content, accessibility">
+                {[
+                  { c: "BUTTON", anatomy: "Trigger · icon (optional) · label · container · loading state", behavior: "Hover lifts border; pressed darkens fill; focus shows a 2px ring with canvas offset; disabled at 45% opacity, no pointer events.", content: "Verb-first labels (\"View selected work\"), sentence case, no trailing punctuation.", a11y: "Real <button>/<a> elements · 44px min target · aria-busy while loading · icon-only variants carry aria-label." },
+                  { c: "FILTER CHIP", anatomy: "Container · label · count badge · pressed state", behavior: "Click toggles selection; active chip inverts to ink; layout transition keeps cards from jumping.", content: "Category name + live project count — counts are data-derived, never static.", a11y: "role=\"group\" per row · aria-pressed on each chip · URL syncs (?domain=) so state survives reload." },
+                  { c: "DRAWER", anatomy: "Overlay · scrim · panel · header · body · pinned actions", behavior: "Slides in over 380ms ease-out; scrim click and ESC close; body scroll locks while open.", content: "One purpose per drawer (recruiter profile, system docs); sections numbered for scanning.", a11y: "role=\"dialog\" · aria-modal · focus trapped · focus returns to the trigger on close." },
+                  { c: "EVIDENCE ROW", anatomy: "Kind tag (measured / scope / objective / gap) · label · value · note", behavior: "Static by design — evidence should not animate or distract from its value.", content: "Only documented metrics appear as numbers; everything else is labelled scope or declared a gap.", a11y: "Definition-list semantics; colour never the only carrier of meaning (kinds are written out)." },
+                  { c: "COMMAND MENU", anatomy: "Trigger (⌘K / /) · search field · grouped results · footer hints", behavior: "Arrow keys move the active row, Enter runs, ESC closes; results filter on label, group and hint text.", content: "Commands are actions, not links to nowhere — every entry performs a real navigation or opens a real surface.", a11y: "combobox + listbox pattern · aria-activedescendant · returns focus on close." },
+                ].map(s => (
+                  <article key={s.c} className="uikit-card" role="listitem">
+                    <h3>{s.c}</h3>
+                    <dl>
+                      <dt>ANATOMY</dt><dd>{s.anatomy}</dd>
+                      <dt>BEHAVIOR</dt><dd>{s.behavior}</dd>
+                      <dt>CONTENT</dt><dd>{s.content}</dd>
+                      <dt>ACCESSIBILITY</dt><dd>{s.a11y}</dd>
+                    </dl>
+                  </article>
+                ))}
+              </div>
             </section>
 
             <section className="sys-sec" id="patterns" aria-label="Patterns">

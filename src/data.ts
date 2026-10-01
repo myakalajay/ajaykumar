@@ -375,7 +375,9 @@ export const DOMAINS: { key: string; label: string; tagline: string; areas: stri
   { key: "design-systems", label: "DESIGN SYSTEMS", tagline: "Foundations, tokens, governance", areas: ["Components", "States", "Documentation"] },
 ];
 
-export const WORK_FILTERS: readonly string[] = ["ALL", "B2B", "B2C", "D2C", "ENTERPRISE", "FINTECH", "ADTECH", "AI / DATA", "E-COMMERCE", "DESIGN SYSTEMS"];
+/* Atlas rows: product models vs domains — only real, populated categories */
+export const MODEL_FILTERS: readonly string[] = ["ALL", "B2B", "B2C", "D2C", "ENTERPRISE", "AI / DATA"];
+export const DOMAIN_FILTERS: readonly string[] = ["FINTECH", "ADTECH", "E-COMMERCE", "DESIGN SYSTEMS"];
 
 export const THINK_STAGES: { stage: string; items: string[]; project: string }[] = [
   { stage: "DISCOVER", items: ["Research", "Context", "Constraints"], project: "Procurement — comparison observation → delivery-risk insight" },
@@ -389,25 +391,50 @@ export const THINK_STAGES: { stage: string; items: string[]; project: string }[]
 
 export const RECRUITER = {
   availability: "Open to opportunities",
-  whyThis: [
-    "Complex enterprise products — procurement, mortgage and audience-data platforms shipped at scale.",
-    "Scalable design systems — tokens, components, states and documentation reused across products.",
-    "AI-assisted design workflows — AI-readable specifications with human-owned decisions.",
-  ],
-  specialization: [
-    ["Complex product UX", "Enterprise platforms"],
-    ["AI-enabled experiences", "Design systems"],
-    ["Data-heavy workflows", "B2B · B2C · D2C"],
-  ],
-  domains: ["Fintech", "B2B", "SaaS", "E-commerce", "AdTech", "MediaTech", "EdTech", "Enterprise"],
-  tools: ["Figma", "FigJam", "Prototyping", "Design Systems", "UX Research", "AI-assisted Design"],
-  links: [
-    { label: "Selected work", kind: "work" },
-    { label: "Résumé", kind: "resume" },
-    { label: "LinkedIn", kind: "linkedin" },
-    { label: "Contact", kind: "contact" },
-  ] as { label: string; kind: string }[],
+  profile: ["11+ years Product Design", "Enterprise UX", "AI / Agent experiences", "Product Strategy", "Design Systems"],
+  models: ["B2B", "B2C", "SaaS", "D2C", "Enterprise"],
+  domains: ["FinTech", "Mortgage Technology", "Enterprise Technology", "Procurement", "GovTech", "Media", "AdTech", "MarTech", "Recruitment Technology"],
+  /* Expandable strength clusters — sub-points trace to shipped case evidence */
+  strengths: [
+    { t: "AI & Agent Experience", items: ["AI interaction design", "Human-in-the-loop review patterns", "Trust, confidence & transparency", "Contextual assistance"] },
+    { t: "Complex Workflow Design", items: ["Multi-actor operational surfaces", "Decision & approval flows", "Exception & recovery states", "Handoffs across roles"] },
+    { t: "Design Systems", items: ["Tokens → components → governance", "Patterns reused across products", "Documentation & adoption", "Engineering parity"] },
+    { t: "Product Strategy", items: ["Problem framing before interface", "Opportunity mapping", "Scope definition", "Outcome framing"] },
+    { t: "Research & Discovery", items: ["Journey & ecosystem mapping", "Service blueprints", "Insight → decision trails", "Validation under real constraints"] },
+    { t: "Enterprise UX", items: ["Data-heavy decision surfaces", "Role-scoped experiences", "Compliance-aware patterns", "Dense data made actionable"] },
+  ] as { t: string; items: string[] }[],
+  /* Selected proof — real, documented evidence only */
+  proof: [
+    { k: "UNDERWRITING WORKFLOW", v: "37% faster decision time", note: "CV-documented · case 01" },
+    { k: "PROCUREMENT PLATFORM", v: "5 workflow families · 1 design system", note: "scope, documented · case 02" },
+    { k: "AUDIENCE PLATFORM", v: "5 products · 4 languages · 1 signal system", note: "scope, documented · case 03" },
+    { k: "E-COMMERCE", v: "6-stage journey · 1 system", note: "scope, documented · case 04" },
+  ] as { k: string; v: string; note: string }[],
+  whatIDo: [
+    ["Strategy", "Framing ambiguity into direction"],
+    ["Systems", "Patterns that scale across products"],
+    ["Experience", "Workflows people can act on"],
+    ["AI", "Human-owned intelligent surfaces"],
+    ["Leadership", "Governance, critique, mentoring"],
+  ] as [string, string][],
+  caseIds: ["01", "02", "03", "04"],
 };
+
+/* -------------------------------- design os -------------------------------- */
+
+export interface DesignOsStep { n: string; t: string; d: string; ex: string; }
+
+export const DESIGN_OS: DesignOsStep[] = [
+  { n: "01", t: "FRAME", d: "Problem framing before interface", ex: "Procurement — five workflow families framed from observed comparison behaviour" },
+  { n: "02", t: "MODEL", d: "Ecosystem & service models before screens", ex: "Procurement service blueprint; HomeRatesYard four-actor journey" },
+  { n: "03", t: "DISCOVER", d: "Research, context, constraints", ex: "Procurement — supplier comparison observation → delivery-risk insight" },
+  { n: "04", t: "DECIDE", d: "Decision ledgers with trade-offs", ex: "HomeRatesYard — grouped controls around the borrower's operational sequence" },
+  { n: "05", t: "DESIGN", d: "Flows, systems, interfaces", ex: "HomeRatesYard — one journey across discovery, application, underwriting" },
+  { n: "06", t: "VALIDATE", d: "Prototype, test, evidence", ex: "HomeRatesYard — 37% decision-time reduction (CV-documented)" },
+  { n: "07", t: "SYSTEMIZE", d: "Design system, governance, reuse", ex: "Procurement — patterns reused across five workflow families" },
+  { n: "08", t: "MEASURE", d: "Evidence ledger: measured / scope / objective / gap", ex: "All four cases carry honest evidence rows — nothing undocumented is claimed" },
+  { n: "09", t: "LEARN", d: "What I'd improve next", ex: "HomeRatesYard — quantified usability testing at each journey stage" },
+];
 
 /* -------------------------- case-02 editorial upgrade -------------------------- */
 
@@ -584,52 +611,6 @@ export const experience = [
   { period: "2016 – 18", org: "Nitya Software India", role: "UI/UX Designer", domain: "Recruitment Tech", note: "JobsNProfiles, VioTalk; IA, flows and responsive product design." }
 ];
 
-/* -------------------------------- how I work ------------------------------- */
-
-export interface Method { id: string; label: string; map: string; mapAlt: string; method: string; project: string; evidence: string; decision: string; }
-
-export const methods: Method[] = [
-  {
-    id: "research", label: "Research",
-    map: "/concept-maps/research-loop-realistic-clean.png", mapAlt: "Research loop from observation to validation",
-    method: "Observation → pattern → insight → decision → validation. Research exists to change a decision, not to produce a report.",
-    project: "Procurement & Supplier Experience — supplier comparison behaviour",
-    evidence: "Delivery confidence influenced decisions more than expected; price alone was an incomplete input.",
-    decision: "Surface delivery risk beside supplier cost in every comparison surface."
-  },
-  {
-    id: "journey", label: "Journey",
-    map: "/concept-maps/journey-map-realistic-clean.png", mapAlt: "Journey map across stages with sentiment and pain points",
-    method: "Stages, sentiment and pain points mapped per actor group — so friction is located, not guessed.",
-    project: "HomeRatesYard — six-stage borrowing journey across four actor groups",
-    evidence: "Steepest sentiment drop at underwriting; silence between stages read as risk.",
-    decision: "Live underwriting milestones with plain-language explanation inside the borrower dashboard."
-  },
-  {
-    id: "systems", label: "Systems",
-    map: "/concept-maps/ecosystem-map-realistic-clean.png", mapAlt: "Ecosystem map of actors and dependencies",
-    method: "Ecosystem and service blueprints before screens: actors, rules and handoffs made visible first.",
-    project: "Procurement — five workflow families as one connected system",
-    evidence: "The blueprint exposed where supplier and spend data joins failed silently.",
-    decision: "Role-based IA with the next operational action surfaced on every dashboard."
-  },
-  {
-    id: "ai", label: "AI",
-    map: "/concept-maps/ai-human-loop-realistic-clean.png", mapAlt: "AI human loop with evidence and human review",
-    method: "Context → AI generate → evidence → human review → decision → action. Assistance without accountability is not a product.",
-    project: "Supplier risk prompts with evidence, confidence and human approval",
-    evidence: "Every AI recommendation needed traceable evidence to be actionable in operations.",
-    decision: "Evidence and confidence shown beside every AI output; humans own the approve/modify/reject call."
-  },
-  {
-    id: "validation", label: "Validation",
-    map: "/concept-maps/quality-loop-realistic-clean.png", mapAlt: "Quality loop of critique, accessibility and testing",
-    method: "Test plans, critique and accessibility as continuous loops — and honest evidence boundaries where results aren't measured.",
-    project: "Every case carries a validation ledger: measured, documented, or not supplied",
-    evidence: "One measured outcome (37% decision-time reduction); the rest are declared objectives or gaps.",
-    decision: "Instrument before claiming — no metric appears on this site without a source."
-  }
-];
 
 export const CV = "/Ajay_Kumar_Myakala_Design_Strategist_CV.pdf";
 export const EMAIL = "ajaykumarmyakala@outlook.com";

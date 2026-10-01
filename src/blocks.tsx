@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
-import { Users, X } from "lucide-react";
+import { ScanSearch, Users, X } from "lucide-react";
 import type { CaseMap, Hotspot, InsightCard, JourneyStage, ProtoFrame, Project } from "./data";
 import { BrowserFrame, DesktopMock, MockScreen, PhoneFrame } from "./mocks";
 
@@ -554,8 +554,18 @@ export function JourneyRail({ stages, accent }: { stages: JourneyStage[]; accent
 /* ---- hotspot-annotated product image ---- */
 export function HotspotImage({ src, alt, hotspots, accent }: { src: string; alt: string; hotspots: Hotspot[]; accent: string }) {
   const [open, setOpen] = useState<number | null>(null);
+  const [xray, setXray] = useState(false);
   return (
-    <div className="hots" style={{ ["--accent" as string]: accent } as React.CSSProperties}>
+    <div className={`hots ${xray ? "xray" : ""}`} style={{ ["--accent" as string]: accent } as React.CSSProperties}>
+      <div className="hots-ctrl">
+        <span className="hots-hint">{xray
+          ? `X-RAY — ${hotspots.length} layers: ${[...new Set(hotspots.map(h => h.label))].slice(0, 3).join(" · ")}`
+          : "PRODUCT — annotated production UI"}
+        </span>
+        <button className="hots-xray-btn" aria-pressed={xray} onClick={() => { setXray(v => !v); setOpen(null); }}>
+          <ScanSearch size={13} aria-hidden="true"/> X-ray
+        </button>
+      </div>
       <div className="hots-img">
         <img src={src} alt={alt} loading="lazy" decoding="async"/>
         {hotspots.map((h, i) => (
@@ -565,7 +575,7 @@ export function HotspotImage({ src, alt, hotspots, accent }: { src: string; alt:
               onClick={() => setOpen(open === i ? null : i)} onMouseEnter={() => setOpen(i)} onMouseLeave={() => setOpen(prev => (prev === i ? null : prev))}>
               {i + 1}
             </button>
-            {open === i && (
+            {(open === i || xray) && (
               <span className="hots-panel" role="status">
                 <b>{h.label}</b>
                 <span>{h.text}</span>

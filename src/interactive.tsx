@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
-  ArrowRight, ArrowUpRight, Check, ChevronDown, Download, FileText, LayoutGrid, Linkedin, Mail, ShieldCheck,
+  ArrowRight, ArrowUpRight, Check, ChevronDown, Download, FileText, LayoutGrid, Linkedin, Mail, Search, ShieldCheck,
   Sparkles, X,
 } from "lucide-react";
 import { CV, EMAIL, LINKEDIN, RECRUITER, experience, projects, type Project } from "./data";
@@ -158,7 +158,7 @@ export function SupplierDemo() {
 
 /* --------------------------- 3. AI human loop ------------------------------ */
 
-const AI_STEPS = ["CONTEXT", "AI / LLM", "GENERATE", "EVIDENCE", "HUMAN REVIEW", "DECISION", "ACTION"] as const;
+const AI_STEPS = ["CONTEXT", "AI INTERPRETATION", "RECOMMENDATION", "CONFIDENCE", "HUMAN REVIEW", "DECISION", "ACTION"] as const;
 const AI_EVIDENCE = [
   { k: "Delivery risk", v: "Low — 97% on-time, 12-day lead", src: "Historic performance records" },
   { k: "Cost position", v: "$128/unit — 2nd of 5 in blended score", src: "Current price file" },
@@ -170,10 +170,11 @@ export function AiLoopDemo() {
   const [phase, setPhase] = useState<"idle" | "analysing" | "done">("idle");
   const [step, setStep] = useState(0);
   const [verdict, setVerdict] = useState<"approved" | "modified" | "rejected" | null>(null);
+  const [why, setWhy] = useState(false);
   const reduce = useReducedMotion();
 
   const run = () => {
-    setPhase("analysing"); setStep(0); setVerdict(null);
+    setPhase("analysing"); setStep(0); setVerdict(null); setWhy(false);
     let i = 0;
     const tick = () => {
       i += 1;
@@ -211,11 +212,15 @@ export function AiLoopDemo() {
               <b><ShieldCheck size={13}/> HUMAN REVIEW</b>
               <p>The model recommends; a person owns the call. Approve, modify or reject — every action is attributed.</p>
               <div className="ai-actions">
-                <button className={`ai-btn ok ${verdict === "approved" ? "picked" : ""}`} onClick={() => setVerdict("approved")} disabled={phase !== "done"}>Approve</button>
-                <button className={`ai-btn mid ${verdict === "modified" ? "picked" : ""}`} onClick={() => setVerdict("modified")} disabled={phase !== "done"}>Modify</button>
+                <button className={`ai-btn ok ${verdict === "approved" ? "picked" : ""}`} onClick={() => setVerdict("approved")} disabled={phase !== "done"}>Accept</button>
+                <button className={`ai-btn mid ${verdict === "modified" ? "picked" : ""}`} onClick={() => setVerdict("modified")} disabled={phase !== "done"}>Edit</button>
                 <button className={`ai-btn bad ${verdict === "rejected" ? "picked" : ""}`} onClick={() => setVerdict("rejected")} disabled={phase !== "done"}>Reject</button>
+                <button className="ai-btn ghost" onClick={() => setWhy(v => !v)} aria-expanded={why}>Ask why</button>
               </div>
-              {verdict && <p className="ai-verdict" role="status">Decision recorded: {verdict} — attributed to reviewer, logged with evidence set.</p>}
+              {why && (
+                <p className="ai-why" role="note"><b>WHY THIS RECOMMENDATION</b>Delivery confidence carried more weight than unit price — the same pattern that decided the procurement case. Two of five suppliers were excluded for incomplete certification records, not cost.</p>
+              )}
+              {verdict && <p className="ai-verdict" role="status">Decision recorded: {verdict} — attributed to reviewer, logged with evidence set.{verdict === "modified" ? " Edit captured as feedback for the next recommendation cycle." : ""}</p>}
             </div>
           </motion.div>
         )}
@@ -238,8 +243,9 @@ export function RecruiterModal({ open, onClose, onOpenCase }: { open: boolean; o
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
-  const [tab, setTab] = useState<"profile" | "work" | "capabilities" | "experience" | "contact">("profile");
-  useEffect(() => { if (open) setTab("profile"); }, [open]);
+  const [tab, setTab] = useState<"profile" | "work" | "capabilities">("profile");
+  const [openStrength, setOpenStrength] = useState<string | null>(null);
+  useEffect(() => { if (open) { setTab("profile"); setOpenStrength(null); } }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -278,28 +284,44 @@ export function RecruiterModal({ open, onClose, onOpenCase }: { open: boolean; o
               <p className="rv-line">11+ years · Enterprise + consumer · AI + complex workflows · Product strategy + systems</p>
               <p className="rv-avail"><i aria-hidden="true"/> Open to opportunities</p>
             </header>
-            <div className="rv-tabs" role="tablist" aria-label="Hiring view sections">
-              {([["profile", "30 sec"], ["work", "Work"], ["capabilities", "Capabilities"], ["experience", "Experience"], ["contact", "Contact"]] as const).map(([k, label]) => (
+            <div className="rv-tabs" role="tablist" aria-label="Reading modes">
+              {([["profile", "30 sec"], ["work", "3 min"], ["capabilities", "10 min"]] as const).map(([k, label]) => (
                 <button key={k} role="tab" aria-selected={tab === k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{label}</button>
               ))}
             </div>
             {tab === "profile" && (
               <>
             <section className="rv-sec">
-              <h4>SELECTED CAPABILITIES</h4>
-              <div className="rv-grid2">
-                {RECRUITER.specialization.map(([t, d]) => <div key={t} className="rv-spec"><b>{t}</b><span>{d}</span></div>)}
+              <h4>CORE STRENGTHS</h4>
+              <div className="rv-strengths">
+                {RECRUITER.strengths.map(s => (
+                  <div key={s.t} className="rv-strength">
+                    <button aria-expanded={openStrength === s.t} onClick={() => setOpenStrength(openStrength === s.t ? null : s.t)}>
+                      <b>{s.t}</b>
+                      <span aria-hidden="true">{openStrength === s.t ? "−" : "+"}</span>
+                    </button>
+                    {openStrength === s.t && (
+                      <ul>
+                        {s.items.map(it => <li key={it}>{it}</li>)}
+                      </ul>
+                    )}
+                  </div>
+                ))}
               </div>
+            </section>
+            <section className="rv-sec">
+              <h4>SELECTED PROOF — DOCUMENTED</h4>
+              <div className="rv-proof">
+                {RECRUITER.proof.map(p => <div key={p.k}><small>{p.k}</small><b>{p.v}</b><span>{p.note}</span></div>)}
+              </div>
+            </section>
+            <section className="rv-sec">
+              <h4>PRODUCT MODELS</h4>
+              <div className="rv-chips">{RECRUITER.models.map(d => <span key={d}>{d}</span>)}</div>
             </section>
             <section className="rv-sec">
               <h4>DOMAINS</h4>
               <div className="rv-chips">{RECRUITER.domains.map(d => <span key={d}>{d}</span>)}</div>
-            </section>
-            <section className="rv-sec">
-              <h4>WHY THIS PORTFOLIO</h4>
-              <div className="rv-why">
-                {RECRUITER.whyThis.map((w, i) => <div key={i}><b>{String(i + 1).padStart(2, "0")}</b><span>{w}</span></div>)}
-              </div>
             </section>
             <section className="rv-sec">
               <h4>QUICK LINKS</h4>
@@ -313,50 +335,141 @@ export function RecruiterModal({ open, onClose, onOpenCase }: { open: boolean; o
               </>
             )}
             {tab === "work" && (
+              <>
               <section className="rv-sec">
-                <h4>SELECTED WORK</h4>
-                <div className="rv-links">
-                  {projects.map(p => (
-                    <button key={p.id} onClick={() => { onClose(); setTimeout(() => onOpenCase?.(p), 60); }}>
-                      <FileText size={14}/>{p.short}
-                      <em style={{ marginLeft: "auto", fontStyle: "normal", fontSize: 11, color: "var(--muted)" }}>{p.domains[0]}</em>
+                <h4>SELECTED WORK — WITH CONTEXT</h4>
+                <div className="rv-cases">
+                {RECRUITER.caseIds.map(id => {
+                  const p = projects.find(x => x.id === id);
+                  if (!p) return null;
+                  return (
+                    <button key={p.id} className="rv-case" onClick={() => { onClose(); setTimeout(() => onOpenCase?.(p), 60); }}>
+                      <span className="rv-case-thumb" style={{ background: p.accent }} aria-hidden="true"/>
+                      <span className="rv-case-main">
+                        <b>{p.short}</b>
+                        <small>{p.domain} · {p.domains.filter(d => d !== "DESIGN SYSTEMS").slice(0, 2).join(" · ")}</small>
+                        <em>{p.outcomeLine.split(" — ")[0]}</em>
+                      </span>
+                      <ArrowRight size={14} aria-hidden="true"/>
                     </button>
-                  ))}
+                  );
+                })}
                 </div>
-                <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 12 }}>Opens the full case study — research, decisions, evidence and honest boundaries.</p>
+                <p style={{ fontSize: 12.5, color: "var(--muted)", marginTop: 12 }}>Each opens the full case study — research, decisions, evidence and honest boundaries.</p>
               </section>
-            )}
-            {tab === "capabilities" && (
-              <section className="rv-sec">
-                <h4>CAPABILITIES</h4>
-                <div className="rv-grid2">
-                  {[["Product Strategy", "Ambiguity → direction"], ["Enterprise UX", "Complex workflows at scale"], ["AI / Agent Experience", "Human-AI interaction patterns"], ["Design Systems", "Tokens → components → governance"], ["Complex Workflows", "Multi-actor operational surfaces"], ["Research", "Evidence trails tied to decisions"], ["Product Discovery", "Framing before interface"], ["Data-heavy Products", "Dense data made decision-ready"], ["Growth", "Activation through clarity"], ["Design Leadership", "Governance + mentoring"]].map(([t, d]) => <div key={t} className="rv-spec"><b>{t}</b><span>{d}</span></div>)}
-                </div>
-              </section>
-            )}
-            {tab === "experience" && (
               <section className="rv-sec">
                 <h4>EXPERIENCE — 11+ YEARS</h4>
                 <div className="rv-xp2">
                   {experience.map(x => <div key={x.org}><b>{x.period}</b><span><em>{x.role}</em>{x.org} · {x.domain}</span></div>)}
                 </div>
               </section>
+              </>
             )}
-            {tab === "contact" && (
+            {tab === "capabilities" && (
+              <>
               <section className="rv-sec">
-                <h4>CONTACT</h4>
-                <div className="rv-links">
-                  <a href={CV} target="_blank" rel="noreferrer"><Download size={14}/> View resume</a>
-                  <a href={LINKEDIN} target="_blank" rel="noreferrer"><Linkedin size={14}/> LinkedIn</a>
-                  <a href={`mailto:${EMAIL}`}><Mail size={14}/> Email</a>
+                <h4>FULL CAPABILITY MAP</h4>
+                <div className="rv-grid2">
+                  {[["Product Strategy", "Ambiguity → direction"], ["Enterprise UX", "Complex workflows at scale"], ["AI / Agent Experience", "Human-AI interaction patterns"], ["Design Systems", "Tokens → components → governance"], ["Complex Workflows", "Multi-actor operational surfaces"], ["Research", "Evidence trails tied to decisions"], ["Product Discovery", "Framing before interface"], ["Data-heavy Products", "Dense data made decision-ready"], ["Growth", "Activation through clarity"], ["Design Leadership", "Governance + mentoring"]].map(([t, d]) => <div key={t} className="rv-spec"><b>{t}</b><span>{d}</span></div>)}
                 </div>
-                <p className="rv-avail" style={{ marginTop: 16 }}><i aria-hidden="true"/> Open to opportunities</p>
               </section>
+              <section className="rv-sec">
+                <h4>WHAT I DO</h4>
+                <div className="rv-why">
+                  {RECRUITER.whatIDo.map(([t, d]) => <div key={t}><b>{t}</b><span>{d}</span></div>)}
+                </div>
+              </section>
+              <section className="rv-sec">
+                <h4>HOW I WORK — DESIGN OS</h4>
+                <p style={{ fontSize: 13, color: "var(--body)", lineHeight: 1.55, margin: 0 }}>Frame → Model → Discover → Decide → Design → Validate → Systemize → Measure → Learn — every step evidenced on the homepage and in each case study.</p>
+              </section>
+              </>
             )}
             <section className="rv-actions">
               <a className="btn btn-primary" href={CV} target="_blank" rel="noreferrer"><Download size={15}/> Download Résumé</a>
               <a className="btn btn-ghost" href={`mailto:${EMAIL}`}><Mail size={15}/> Start a conversation</a>
             </section>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/* --------------------------- 3c. command palette ---------------------------- */
+
+type Command = { id: string; label: string; group: string; hint?: string; run: () => void };
+
+export function CommandPalette({ open, onClose, onRecruiter }: { open: boolean; onClose: () => void; onRecruiter: () => void }) {
+  const [q, setQ] = useState("");
+  const [idx, setIdx] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  const commands: Command[] = useMemo(() => {
+    const go = (id: string) => () => { onClose(); setTimeout(() => scrollTo(`#${id}`), 80); };
+    return [
+      { id: "work", label: "View selected work", group: "Navigate", hint: "4 case studies", run: go("work") },
+      { id: "c2c", label: "Complexity → Clarity", group: "Navigate", hint: "signature interaction", run: go("c2c") },
+      { id: "systems-build", label: "AI · human + machine", group: "Navigate", run: go("systems-build") },
+      { id: "capabilities", label: "Design system", group: "Navigate", run: go("capabilities") },
+      { id: "approach", label: "Design OS", group: "Navigate", run: go("approach") },
+      { id: "about", label: "About", group: "Navigate", run: go("about") },
+      { id: "recruiter", label: "Open Recruiter View", group: "For recruiters", hint: "30-sec profile", run: () => { onClose(); onRecruiter(); } },
+      { id: "systems-doc", label: "Open the full system documentation", group: "For recruiters", hint: "/systems", run: () => { onClose(); setTimeout(() => { window.location.hash = "#systems"; window.dispatchEvent(new HashChangeEvent("hashchange")); }, 80); } },
+      { id: "resume", label: "Open résumé", group: "Actions", hint: "PDF", run: () => { window.open(CV, "_blank"); onClose(); } },
+      { id: "email", label: "Email Ajay", group: "Actions", hint: EMAIL, run: () => { window.location.href = `mailto:${EMAIL}`; onClose(); } },
+      { id: "linkedin", label: "LinkedIn profile", group: "Actions", run: () => { window.open(LINKEDIN, "_blank"); onClose(); } },
+    ];
+  }, [onClose, onRecruiter]);
+
+  const results = useMemo(
+    () => commands.filter(c => (c.label + " " + c.group + " " + (c.hint ?? "")).toLowerCase().includes(q.toLowerCase())),
+    [commands, q]
+  );
+
+  useEffect(() => { if (open) { setQ(""); setIdx(0); setTimeout(() => inputRef.current?.focus(), 40); } }, [open]);
+  useEffect(() => { setIdx(0); }, [q]);
+
+  useEffect(() => {
+    if (!open) return;
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key === "ArrowDown") { e.preventDefault(); setIdx(i => Math.min(results.length - 1, i + 1)); }
+      if (e.key === "ArrowUp") { e.preventDefault(); setIdx(i => Math.max(0, i - 1)); }
+      if (e.key === "Enter" && results[idx]) { e.preventDefault(); results[idx].run(); }
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [open, results, idx, onClose]);
+
+  useEffect(() => { listRef.current?.children[idx]?.scrollIntoView({ block: "nearest" }); }, [idx]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div className="cmd-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
+          onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <motion.div className="cmd" role="dialog" aria-modal="true" aria-label="Command menu"
+            initial={{ opacity: 0, y: -12, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: EASE }}>
+            <div className="cmd-head">
+              <Search size={15} aria-hidden="true"/>
+              <input ref={inputRef} value={q} onChange={e => setQ(e.target.value)} placeholder="Search work, systems, AI, actions…" aria-label="Search commands" role="combobox" aria-expanded="true" aria-controls="cmd-list" aria-activedescendant={results[idx] ? `cmd-${results[idx].id}` : undefined}/>
+              <kbd>ESC</kbd>
+            </div>
+            <ul id="cmd-list" ref={listRef} role="listbox" aria-label="Commands">
+              {results.length === 0 && <li className="cmd-empty" role="status">No matches — try "AI", "systems" or "resume".</li>}
+              {results.map((c, i) => (
+                <li key={c.id} id={`cmd-${c.id}`} role="option" aria-selected={i === idx} className={i === idx ? "on" : ""}
+                  onMouseEnter={() => setIdx(i)} onClick={() => c.run()}>
+                  <span className="cmd-label">{c.label}</span>
+                  {c.hint && <span className="cmd-hint">{c.hint}</span>}
+                  <span className="cmd-group">{c.group}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="cmd-foot" aria-hidden="true"><span>↑↓ navigate</span><span>↵ select</span><span>esc close</span></div>
           </motion.div>
         </motion.div>
       )}
