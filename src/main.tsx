@@ -1,28 +1,122 @@
-import React, { Component, ReactNode } from "react";
+import React, { Component, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import App from "./App";
 import "./index.css";
 
-class GlobalErrorBoundary extends Component<{ children?: ReactNode }, { hasError: boolean; error?: Error }> {
-  state = { hasError: false, error: undefined as Error | undefined };
-  static getDerivedStateFromError(error: Error) { return { hasError: true, error }; }
-  componentDidCatch(error: Error, info: any) { console.error("Portfolio render error", error, info); }
+type BoundaryState = { hasError: boolean; error?: Error };
+
+/**
+ * Last-resort error boundary. Catches render-time crashes so visitors see a
+ * clear recovery screen instead of a blank page.
+ */
+class GlobalErrorBoundary extends Component<{ children: ReactNode }, BoundaryState> {
+  state: BoundaryState = { hasError: false };
+
+  static getDerivedStateFromError(error: Error): BoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, info: unknown) {
+    console.error("Portfolio render error:", error, info);
+  }
+
   render() {
     if (!this.state.hasError) return this.props.children;
     return (
-      <main style={{minHeight:"100vh",background:"#f5f5f2",display:"grid",placeItems:"center",padding:24,fontFamily:"Geist Variable,system-ui,sans-serif",color:"#111210"}}>
-        <section style={{maxWidth:680,width:"100%",background:"#fff",border:"1px solid #d9dbd4",borderRadius:24,padding:36,boxShadow:"0 30px 90px rgba(17,18,16,.1)"}}>
-          <div style={{width:48,height:48,borderRadius:14,display:"grid",placeItems:"center",background:"#f0eee8",marginBottom:20}}><AlertTriangle/></div>
-          <div style={{fontSize:10,letterSpacing:".15em",textTransform:"uppercase",color:"#777a72"}}>Portfolio runtime safeguard</div>
-          <h1 style={{fontSize:40,lineHeight:1,letterSpacing:"-.05em",margin:"10px 0 14px"}}>The interface hit an unexpected error.</h1>
-          <p style={{color:"#6f726a",lineHeight:1.6}}>Reload first. If it happens again, open the browser console and share the first red error rather than changing random project files.</p>
-          <pre style={{background:"#f7f7f4",color:"#5f2024",padding:16,borderRadius:14,overflow:"auto",fontSize:11}}>{this.state.error?.message || "Unknown error"}</pre>
-          <button onClick={()=>window.location.reload()} style={{marginTop:18,height:46,padding:"0 18px",border:0,borderRadius:12,background:"#ed1c24",color:"#fff",fontWeight:700,display:"inline-flex",alignItems:"center",gap:8}}><RotateCcw size={15}/> Reload portfolio</button>
+      <main
+        style={{
+          minHeight: "100vh",
+          display: "grid",
+          placeItems: "center",
+          padding: 24,
+          background: "var(--bg, #faf9f6)",
+          color: "var(--ink, #16181d)",
+          fontFamily: "'Geist Variable', system-ui, sans-serif",
+        }}
+      >
+        <section
+          style={{
+            maxWidth: 640,
+            width: "100%",
+            background: "var(--panel, #fff)",
+            border: "1px solid var(--line, #e6e3db)",
+            borderRadius: 16,
+            padding: 32,
+          }}
+        >
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              display: "grid",
+              placeItems: "center",
+              background: "var(--bg-2, #f1efe9)",
+              color: "var(--err, #b91c1c)",
+              marginBottom: 16,
+            }}
+          >
+            <AlertTriangle aria-hidden="true" />
+          </div>
+          <p
+            style={{
+              fontSize: 12,
+              letterSpacing: ".12em",
+              textTransform: "uppercase",
+              color: "var(--muted, #62676f)",
+              margin: 0,
+            }}
+          >
+            Something went wrong
+          </p>
+          <h1 style={{ fontSize: 28, lineHeight: 1.15, letterSpacing: "-.02em", margin: "8px 0 12px" }}>
+            The page hit an unexpected error.
+          </h1>
+          <p style={{ color: "var(--body, #4c515a)", lineHeight: 1.6, margin: 0 }}>
+            Reloading usually fixes it. If it keeps happening, please share the error below.
+          </p>
+          <pre
+            style={{
+              background: "var(--bg-2, #f1efe9)",
+              padding: 16,
+              borderRadius: 12,
+              overflow: "auto",
+              fontSize: 13,
+              marginTop: 16,
+            }}
+          >
+            {this.state.error?.message || "Unknown error"}
+          </pre>
+          <button
+            onClick={() => window.location.reload()}
+            style={{
+              marginTop: 16,
+              minHeight: 44,
+              padding: "0 20px",
+              border: 0,
+              borderRadius: 10,
+              background: "var(--accent, #e4572e)",
+              color: "#fff",
+              fontWeight: 600,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              cursor: "pointer",
+            }}
+          >
+            <RotateCcw size={16} aria-hidden="true" /> Reload portfolio
+          </button>
         </section>
       </main>
     );
   }
 }
 
-createRoot(document.getElementById("root")!).render(<React.StrictMode><GlobalErrorBoundary><App /></GlobalErrorBoundary></React.StrictMode>);
+createRoot(document.getElementById("root")!).render(
+  <React.StrictMode>
+    <GlobalErrorBoundary>
+      <App />
+    </GlobalErrorBoundary>
+  </React.StrictMode>
+);

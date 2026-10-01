@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronDown,
-  ExternalLink, FileText, Linkedin, Mail, X,
+  ExternalLink, FileText, Mail, X,
 } from "lucide-react";
 import {
   case01Facts, case01Hotspots, case01InsightCards, case01Proto, case01SystemStrip,
@@ -16,7 +16,7 @@ import {
 import {
   BeforeAfter, CaseHero, CaseSectionNav, ComponentStrip, ComplexityChain, ConstraintExplorer,
   EASE, EditorialSection, EvidenceBoard, FactsBar, HotspotImage, InsightCards, JourneyMap, JourneyRail,
-  Marquee, ProtoPlayer, Reveal, RoleQuad,
+  ProtoPlayer, Reveal, RoleQuad,
   scrollTo, ServiceBlueprint, SpotlightCard, SystemMaps, TestDonut,
 } from "./blocks";
 import { BrowserFrame, DesktopMock } from "./mocks";
@@ -73,7 +73,7 @@ function MenuIcon() {
 
 /* ---------------------------------- hero ----------------------------------- */
 
-function Hero({ onRecruiter }: { onRecruiter: () => void }) {
+function Hero() {
   return (
     <section className="hero" id="home">
       <div className="q-circle" aria-hidden="true"/>
@@ -499,7 +499,6 @@ function CaseBody({ project }: { project: Project }) {
   const proto = project.id === "01" ? case01Proto : project.id === "03" ? case03Proto : case04Proto;
   const insights = project.id === "01" ? case01InsightCards : case03InsightCards;
   const demo = caseDemo(project);
-  const hasDemo = Boolean(demo);
   return (
     <>
       <EditorialSection n="01" label="OVERVIEW" title={project.overview.split(" — ")[0] ?? project.overview}>
@@ -881,7 +880,7 @@ export default function App() {
   const [recruiter, setRecruiter] = useState(false);
   const [quick, setQuick] = useState<Project | null>(null);
   const [sysOpen, setSysOpen] = useState(() => window.location.hash === "#systems");
-  const [workFilterSignal, setWorkFilterSignal] = useState<{ d: string; n: number } | null>(null);
+  const [workFilterSignal] = useState<{ d: string; n: number } | null>(null);
   useEffect(() => {
     const onHash = () => setSysOpen(window.location.hash === "#systems");
     window.addEventListener("hashchange", onHash);
@@ -914,7 +913,7 @@ export default function App() {
       <div className="scroll-progress" aria-hidden="true"/>
       <Header active={active} onRecruiter={() => setRecruiter(true)}/>
       <main>
-        <Hero onRecruiter={() => setRecruiter(true)}/>
+        <Hero/>
         <Work onOpen={openCase} onQuickView={setQuick} filterSignal={workFilterSignal}/>
         <AiSystems/>
         <Demos/>

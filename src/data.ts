@@ -409,14 +409,6 @@ export const RECRUITER = {
   ] as { label: string; kind: string }[],
 };
 
-export const ARTIFACTS: { src: string; alt: string; label: string; kind: string }[] = [
-  { src: "/concept-maps/service-blueprint-realistic-clean.png", alt: "Procurement service blueprint", label: "Service blueprint", kind: "Procurement case" },
-  { src: "/concept-maps/journey-map-realistic-clean.png", alt: "Reader journey map", label: "Journey map", kind: "Audience Intelligence case" },
-  { src: "/concept-maps/decision-tree-realistic-clean.png", alt: "Underwriting decision tree", label: "Decision tree", kind: "HomeRatesYard case" },
-  { src: "/concept-maps/research-loop-realistic-clean.png", alt: "Research loop", label: "Research synthesis", kind: "Audience Intelligence case" },
-  { src: "/real-work/procurement-1600x900.jpg", alt: "Procurement platform dashboard", label: "Production dashboard", kind: "Shipped product" },
-];
-
 /* -------------------------- case-02 editorial upgrade -------------------------- */
 
 export const case02Facts: { label: string; value: string }[] = [

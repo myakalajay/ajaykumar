@@ -1,12 +1,23 @@
+# Dependencies & build output
 node_modules/
 dist/
-*.zip
-.DS_Store
 
-# Local working copies & internal review notes (not part of the site)
-/current/
-/references/
-/*_2026.md
-/START_HERE.md
-/REAL_WORK_IMAGE_DIMENSIONS.md
+# Environment
+.env
+.env.local
+.env.example
+
+# Archives & local working copies
+*.zip
+current/
+references/
+
+# Scaffold remnants (shadcn base components are excluded from the build)
+components/
+lib/
+components.json
+metadata.json
+
+# OS / tooling noise
+.DS_Store
 .freebuff/

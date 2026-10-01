@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Accessibility, ArrowLeft, ArrowUpRight, BarChart3, Bot, BookOpen, Boxes, Check, FileCode, GitBranch, Laptop,
-  Layers, Monitor, Smartphone, Tablet, X,
+  Accessibility, ArrowLeft, ArrowUpRight, BarChart3, Bot, BookOpen, Boxes, FileCode, GitBranch,
+  Layers, X,
 } from "lucide-react";
 import { Reveal, scrollTo } from "./blocks";
 import { projects, CV, EMAIL } from "./data";

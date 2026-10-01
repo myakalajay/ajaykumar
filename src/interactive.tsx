@@ -7,10 +7,6 @@ import {
 import { CV, EMAIL, LINKEDIN, RECRUITER, experience, projects, type Project } from "./data";
 import { scrollTo } from "./blocks";
 
-const MSA = {
-  "01": "#e4572e", "02": "#2563eb", "03": "#7c3aed", "04": "#0d9488",
-} as Record<string, string>;
-
 const EASE = [0.16, 1, 0.3, 1] as const;
 const ru = (n: number) => "$" + n.toLocaleString("en-US", { maximumFractionDigits: 0 });
 

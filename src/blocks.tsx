@@ -583,7 +583,7 @@ export function HotspotImage({ src, alt, hotspots, accent }: { src: string; alt:
 }
 
 /* ---- accessible lightbox for product screens ---- */
-export function Lightbox({ open, onClose, src, alt, accent }: { open: boolean; onClose: () => void; src: string; alt: string; accent: string }) {
+export function Lightbox({ open, onClose, label, accent, children }: { open: boolean; onClose: () => void; label: string; accent: string; children: ReactNode }) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
@@ -604,13 +604,13 @@ export function Lightbox({ open, onClose, src, alt, accent }: { open: boolean; o
   return (
     <AnimatePresence>
       {open && (
-        <motion.div className="lbox" role="dialog" aria-modal="true" aria-label={alt}
+        <motion.div className="lbox" role="dialog" aria-modal="true" aria-label={label}
           style={{ ["--accent" as string]: accent } as React.CSSProperties}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}
           onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
           <button ref={closeRef} className="lbox-close" onClick={onClose} aria-label="Close enlarged image"><X size={18}/></button>
           <motion.figure initial={{ scale: 0.97, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.98, opacity: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-            <img src={src} alt={alt}/>
+            {children}
           </motion.figure>
         </motion.div>
       )}
@@ -652,12 +652,13 @@ export function ProtoPlayer({ frames, accent }: { frames: ProtoFrame[]; accent: 
         </div>
         <button className="pplayer-zoom" onClick={() => setLb(true)}>Enlarge current screen</button>
       </div>
-      <Lightbox open={lb} onClose={() => setLb(false)} src={currentSrc(f)} alt={f.caption} accent={accent}/>
+      <Lightbox open={lb} onClose={() => setLb(false)} label={f.caption} accent={accent}>
+        {f.phone
+          ? <PhoneFrame><MockScreen v={f.mock} accent={accent}/></PhoneFrame>
+          : <DesktopMock v={f.mock} cap={f.caption} accent={accent}/>}
+      </Lightbox>
     </div>
   );
-}
-function currentSrc(f: ProtoFrame): string {
-  return "/real-work/procurement-1600x900.jpg";
 }
 
 /* ---- design-system component strip ---- */
