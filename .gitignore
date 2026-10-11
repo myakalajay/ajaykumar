@@ -1,0 +1,17 @@
+node_modules
+dist
+.DS_Store
+*.local
+.claude
+
+# Worker local dev: secrets + wrangler state
+worker/.dev.vars
+.wrangler
+worker/.wrangler
+
+# Deploy build output + generated admin credentials (never commit)
+deploy-bundle/
+dist-worker/
+.admin-dev-password.txt
+.admin-password.txt
+*.dev.vars

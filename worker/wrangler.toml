@@ -1,0 +1,17 @@
+# Local dev / test config for the admin-portal Worker.
+# The real deploy is done by the Sites pipeline (sites_deploy); this config is
+# here so `wrangler dev` can run the same Worker against a local D1 database.
+
+name = "ajay-admin-api"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+# Serve the built portfolio + /admin UI from dist/ when running locally.
+[assets]
+directory = "../dist"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ajay-admin"
+database_id = "local-dev-placeholder"

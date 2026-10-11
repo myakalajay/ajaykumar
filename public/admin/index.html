@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Admin · Ajay Kumar Myakala</title>
+    <link rel="icon" href="/favicon.svg" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --ink: #07070a;
+        --ink-2: #0e0e13;
+        --ink-3: #16161d;
+        --crimson: #e5132b;
+        --crimson-2: #ff3d5a;
+        --bone: #f4f1ec;
+        --mist: #a7a6ad;
+        --smoke: #6d6c75;
+        --line: rgba(255, 255, 255, 0.09);
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; height: 100%; }
+      body {
+        background: var(--ink);
+        color: var(--bone);
+        font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      button, input, textarea { font: inherit; color: inherit; }
+      a { color: var(--crimson-2); }
+
+      /* ── login ── */
+      .login-wrap { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+      .login-card { width: min(380px, 100%); background: var(--ink-2); border: 1px solid var(--line); border-radius: 16px; padding: 32px; }
+      .brand { font-family: "Bebas Neue", Impact, sans-serif; letter-spacing: 0.12em; font-size: 30px; }
+      .brand span { color: var(--crimson-2); }
+      .sub { color: var(--smoke); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; }
+      label { display: block; font-size: 12px; color: var(--mist); margin: 20px 0 6px; letter-spacing: 0.05em; }
+      input, textarea {
+        width: 100%; background: var(--ink-3); border: 1px solid var(--line); border-radius: 10px;
+        padding: 11px 12px; outline: none;
+      }
+      input:focus, textarea:focus { border-color: var(--crimson-2); }
+      .btn {
+        cursor: pointer; border: 1px solid var(--line); background: var(--ink-3); color: var(--bone);
+        border-radius: 10px; padding: 10px 16px; font-weight: 600;
+      }
+      .btn:hover { border-color: rgba(255, 255, 255, 0.3); }
+      .btn-primary { background: var(--crimson); border-color: var(--crimson); width: 100%; margin-top: 24px; padding: 13px; }
+      .btn-primary:hover { background: var(--crimson-2); border-color: var(--crimson-2); }
+      .btn-primary:disabled { opacity: 0.6; cursor: default; }
+      .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
+      .err { color: var(--crimson-2); font-size: 13px; margin-top: 14px; min-height: 18px; }
+
+      /* ── app shell ── */
+      .app { display: none; min-height: 100dvh; }
+      .app.on { display: grid; grid-template-columns: 232px 1fr; }
+      .side { background: var(--ink-2); border-right: 1px solid var(--line); padding: 20px 14px; position: sticky; top: 0; height: 100dvh; }
+      .nav { margin-top: 24px; display: flex; flex-direction: column; gap: 2px; }
+      .nav button {
+        text-align: left; background: none; border: 0; padding: 10px 12px; border-radius: 9px;
+        color: var(--mist); cursor: pointer; font-weight: 600;
+      }
+      .nav button:hover { color: var(--bone); background: rgba(255, 255, 255, 0.04); }
+      .nav button.active { color: var(--bone); background: rgba(229, 19, 43, 0.16); }
+      .side-foot { position: absolute; bottom: 20px; left: 14px; right: 14px; }
+      .main { padding: 28px 32px 64px; max-width: 1100px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+      h1 { font-family: "Bebas Neue", Impact, sans-serif; letter-spacing: 0.06em; font-size: 34px; margin: 0; }
+      .muted { color: var(--smoke); }
+
+      .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+      .card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+      .card .k { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--smoke); }
+      .card .v { font-family: "Bebas Neue", Impact, sans-serif; font-size: 38px; line-height: 1; margin-top: 8px; }
+
+      table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+      th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--smoke); }
+      tbody tr { cursor: pointer; }
+      tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+      .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; border: 1px solid var(--line); color: var(--mist); }
+      .pill.unread { border-color: var(--crimson-2); color: var(--crimson-2); }
+
+      .bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 140px; margin-top: 14px; }
+      .bar-chart .bar { flex: 1; background: linear-gradient(180deg, var(--crimson-2), var(--crimson)); border-radius: 4px 4px 0 0; min-height: 2px; position: relative; }
+      .bar-chart .bar span { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: var(--smoke); }
+
+      .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+      .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; }
+      .toolbar input { max-width: 280px; }
+
+      .drawer-bg { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: none; }
+      .drawer-bg.on { display: block; }
+      .drawer { position: fixed; top: 0; right: 0; height: 100dvh; width: min(460px, 100%); background: var(--ink-2); border-left: 1px solid var(--line); padding: 24px; overflow: auto; transform: translateX(100%); transition: transform 0.25s ease; }
+      .drawer.on { transform: translateX(0); }
+      .kv { display: grid; grid-template-columns: 120px 1fr; gap: 6px 12px; margin-top: 14px; font-size: 13px; }
+      .kv dt { color: var(--smoke); }
+      .kv dd { margin: 0; word-break: break-word; }
+      .msg-body { white-space: pre-wrap; background: var(--ink-3); border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-top: 14px; }
+      .close-x { position: absolute; top: 18px; right: 18px; }
+      .section { display: none; }
+      .section.on { display: block; }
+      .empty { color: var(--smoke); padding: 30px 0; text-align: center; }
+      textarea.code { min-height: 220px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
+      .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--ink-3); border: 1px solid var(--line); padding: 11px 18px; border-radius: 10px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+      .toast.on { opacity: 1; }
+      @media (max-width: 760px) {
+        .app.on { grid-template-columns: 1fr; }
+        .side { position: static; height: auto; display: flex; align-items: center; justify-content: space-between; }
+        .nav { flex-direction: row; margin: 0; flex-wrap: wrap; }
+        .side-foot { position: static; }
+        .main { padding: 20px 16px 60px; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── login ── -->
+    <div class="login-wrap" id="login">
+      <form class="login-card" id="login-form">
+        <div class="brand">AJAY <span>·</span> ADMIN</div>
+        <div class="sub">Portfolio control room</div>
+        <label for="pw">Admin password</label>
+        <input id="pw" type="password" autocomplete="current-password" required />
+        <div class="err" id="login-err"></div>
+        <button class="btn btn-primary" id="login-btn" type="submit">Sign in</button>
+      </form>
+    </div>
+
+    <!-- ── app ── -->
+    <div class="app" id="app">
+      <aside class="side">
+        <div>
+          <div class="brand">AJAY <span>·</span> ADMIN</div>
+          <nav class="nav" id="nav">
+            <button data-view="dashboard" class="active">Dashboard</button>
+            <button data-view="visitors">Visitors</button>
+            <button data-view="messages">Messages</button>
+            <button data-view="content">Content</button>
+          </nav>
+        </div>
+        <div class="side-foot">
+          <a href="/" style="display:block;margin-bottom:10px;font-size:12px">← View site</a>
+          <button class="btn btn-sm" id="logout" style="width:100%">Sign out</button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="topbar">
+          <h1 id="view-title">Dashboard</h1>
+          <span class="muted" id="clock"></span>
+        </div>
+
+        <!-- dashboard -->
+        <section class="section on" id="view-dashboard">
+          <div class="cards" id="stat-cards"></div>
+          <div class="card" style="margin-top:16px">
+            <div class="k">Page views · last 30 days</div>
+            <div class="bar-chart" id="chart"></div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="k">Top pages</div>
+            <table><thead><tr><th>Path</th><th>Views</th></tr></thead><tbody id="top-paths"></tbody></table>
+          </div>
+        </section>
+
+        <!-- visitors -->
+        <section class="section" id="view-visitors">
+          <div class="toolbar">
+            <input id="u-search" placeholder="Search id, country, city, OS, browser…" />
+            <span class="muted" id="u-count"></span>
+          </div>
+          <div class="card">
+            <table>
+              <thead><tr><th>Visitor</th><th>Where</th><th>Device</th><th>Views</th><th>Time</th><th>Last seen</th></tr></thead>
+              <tbody id="u-body"></tbody>
+            </table>
+            <div class="empty" id="u-empty" hidden>No visitors tracked yet.</div>
+          </div>
+        </section>
+
+        <!-- messages -->
+        <section class="section" id="view-messages">
+          <div class="card">
+            <table>
+              <thead><tr><th>From</th><th>Subject</th><th>Received</th><th></th></tr></thead>
+              <tbody id="m-body"></tbody>
+            </table>
+            <div class="empty" id="m-empty" hidden>No messages yet.</div>
+          </div>
+        </section>
+
+        <!-- content -->
+        <section class="section" id="view-content">
+          <p class="muted" style="margin-top:0">
+            Editable site content, stored as JSON in the database. Keys are read by the site at runtime.
+          </p>
+          <div class="toolbar">
+            <label for="c-key" style="margin:0">Key</label>
+            <input id="c-key" placeholder="e.g. hero" style="max-width:200px" />
+            <button class="btn btn-sm" id="c-load">Load</button>
+            <button class="btn btn-sm" id="c-new">New</button>
+          </div>
+          <div class="card">
+            <textarea class="code" id="c-value" spellcheck="false" placeholder="{ }"></textarea>
+            <div class="row" style="margin-top:12px">
+              <button class="btn btn-primary" id="c-save" style="width:auto;margin:0;padding:10px 22px">Save</button>
+              <span class="muted" id="c-msg"></span>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="k">Existing keys</div>
+            <div class="row" id="c-list" style="margin-top:10px"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- drawers -->
+    <div class="drawer-bg" id="drawer-bg"></div>
+    <aside class="drawer" id="drawer">
+      <button class="btn btn-sm close-x" id="drawer-close">✕</button>
+      <div id="drawer-content"></div>
+    </aside>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="/admin.js"></script>
+  </body>
+</html>
