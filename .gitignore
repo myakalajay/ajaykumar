@@ -14,4 +14,6 @@ deploy-bundle/
 dist-worker/
 .admin-dev-password.txt
 .admin-password.txt
+.admin-password-hash.txt
+.session-secret.txt
 *.dev.vars
