@@ -4,7 +4,7 @@ import { achievements, profile, projects, toolbox, type ProfileId } from '../dat
 import { useFinePointer } from '../hooks/useMedia';
 import { useSmoothScroll } from '../hooks/smoothScroll';
 import { DotList, EASE, Magnetic, Particles } from './fx';
-import { SeriesMark } from './Poster';
+import { greetingFor, langLabel, useLocale } from '../i18n';
 
 const container = { hidden: {}, show: { transition: { staggerChildren: 0.09, delayChildren: 0.25 } } };
 const item = {
@@ -16,6 +16,7 @@ export default function Hero({ onPlay, onResume, profileId }: { onPlay: () => vo
   const ref = useRef<HTMLElement>(null);
   const fine = useFinePointer();
   const { scrollTo } = useSmoothScroll();
+  const locale = useLocale();
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
@@ -117,8 +118,26 @@ export default function Hero({ onPlay, onResume, profileId }: { onPlay: () => vo
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={item} className="mb-3 text-lg">
-          <SeriesMark />
+        {/* Localized greeting — auto-detected from the visitor's language/region. */}
+        <motion.div variants={item} className="mb-4 flex items-center gap-3">
+          <motion.span
+            key={locale.lang}
+            initial={{ opacity: 0, y: 8, filter: 'blur(6px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="glass rounded-full px-3.5 py-1.5 text-[13px] font-semibold text-bone"
+          >
+            {greetingFor(locale.lang)} 👋
+          </motion.span>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="text-[10px] font-semibold uppercase tracking-[0.24em] text-mist"
+          >
+            {langLabel(locale.lang)}
+            {locale.country ? ` · ${locale.country}` : ''}
+          </motion.span>
         </motion.div>
         {/* The display type shows the first name only, so the h1 says who this is:
             assistive tech and crawlers get the full name and role, the design gets "AJAY". */}

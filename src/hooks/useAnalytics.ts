@@ -22,6 +22,13 @@ function visitorId(): string {
 
 type TrackPayload = { path: string; section?: string; dwellMs?: number };
 
+/** The visitor's browser language, reported so the admin portal can break down by locale. */
+function detectLang(): string | undefined {
+  const raw = navigator.languages?.[0] ?? navigator.language;
+  const code = raw?.trim().toLowerCase().split(/[-_]/)[0];
+  return code && /^[a-z]{2,3}$/.test(code) ? code : undefined;
+}
+
 /** Fire-and-forget: analytics must never break the page or block paint. */
 function send(payload: TrackPayload) {
   try {
@@ -31,6 +38,7 @@ function send(payload: TrackPayload) {
       section: payload.section,
       referrer: document.referrer || undefined,
       dwellMs: payload.dwellMs,
+      lang: detectLang(),
     });
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' }));

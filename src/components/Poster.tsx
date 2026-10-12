@@ -158,6 +158,41 @@ function Motif({ motif, a }: { motif: MotifName; a: string }) {
         </g>
       );
 
+    /* Precision engineering & CAD — a drafting grid with an exploded fastener. */
+    case 'engineering':
+      return (
+        <g transform="translate(198 40)" {...stroke}>
+          {[0, 1, 2, 3, 4, 5].map((i) => (
+            <path key={`v${i}`} d={`M${i * 32} 0 V150`} strokeWidth="1" strokeOpacity="0.12" />
+          ))}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <path key={`h${i}`} d={`M0 ${i * 32} H160`} strokeWidth="1" strokeOpacity="0.12" />
+          ))}
+          <circle cx="80" cy="52" r="30" strokeWidth="2" strokeOpacity="0.75" />
+          <circle cx="80" cy="52" r="12" strokeWidth="2" strokeOpacity="0.5" />
+          <path d="M80 22 V10 M80 82 V94 M50 52 H38 M110 52 H122" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.45" />
+          <path d="M64 100 H96 V118 H64 Z" strokeWidth="2" strokeOpacity="0.6" />
+          <path d="M70 118 V138 M80 118 V138 M90 118 V138" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.4" />
+          <circle cx="80" cy="52" r="4" fill={a} fillOpacity="0.9" stroke="none" />
+          <path d="M8 150 H152" strokeWidth="3" strokeLinecap="round" strokeOpacity="0.25" />
+        </g>
+      );
+
+    /* AI video intelligence — a camera frame with a scan beam over a detected box. */
+    case 'vision':
+      return (
+        <g transform="translate(198 44)" {...stroke}>
+          <path d="M0 24 H20 V12 H52 V24 H150 a12 12 0 0 1 12 12 V120 a12 12 0 0 1 -12 12 H12 a12 12 0 0 1 -12 -12 V36 a12 12 0 0 1 12 -12 Z" strokeWidth="2" strokeOpacity="0.7" />
+          <path d="M0 60 H162 M0 96 H162" strokeWidth="1" strokeOpacity="0.18" />
+          <path d="M54 24 V132 M108 24 V132" strokeWidth="1" strokeOpacity="0.18" />
+          <rect x="60" y="52" width="46" height="52" rx="4" strokeWidth="2.5" strokeOpacity="0.9" />
+          <circle cx="83" cy="66" r="7" fill={a} fillOpacity="0.85" stroke="none" />
+          <path d="M70 92 a13 13 0 0 1 26 0" strokeWidth="2" strokeOpacity="0.6" />
+          <path d="M14 40 H148" strokeWidth="3" strokeLinecap="round" stroke={a} strokeOpacity="0.9" />
+          <circle cx="150" cy="40" r="5" fill={a} fillOpacity="0.9" stroke="none" />
+        </g>
+      );
+
     default:
       return null;
   }

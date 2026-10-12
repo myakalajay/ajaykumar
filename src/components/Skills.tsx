@@ -118,10 +118,10 @@ function SkillCard({ skill, hue }: { skill: Skill; hue: string }) {
       >
         {skill.mono}
       </motion.span>
-      <span className="relative mt-4 flex items-center gap-2 text-[15px] font-semibold text-bone">
+      <span className="relative mt-4 flex items-start gap-2 text-[15px] font-semibold text-bone">
         {skill.name}
         {skill.note && (
-          <span className="rounded px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink" style={{ background: hue }}>
+          <span className="shrink-0 self-start rounded px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink" style={{ background: hue }}>
             {skill.note}
           </span>
         )}

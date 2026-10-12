@@ -1,0 +1,79 @@
+# Auto-deploy: every push to main builds the site and publishes the Worker
+# (which serves dist/ as assets, plus /api/track and the /admin portal).
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   CLOUDFLARE_API_TOKEN   — API token with Edit Cloudflare Workers permission
+#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account id
+#   D1_DATABASE_ID         — id of the ajay-admin D1 database to bind
+# Optional (only set if you want the admin portal live on this worker):
+#   ADMIN_PASSWORD_HASH    — bcrypt/argon hash for the /admin login
+#   SESSION_SECRET         — random 32+ byte string for session cookies
+
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Never cancel an in-flight production deploy, but never run two at once either.
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `npm run build` runs `tsc -b && vite build`, so typecheck failures block the deploy.
+      - name: Typecheck & build
+        run: npm run build
+
+      # worker/wrangler.toml keeps a placeholder database_id so `wrangler dev` stays
+      # self-contained for local work. CI swaps in the real D1 binding.
+      - name: Prepare deploy config
+        run: |
+          test -n "${{ secrets.D1_DATABASE_ID }}" || { echo "D1_DATABASE_ID secret is not set"; exit 1; }
+          sed "s/local-dev-placeholder/${{ secrets.D1_DATABASE_ID }}/" worker/wrangler.toml > worker/wrangler.deploy.toml
+          if grep -q "local-dev-placeholder" worker/wrangler.deploy.toml; then
+            echo "database_id substitution failed — placeholder still present" >&2
+            exit 1
+          fi
+
+      - name: Deploy Worker + assets
+        run: npx wrangler deploy --config worker/wrangler.deploy.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      # printf (not echo) so the hash/secret never gains a trailing newline.
+      # These only apply to this Actions-deployed worker; the pipeline-managed
+      # production worker keeps its own copies.
+      - name: Set ADMIN_PASSWORD_HASH
+        if: ${{ secrets.ADMIN_PASSWORD_HASH != '' }}
+        run: printf '%s' "$ADMIN_PASSWORD_HASH" | npx wrangler secret put ADMIN_PASSWORD_HASH --config worker/wrangler.deploy.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ADMIN_PASSWORD_HASH: ${{ secrets.ADMIN_PASSWORD_HASH }}
+
+      - name: Set SESSION_SECRET
+        if: ${{ secrets.SESSION_SECRET != '' }}
+        run: printf '%s' "$SESSION_SECRET" | npx wrangler secret put SESSION_SECRET --config worker/wrangler.deploy.toml
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}

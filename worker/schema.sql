@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
   referrer     TEXT,
   country      TEXT,
   city         TEXT,
+  lang         TEXT,                -- ISO-639-1, from the browser or derived from country
   device       TEXT,                      -- desktop | mobile | tablet
   browser      TEXT,
   os           TEXT,

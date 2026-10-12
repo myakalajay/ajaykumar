@@ -94,6 +94,21 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               {project.logline}
             </motion.p>
 
+            {/* at a glance — who it was for and what part of it was mine */}
+            <motion.dl
+              variants={block}
+              className="mt-6 grid gap-px overflow-hidden rounded-xl bg-white/10 text-sm sm:grid-cols-2"
+            >
+              <div className="bg-ink-3 p-4">
+                <dt className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">Client / Domain</dt>
+                <dd className="mt-1.5 leading-relaxed text-bone">{project.client}</dd>
+              </div>
+              <div className="bg-ink-3 p-4">
+                <dt className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">My Role</dt>
+                <dd className="mt-1.5 leading-relaxed text-bone">{project.role}</dd>
+              </div>
+            </motion.dl>
+
             <motion.div variants={block} className="mt-6 flex flex-wrap gap-3">
               <Magnetic>
                 <a
@@ -111,7 +126,9 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
             {/* impact */}
             <motion.section variants={block} className="mt-12">
               <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Result / Impact</h3>
-              <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10 sm:grid-cols-3 lg:grid-cols-5">
+              {/* lg:grid-cols-4, not 5 — every project carries exactly 4 metrics, so a 5th
+                  column left a dead empty cell at desktop. 2 → 4 keeps each row full. */}
+              <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10 sm:grid-cols-4">
                 {project.metrics.map((m, i) => (
                   <motion.div
                     key={m.label}
@@ -129,16 +146,35 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </div>
             </motion.section>
 
+            {/* the case study — problem, approach, outcome */}
+            <motion.section variants={block} className="mt-12">
+              <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">The Problem</h3>
+              <p className="max-w-3xl text-[15px] leading-relaxed text-bone/80 sm:text-base">{project.problem}</p>
+            </motion.section>
+
             <div className="mt-12 grid gap-10 lg:grid-cols-[3fr_2fr]">
-              <motion.section variants={block}>                  <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">What I Did</h3>
-                <ul className="space-y-4">
-                  {project.build.map((b) => (
-                    <li key={b} className="flex gap-3 text-[15px] leading-relaxed text-bone/85">
-                      <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: project.palette.accent }} />
-                      {b}
+              <motion.section variants={block}>
+                <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">What I Did</h3>
+                {/* A numbered process timeline: the connector line threads the steps together so
+                    the work reads as a sequence, not a bullet pile. The last step drops its line. */}
+                <ol className="relative space-y-5">
+                  <span
+                    aria-hidden
+                    className="absolute left-[15px] top-2 bottom-2 w-px"
+                    style={{ background: `linear-gradient(${project.palette.accent}66, ${project.palette.accent}22)` }}
+                  />
+                  {project.approach.map((b, i) => (
+                    <li key={b} className="relative flex gap-4">
+                      <span
+                        className="relative z-[1] mt-0.5 flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full font-display text-[13px] tabular-nums"
+                        style={{ background: `${project.palette.accent}1f`, color: project.palette.accent, boxShadow: `inset 0 0 0 1px ${project.palette.accent}55` }}
+                      >
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <span className="pt-1 text-[15px] leading-relaxed text-bone/85">{b}</span>
                     </li>
                   ))}
-                </ul>
+                </ol>
               </motion.section>
               <div className="space-y-10">
                 <motion.section variants={block}>
@@ -164,6 +200,18 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
                 </motion.section>
               </div>
             </div>
+
+            {/* outcome — the closing statement, tinted with the project's own accent */}
+            <motion.section
+              variants={block}
+              className="mt-12 rounded-xl border p-5 sm:p-7"
+              style={{ borderColor: `${project.palette.accent}40`, background: `linear-gradient(135deg, ${project.palette.from}, transparent)` }}
+            >
+              <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.3em]" style={{ color: project.palette.accent }}>
+                Outcome
+              </h3>
+              <p className="max-w-3xl text-[15px] leading-relaxed text-bone sm:text-base">{project.outcome}</p>
+            </motion.section>
 
             {/* more like this */}
             <motion.section variants={block} className="mt-14 border-t border-white/10 pt-8">

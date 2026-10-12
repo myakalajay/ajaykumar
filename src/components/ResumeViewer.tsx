@@ -111,11 +111,23 @@ export function ResumeSheet() {
   return (
     <article className="relative overflow-hidden rounded-2xl bg-[linear-gradient(180deg,#121218,#0c0c11)] p-6 ring-1 ring-white/10 sm:p-10">
       <div aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-crimson-2/70 to-transparent" />
-      <header className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-6">
-        <div>
+      {/* Stacked on phones: side-by-side put the ~430px role run underneath the contact
+          block, where it overlapped "LinkedIn". Full width on its own line lets it wrap free. */}
+      <header className="mb-8 flex flex-col items-start gap-5 border-b border-white/10 pb-6 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:gap-4">
+        {/* This title block gets a real pixel floor and is excluded from flex-shrink: the role
+            line is one long uppercase run (~430px). Letting it shrink made the line box collapse
+            to 14px and the article's overflow-hidden clipped the tail of the title.
+            The floor is scoped to sm+ (≥640px, where ~528px of room exists for the 416px floor):
+            below that the floor itself exceeded the viewport, widened the sheet's min-content
+            past the screen and the same overflow-hidden clipped every line in the sheet. */}
+        <div className="min-w-0 grow basis-0 sm:min-w-[26rem] sm:shrink-0">
           <p className="text-[10px] font-bold tracking-[0.34em] text-smoke">STARRING</p>
           <h3 className="mt-1 font-display text-[clamp(1.9rem,4.4vw,3.2rem)] leading-[0.9] tracking-wide text-bone">{profile.fullName}</h3>
-          <p className="mt-2 max-w-md text-[11px] font-semibold uppercase leading-relaxed tracking-[0.16em] text-crimson-2">{profile.role}</p>
+          {/* max-w-sm (384px) not max-w-md: the role line is a single ~430px uppercase run. At
+              max-w-md it fit on one line inside the cap, then overflowed the narrower flex item and
+              the article's overflow-hidden clipped its tail. Capping below the available width forces
+              a clean two-line wrap instead. */}
+          <p className="mt-2 max-w-sm text-[11px] font-semibold uppercase leading-relaxed tracking-[0.16em] text-crimson-2">{profile.role}</p>
         </div>
         <div className="text-xs leading-relaxed text-mist sm:text-right">
           <a href={`mailto:${profile.email}`} className="block hover:text-bone">

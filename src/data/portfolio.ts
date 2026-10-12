@@ -64,14 +64,14 @@ export const profile = {
   seriesTag: 'THE SERIES',
   /** Fictional studio card shown at the very start of the opening sequence. */
   originalLabel: 'A MYAKALA ORIGINAL',
-  role: 'Product Strategy & Design Transformation Leader',
+  role: 'Product Strategy · AI-Native Design · Transformation',
   /** The CV's own sub-headline, kept verbatim. */
   headline: 'Business Problem Framing • Product Strategy • Enterprise Transformation • AI-Enabled Product Development',
   tagline: ['Product Strategy', 'Enterprise Transformation', 'AI-Enabled Product Development'],
   intro:
-    'Product strategy and design transformation professional with 10+ years across Enterprise SaaS, FinTech, mortgage and lending, procurement, GovTech, media, AdTech, MarTech and recruitment technology — translating business, user, operational and technical constraints into scalable product direction.',
+    'Ten years from UX craft to product strategy across eight industries — FinTech, GovTech, media and more. An implemented underwriting workflow I shaped cut decision time by 37%.',
   tenure: '10+ years',
-  location: 'Hyderabad, India',
+  location: 'Bengaluru, India',
   email: 'ajaykumarmyakala@outlook.com',
   phone: '+91 7382328066',
   links: {
@@ -179,7 +179,15 @@ export const experience = [
 
 export type Metric = { value: string; label: string };
 
-export type Motif = 'lending' | 'supplier' | 'civic' | 'broadcast' | 'audience' | 'recruit';
+export type Motif =
+  | 'lending'
+  | 'supplier'
+  | 'civic'
+  | 'broadcast'
+  | 'audience'
+  | 'recruit'
+  | 'engineering'
+  | 'vision';
 
 export type Project = {
   id: string;
@@ -190,11 +198,16 @@ export type Project = {
   logline: string;
   /** Methods and tooling used, shown as the "stack" of the case study. */
   stack: string[];
-  build: string[];
   features: string[];
   metrics: Metric[];
   palette: Palette;
   motif: Motif;
+  /** The case-study spine. Every string is drawn from the CV — nothing invented here. */
+  client: string;
+  role: string;
+  problem: string;
+  approach: string[];
+  outcome: string;
 };
 
 /**
@@ -209,12 +222,6 @@ export const projects: Project[] = [
     genre: 'Mortgage • Lending • Enterprise SaaS',
     logline: 'Product strategy and end-to-end design for US mortgage and lending platforms, from origination through servicing.',
     stack: ['Product Strategy', 'Journey Mapping', 'Service Design', 'Design Standards', 'Figma'],
-    build: [
-      'Led product strategy and end-to-end design for US mortgage and lending platforms, partnering with Product, Engineering and business stakeholders to shape roadmap priorities and scalable customer experiences.',
-      'Framed complex borrower and operational problems across origination, underwriting, onboarding, servicing and lending operations; translated requirements into journeys, workflows and solution direction.',
-      'Mapped end-to-end customer and operational journeys and drove workflow optimisation; an implemented underwriting workflow improvement reduced decision time by 37%.',
-      'Established reusable design standards and scalable interaction patterns; collaborated with teams working across AWS and Azure ecosystems.',
-    ],
     features: [
       'Borrower and operational journeys across the lending lifecycle',
       'Underwriting workflow optimisation',
@@ -230,6 +237,18 @@ export const projects: Project[] = [
     ],
     palette: { from: '#2a0610', via: '#7a0f24', to: '#0b0710', accent: '#ff3d5a' },
     motif: 'lending',
+    client: 'HomeLoc Solutions LLP · US mortgage & lending market',
+    role: 'Lead Product Design Consultant — product strategy and end-to-end design',
+    problem:
+      'Borrower and operational problems were spread across origination, underwriting, onboarding, servicing and lending operations, with no shared journey or design language tying them together.',
+    approach: [
+      'Framed the business, user and operational constraints into concrete product opportunities before any interface was drawn.',
+      'Mapped end-to-end customer and operational journeys across the five lending stages to find where time and decisions were being lost.',
+      'Ran discovery, product-vision and design-review sessions to keep business objectives, user needs and implementation reality aligned.',
+      'Established reusable design standards and scalable interaction patterns, partnering with teams across AWS and Azure ecosystems.',
+    ],
+    outcome:
+      'An implemented underwriting workflow improvement cut decision time by 37%, and the design standards now scale across both customer and operational experiences.',
   },
   {
     id: 'cashtrax',
@@ -238,12 +257,6 @@ export const projects: Project[] = [
     genre: 'Procurement • Supplier Diversity • Compliance',
     logline: 'Enterprise procurement platforms spanning supplier diversity, compliance, spend visibility and reconciliation.',
     stack: ['Enterprise UX', 'Information Architecture', 'Stakeholder Discovery', 'Dashboards', 'Figma'],
-    build: [
-      'Led UX strategy and product design for CashTrax and DiversityTrax enterprise platforms spanning procurement, supplier diversity, compliance, spend visibility and reconciliation.',
-      'Conducted stakeholder discovery and translated complex business requirements into service experiences, supplier onboarding workflows, reporting systems and operational dashboards.',
-      'Structured role-based information architecture and workflows for enterprise users, balancing business process requirements with usability and scalability.',
-      'Worked closely with CEO, Product Managers and Engineering teams to align business goals, product priorities and delivery constraints.',
-    ],
     features: [
       'Supplier onboarding workflows',
       'Spend visibility and reconciliation views',
@@ -259,6 +272,18 @@ export const projects: Project[] = [
     ],
     palette: { from: '#1a0d02', via: '#8a4a07', to: '#0a0806', accent: '#ffb547' },
     motif: 'supplier',
+    client: 'Computech Corporation · enterprise procurement',
+    role: 'Sr UX Designer — UX strategy and product design across two platforms',
+    problem:
+      'Procurement, supplier diversity, compliance, spend visibility and reconciliation lived in separate enterprise tools, each with its own roles, rules and reporting.',
+    approach: [
+      'Ran stakeholder discovery with the CEO, product managers and engineering to align business goals with delivery constraints.',
+      'Translated complex business requirements into service experiences, supplier onboarding workflows and reporting systems.',
+      'Structured role-based information architecture so each enterprise user saw the process that applied to them.',
+      'Designed operational dashboards that made spend and reconciliation legible to non-analyst users.',
+    ],
+    outcome:
+      'Two enterprise platforms — CashTrax and DiversityTrax — now cover the full procurement path from onboarding through reconciliation under one role-based structure.',
   },
   {
     id: 'epragathi',
@@ -267,12 +292,6 @@ export const projects: Project[] = [
     genre: 'GovTech • Public Sector • Accessibility',
     logline: 'Digital transformation for government and public-sector platforms, designing citizen and administrative workflows.',
     stack: ['Accessibility / WCAG', 'Process Mapping', 'Information Architecture', 'Prototyping', 'Figma'],
-    build: [
-      'Contributed to digital transformation initiatives for government and public-sector platforms, including ePragathi and citizen-service ecosystems.',
-      'Designed citizen-facing and administrative workflows, simplifying complex service processes through information architecture, process mapping and responsive interaction design.',
-      'Applied accessibility-focused design to improve service usability for diverse public audiences and collaborated with business analysts, architects and engineering teams.',
-      'Produced process flows, wireframes, prototypes and production-ready interfaces.',
-    ],
     features: [
       'Citizen-facing service journeys',
       'Administrative back-office workflows',
@@ -288,6 +307,18 @@ export const projects: Project[] = [
     ],
     palette: { from: '#04121f', via: '#0f4c6e', to: '#05080d', accent: '#4cc9ff' },
     motif: 'civic',
+    client: 'Visual IT Solution · Government & public sector (ePragathi)',
+    role: 'Sr UX Designer — citizen and administrative workflow design',
+    problem:
+      'Public-service processes were complex and written for the institution, not the citizen, and had to serve audiences with very different access needs.',
+    approach: [
+      'Redrew complex service processes through information architecture and process mapping before designing screens.',
+      'Designed citizen-facing and administrative workflows as one system, so front and back office stayed consistent.',
+      'Applied accessibility-focused design so the services remained usable for diverse public audiences.',
+      'Delivered process flows, wireframes, prototypes and production-ready interfaces alongside business analysts and architects.',
+    ],
+    outcome:
+      'Citizen-service ecosystems including ePragathi, designed accessibility-first from process flows through to production-ready interfaces for two distinct audiences.',
   },
   {
     id: 'gaian-broadcast',
@@ -296,12 +327,6 @@ export const projects: Project[] = [
     genre: 'Media • Broadcasting • AdTech',
     logline: 'Enterprise broadcasting, television technology and media monetisation experiences, including ATSC 3.0 initiatives.',
     stack: ['Content Management', 'Operational Dashboards', 'Interaction Models', 'ATSC 3.0', 'Figma'],
-    build: [
-      'Designed enterprise broadcasting, television technology and media monetisation experiences supporting digital content distribution and audience engagement.',
-      'Designed content-management workflows, operational dashboards and scalable interaction models for complex media ecosystems.',
-      'Contributed to ATSC 3.0-related product initiatives and partnered with Engineering on next-generation broadcasting experiences.',
-      'Worked across advertising workflows, reporting dashboards and audience-engagement experiences.',
-    ],
     features: [
       'Content-management workflows for broadcast operations',
       'Advertising and monetisation workflows',
@@ -317,6 +342,18 @@ export const projects: Project[] = [
     ],
     palette: { from: '#120822', via: '#3d1a6e', to: '#07060c', accent: '#b98bff' },
     motif: 'broadcast',
+    client: 'Gaian Solution · enterprise broadcasting & media',
+    role: 'Sr UX Designer — broadcast operations, advertising and reporting',
+    problem:
+      'Broadcast and monetisation operations ran across content management, advertising workflows and reporting, each with its own tooling and no shared interaction model.',
+    approach: [
+      'Designed content-management workflows and operational dashboards for the people running broadcast operations day to day.',
+      'Built scalable interaction models so one pattern could carry across a complex media ecosystem.',
+      'Contributed to ATSC 3.0 next-generation broadcasting initiatives, partnering with engineering on the standard shift.',
+      'Worked across advertising workflows, reporting dashboards and audience-engagement experiences.',
+    ],
+    outcome:
+      'A coherent operations layer across content, advertising and reporting, plus a contribution to ATSC 3.0 next-generation broadcasting work.',
   },
   {
     id: 'audience-intelligence',
@@ -325,12 +362,6 @@ export const projects: Project[] = [
     genre: 'AdTech • MarTech • Audience Platforms',
     logline: 'Consumer media and enterprise audience platforms — content discovery, segmentation, campaigns and monetisation.',
     stack: ['Mobile-first UX', 'Customer Segmentation', 'Behaviour Analytics', 'Campaign Management', 'Figma'],
-    build: [
-      'Worked across Way2News, AudiencePlay, AudiencePrime, DigitalKites and TheTasteCompany across consumer media, AdTech, MarTech, audience intelligence and customer engagement products.',
-      'Designed mobile-first content discovery and engagement experiences alongside enterprise interfaces for customer segmentation, campaign management, audience intelligence and monetisation.',
-      'Supported data-driven platform experiences using audience insights, behaviour analytics and reporting to improve retention, engagement and platform adoption.',
-      'Collaborated with product, editorial, marketing and engineering teams across customer engagement and campaign experience initiatives.',
-    ],
     features: [
       'Mobile-first content discovery and engagement',
       'Customer segmentation and audience intelligence',
@@ -346,6 +377,18 @@ export const projects: Project[] = [
     ],
     palette: { from: '#03150f', via: '#0d5a40', to: '#050a08', accent: '#46e3a8' },
     motif: 'audience',
+    client: 'Way2News Interactive · five consumer & enterprise brands',
+    role: 'Sr UI/UX Designer — consumer media and enterprise audience platforms',
+    problem:
+      'Five brands needed both mobile-first content discovery for readers and enterprise tooling for segmentation, campaigns and monetisation — two very different surfaces from one audience base.',
+    approach: [
+      'Designed mobile-first content discovery and engagement experiences for the consumer media products.',
+      'Built enterprise interfaces for customer segmentation, campaign management and monetisation on the same audience data.',
+      'Used audience insight, behaviour analytics and reporting to steer retention, engagement and adoption decisions.',
+      'Worked across product, editorial, marketing and engineering to keep the platforms moving together.',
+    ],
+    outcome:
+      'One suite spanning five brands and three platform families — consumer, AdTech and MarTech — from discovery through to monetisation.',
   },
   {
     id: 'jobsnprofiles',
@@ -354,11 +397,6 @@ export const projects: Project[] = [
     genre: 'Recruitment Tech • Communication Products',
     logline: 'Recruitment technology, communication products and client-facing digital solutions, designed and shipped to front-end.',
     stack: ['Wireframes', 'Information Architecture', 'Responsive UX', 'WordPress', 'PHP · MySQL'],
-    build: [
-      'Designed recruitment technology, communication products, enterprise web applications and client-facing digital solutions including JobsNProfiles and VioTalk.',
-      'Created wireframes, information architecture and responsive product experiences and collaborated with development teams through front-end implementation.',
-      'Supported branding, marketing websites and digital product initiatives using WordPress, Joomla, PHP and MySQL.',
-    ],
     features: [
       'Recruitment technology platform design',
       'Communication product interfaces',
@@ -374,6 +412,94 @@ export const projects: Project[] = [
     ],
     palette: { from: '#1c1003', via: '#6b3c06', to: '#0a0806', accent: '#ffb547' },
     motif: 'recruit',
+    client: 'Nitya Software India · recruitment & communication products',
+    role: 'UI/UX Designer — concept through front-end implementation',
+    problem:
+      'Recruitment and communication products needed to be designed and shipped end to end, on a stack where design and front-end were the same pair of hands.',
+    approach: [
+      'Designed recruitment technology and communication products including JobsNProfiles and VioTalk.',
+      'Created wireframes, information architecture and responsive product experiences for client-facing web applications.',
+      'Collaborated directly with development teams through front-end implementation, closing the gap between design and build.',
+      'Supported branding, marketing websites and digital product initiatives across WordPress, Joomla, PHP and MySQL.',
+    ],
+    outcome:
+      'Two flagship products shipped end to end — from concept and wireframes through to front-end implementation on a PHP and MySQL stack.',
+  },
+  {
+    id: 'pem-pro',
+    title: 'PEM Pro Engineering Portal',
+    year: '2025 – 2026',
+    genre: 'Manufacturing • Precision Engineering • Enterprise SaaS',
+    logline:
+      'An engineering workspace portal for PennEngineering — a secure enclave that provisions a full design environment, guides first-run onboarding and drives an AI-assisted product lifecycle from CAD import to validation.',
+    stack: ['Product Strategy', 'Enterprise Onboarding', 'Design Systems', 'AI-Assisted Workflows', 'Figma'],
+    features: [
+      'First-run workspace provisioning with a live 4-step status sequence',
+      'Engineering Command Center for lifecycle, readiness and AI synthesis',
+      'Product Lifecycle Engine: Project → CAD Import → AI Analysis → Fasteners → Validation',
+      'AI Engineering Copilot embedded for assisted engineering decisions',
+      'Guided product tour and a 7-step project roadmap wizard',
+      'Knowledge Center with design guides and CAD standards',
+    ],
+    metrics: [
+      { value: '4-Step', label: 'secure workspace provisioning flow' },
+      { value: '7-Stage', label: 'project creation roadmap wizard' },
+      { value: 'AI Copilot', label: 'in-product engineering assistant' },
+      { value: 'SOC 2 · ISO 9001', label: 'enterprise trust & compliance' },
+    ],
+    palette: { from: '#041a33', via: '#0b4a86', to: '#05070d', accent: '#4cc9ff' },
+    motif: 'engineering',
+    client: 'PennEngineering (PEM®) · precision fastening & manufacturing',
+    role: 'Product Strategy & Design — enterprise engineering portal & AI lifecycle tooling',
+    problem:
+      'Manufacturing and engineering teams had no single secure workspace that tied enterprise identity, CAD assemblies, AI component analysis and manufacturing validation together — each step lived in a different tool with no shared lifecycle or design language.',
+    approach: [
+      'Framed the first-run experience as a secure provisioning sequence so users trust the workspace before they ever touch a project.',
+      'Structured the whole platform around one Product Lifecycle Engine — Project, CAD Import, AI Analysis, Fasteners, Validation — so every screen reinforces the same journey.',
+      'Designed the Engineering Command Center as the operational home: lifecycle integrity, AI synthesis results and manufacturing readiness at a glance.',
+      'Embedded an AI Engineering Copilot and a guided product tour so complex engineering decisions stay assisted, not intimidating.',
+      'Built a role-aware design system around enterprise trust signals — SOC 2, ISO 9001 and a secure enclave — for a manufacturing audience.',
+    ],
+    outcome:
+      'A cohesive engineering portal where a new user provisions a secure workspace in seconds, then drives projects from CAD import through AI analysis to validation — all inside one AI-assisted lifecycle.',
+  },
+  {
+    id: 'kenvision',
+    title: 'KenVision Video Intelligence',
+    year: '2025 – 2026',
+    genre: 'AI • Video Analytics • Retail & Smart Spaces',
+    logline:
+      'An AI video intelligence platform that turns existing CCTV into real-time operational insight — footfall, dwell, conversion, heatmaps and AI-recommended store actions.',
+    stack: ['Product Strategy', 'Data Visualisation', 'AI/ML UX', 'Dashboard Design', 'Figma'],
+    features: [
+      'Store Health Score with a live AI Command Center',
+      'Store Intelligence Map: footfall, dwell, conversion, revenue and staff heatmaps',
+      'AI Recommended Actions ranked by impact and effort',
+      'Operations Health tiles: queue, staff coverage, camera health, uptime, AI accuracy',
+      'Executive Insights with weekly revenue trends',
+      'Privacy-first analytics that reuse existing camera hardware',
+    ],
+    metrics: [
+      { value: '6', label: 'live KPI streams on one command center' },
+      { value: '5', label: 'store-intelligence heatmap layers' },
+      { value: 'Real-time', label: 'footfall, dwell & conversion insight' },
+      { value: 'No New HW', label: 'privacy-first, existing CCTV only' },
+    ],
+    palette: { from: '#0a0730', via: '#2b1a8c', to: '#05060f', accent: '#7c5cff' },
+    motif: 'vision',
+    client: 'KenVision (by Intelense) · AI video intelligence for retail & smart spaces',
+    role: 'Product Strategy & Design — real-time video intelligence & retail analytics UX',
+    problem:
+      'Retail and operations teams had cameras everywhere but no operational picture — footfall, dwell time, queue congestion, conversion and staffing decisions were made on intuition because the video data was never turned into insight.',
+    approach: [
+      'Designed a Store Health Score that collapses many signals into one number operators can act on immediately.',
+      'Built the Store Intelligence Map so footfall, dwell, conversion, revenue and staff coverage read as layered heatmaps over the real floor plan.',
+      'Turned raw detections into AI Recommended Actions ranked by impact and effort, so insight always ends in a concrete next step.',
+      'Balanced real-time AI accuracy against privacy-first constraints, reusing existing CCTV with no new hardware.',
+      'Gave executives a weekly revenue trend and per-store ranking so location-level and portfolio-level decisions share one interface.',
+    ],
+    outcome:
+      'Existing store cameras became a measurement layer — queue congestion, revenue risk and staffing moves now surface as AI-recommended actions inside a single real-time command center.',
   },
 ];
 

@@ -98,6 +98,32 @@ function classifyUa(ua: string): { device: string; browser: string; os: string }
   return { device, browser, os };
 }
 
+/** Normalize a browser language tag ("en-US", "ja") to a bare ISO-639-1 code ("ja"). */
+function normalizeLang(raw: unknown): string | null {
+  if (typeof raw !== 'string') return null;
+  const code = raw.trim().toLowerCase().split(/[-_]/)[0];
+  return /^[a-z]{2,3}$/.test(code) ? code : null;
+}
+
+/**
+ * Primary language per country/region, used when the browser doesn't report one
+ * (or to geo-localise). Covers the regions this portfolio is seen from most.
+ */
+const COUNTRY_LANG: Record<string, string> = {
+  AE: 'ar', SA: 'ar', QA: 'ar', KW: 'ar', OM: 'ar', BH: 'ar', JO: 'ar', EG: 'ar',
+  JP: 'ja', KR: 'ko', CN: 'zh', TW: 'zh', HK: 'zh',
+  DE: 'de', AT: 'de', CH: 'de', FR: 'fr', BE: 'fr', ES: 'es', MX: 'es', AR: 'es', CL: 'es', CO: 'es',
+  PT: 'pt', BR: 'pt', IT: 'it', NL: 'nl', RU: 'ru', TR: 'tr', IL: 'he',
+  IN: 'en', US: 'en', GB: 'en', CA: 'en', AU: 'en', NZ: 'en', IE: 'en', ZA: 'en', SG: 'en',
+  SE: 'sv', NO: 'no', DA: 'da', DK: 'da', FI: 'fi', PL: 'pl', CZ: 'cs', VN: 'vi', TH: 'th', ID: 'id',
+};
+
+/** Fall back to English for unmapped countries so the client always gets a usable code. */
+function langFromCountry(country: string | null | undefined): string {
+  if (!country) return 'en';
+  return COUNTRY_LANG[country.toUpperCase()] ?? 'en';
+}
+
 const nowIso = () => new Date().toISOString();
 
 /** In-memory login throttle (per-isolate, best effort). */
@@ -138,6 +164,7 @@ CREATE TABLE IF NOT EXISTS users (
   referrer     TEXT,
   country      TEXT,
   city         TEXT,
+  lang         TEXT,
   device       TEXT,
   browser      TEXT,
   os           TEXT,
@@ -181,13 +208,22 @@ function ensureSchema(db: D1Database): Promise<void> {
     // Clear the cache on failure so a later request retries instead of caching a rejection.
     schemaReady = db
       .batch(SCHEMA_SQL.split(';').map((s) => s.trim()).filter(Boolean).map((s) => db.prepare(s)))
-      .then(() => undefined)
+      // Additive migrations for tables created before the column existed. Probed so a
+      // repeat run (column already present) is a no-op instead of a hard D1 error.
+      .then(() => addColumnIfMissing(db, 'users', 'lang', 'TEXT'))
       .catch((err) => {
         schemaReady = null;
         throw err;
       });
   }
   return schemaReady;
+}
+
+/** D1 has no `ADD COLUMN IF NOT EXISTS`; probe the table info, then add only if absent. */
+async function addColumnIfMissing(db: D1Database, table: string, column: string, type: string): Promise<void> {
+  const info = await db.prepare(`PRAGMA table_info(${table})`).all();
+  const exists = (info.results as { name: string }[]).some((c) => c.name === column);
+  if (!exists) await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`).run();
 }
 
 /* ───────────────────────── routing ───────────────────────── */
@@ -253,7 +289,7 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
   /* ── public: track a visit (beacon from the site) ── */
   if (pathname === '/api/track' && method === 'POST') {
     const body = (await req.json().catch(() => null)) as
-      | { visitorId?: string; path?: string; section?: string; referrer?: string; dwellMs?: number }
+      | { visitorId?: string; path?: string; section?: string; referrer?: string; dwellMs?: number; lang?: string }
       | null;
     if (!body?.visitorId || !body.path) return badRequest('visitorId and path required');
 
@@ -262,6 +298,8 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
     const referrer = (body.referrer ?? req.headers.get('referrer') ?? '').slice(0, 2048);
     const cf = (req as Request & { cf?: { country?: string; city?: string } }).cf ?? {};
     const ua = classifyUa(req.headers.get('user-agent') ?? '');
+    // Prefer the browser-reported language, else fall back to Cloudflare's country-derived language.
+    const lang = normalizeLang(body.lang) ?? langFromCountry(cf.country);
     const ts = nowIso();
 
     await env.DB.batch([
@@ -277,15 +315,16 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
         ts,
       ),
       env.DB.prepare(
-        `INSERT INTO users (visitor_id, first_seen, last_seen, visits, page_views, total_ms, referrer, country, city, device, browser, os, landing_path)
-         VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `INSERT INTO users (visitor_id, first_seen, last_seen, visits, page_views, total_ms, referrer, country, city, lang, device, browser, os, landing_path)
+         VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
          ON CONFLICT(visitor_id) DO UPDATE SET
            last_seen  = excluded.last_seen,
            visits     = CASE WHEN excluded.page_views > users.page_views THEN users.visits + 1 ELSE users.visits END,
            page_views = MAX(users.page_views, excluded.page_views),
            total_ms   = users.total_ms + excluded.total_ms,
            country    = COALESCE(excluded.country, users.country),
-           city       = COALESCE(excluded.city, users.city)`,
+           city       = COALESCE(excluded.city, users.city),
+           lang       = COALESCE(excluded.lang, users.lang)`,
       ).bind(
         visitorId,
         ts,
@@ -295,6 +334,7 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
         referrer || null,
         cf.country ?? null,
         cf.city ?? null,
+        lang,
         ua.device,
         ua.browser,
         ua.os,
@@ -302,6 +342,18 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
       ),
     ]);
     return json({ ok: true });
+  }
+
+  /* ── public: geo + language, for client-side localisation ── */
+  if (pathname === '/api/geo' && method === 'GET') {
+    const cf = (req as Request & { cf?: { country?: string; city?: string; continent?: string } }).cf ?? {};
+    const country = cf.country ?? null;
+    return json({
+      country,
+      city: cf.city ?? null,
+      continent: cf.continent ?? null,
+      lang: langFromCountry(country),
+    });
   }
 
   /* ── public: contact form ── */
@@ -326,7 +378,7 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
   if (!isSessionOk) return unauthorized();
 
   if (pathname === '/api/admin/stats' && method === 'GET') {
-    const [totals, byDay, topPaths, recent] = await Promise.all([
+    const [totals, byDay, topPaths, recent, byCountry, byLang, byDevice, topCities] = await Promise.all([
       env.DB.prepare(
         `SELECT
            (SELECT COUNT(*) FROM users)                          AS visitors,
@@ -336,6 +388,7 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
            (SELECT COUNT(*) FROM messages)                       AS messages,
            (SELECT COUNT(*) FROM messages WHERE read = 0)        AS unread,
            (SELECT COUNT(*) FROM users WHERE last_seen >= datetime('now','-7 days'))  AS active_7d,
+           (SELECT COUNT(DISTINCT country) FROM users WHERE country IS NOT NULL)      AS countries,
            (SELECT IFNULL(AVG(total_ms),0) FROM users)           AS avg_ms`,
       ).first(),
       env.DB.prepare(
@@ -351,12 +404,35 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
         `SELECT id, name, email, subject, read, createdat FROM messages
          ORDER BY createdat DESC LIMIT 5`,
       ).all(),
+      // Where in the world the audience is — visitors, views and share per country.
+      env.DB.prepare(
+        `SELECT country, COUNT(*) AS visitors, SUM(page_views) AS views
+         FROM users WHERE country IS NOT NULL
+         GROUP BY country ORDER BY visitors DESC LIMIT 15`,
+      ).all(),
+      // Preferred language per visitor — powers the locale feature.
+      env.DB.prepare(
+        `SELECT lang, COUNT(*) AS visitors FROM users WHERE lang IS NOT NULL
+         GROUP BY lang ORDER BY visitors DESC LIMIT 12`,
+      ).all(),
+      env.DB.prepare(
+        `SELECT device, COUNT(*) AS visitors FROM users WHERE device IS NOT NULL
+         GROUP BY device ORDER BY visitors DESC`,
+      ).all(),
+      env.DB.prepare(
+        `SELECT city, country, COUNT(*) AS visitors FROM users
+         WHERE city IS NOT NULL GROUP BY city, country ORDER BY visitors DESC LIMIT 12`,
+      ).all(),
     ]);
     return json({
       totals,
       byDay: byDay.results,
       topPaths: topPaths.results,
       recentMessages: recent.results,
+      byCountry: byCountry.results,
+      byLang: byLang.results,
+      byDevice: byDevice.results,
+      topCities: topCities.results,
     });
   }
 

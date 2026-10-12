@@ -23,7 +23,7 @@ function Intro() {
       </p>
       <RevealText as="h2" text="ORIGINALS" className="font-display text-[clamp(3.5rem,9vw,8rem)] leading-[0.85] text-bone" />
       <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-mist">
-        Six platforms from the CV — mortgage, procurement, GovTech, broadcast, audience intelligence and recruitment technology. Open any title for the full story.
+        {projects.length} platforms — mortgage, procurement, GovTech, broadcast, audience intelligence, recruitment, precision engineering and AI video intelligence. Open any title for the full story.
       </p>
       <p className="mt-6 hidden text-xs tracking-[0.24em] text-smoke lg:block">SCROLL TO BROWSE →</p>
     </div>

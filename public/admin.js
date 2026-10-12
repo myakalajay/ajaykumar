@@ -18,6 +18,14 @@
   const fmtDate = (iso) => (iso ? new Date(iso).toLocaleString() : '—');
   const shortId = (id) => (id && id.length > 12 ? `${id.slice(0, 8)}…${id.slice(-4)}` : id || '—');
 
+  // Human names for ISO-639-1 codes surfaced in the audience analytics.
+  const LANG_NAMES = {
+    en: 'English', ar: 'العربية', ja: '日本語', ko: '한국어', zh: '中文', de: 'Deutsch',
+    fr: 'Français', es: 'Español', pt: 'Português', it: 'Italiano', nl: 'Nederlands',
+    ru: 'Русский', tr: 'Türkçe', he: 'עברית', hi: 'हिन्दी', sv: 'Svenska', no: 'Norsk',
+    da: 'Dansk', fi: 'Suomi', pl: 'Polski', cs: 'Čeština', vi: 'Tiếng Việt', th: 'ไทย', id: 'Bahasa',
+  };
+
   let toastTimer;
   function toast(msg) {
     const t = $('toast');
@@ -77,6 +85,7 @@
   async function load(view) {
     try {
       if (view === 'dashboard') await loadDashboard();
+      else if (view === 'audience') await loadAudience();
       else if (view === 'visitors') await loadUsers();
       else if (view === 'messages') await loadMessages();
       else if (view === 'content') await loadContent();
@@ -113,6 +122,57 @@
     $('top-paths').innerHTML = (d.topPaths || []).map((p) => `<tr><td>${esc(p.path)}</td><td>${p.views}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">No data yet.</td></tr>';
   }
 
+  /* ── audience / analytics ── */
+  const DONUT_COLORS = ['#ff3d5a', '#4cc9ff', '#46e3a8', '#ffb547', '#b98bff', '#6d6c75'];
+
+  function hbars(el, rows, fmtLabel, total) {
+    if (!rows || !rows.length) { el.innerHTML = '<div class="muted" style="padding:8px 0">No data yet.</div>'; return; }
+    const max = Math.max(...rows.map((r) => r.v), 1);
+    el.innerHTML = rows.map((r) => `
+      <div class="hbar" title="${esc(fmtLabel(r.k))}: ${r.v}">
+        <span class="lbl">${esc(fmtLabel(r.k))}</span>
+        <span class="track"><span class="fill" style="width:${Math.max(2, (r.v / max) * 100)}%"></span></span>
+        <span class="num">${r.v}${total ? ` · ${Math.round((r.v / total) * 100)}%` : ''}</span>
+      </div>`).join('');
+  }
+
+  async function loadAudience() {
+    const d = await j(await api('/api/admin/stats'));
+
+    const countries = (d.byCountry || []).map((c) => ({ k: c.country, v: c.visitors }));
+    hbars($('geo-countries'), countries, (c) => (c ? c.toUpperCase() : '—'));
+    $('geo-empty').hidden = countries.length > 0;
+
+    const langs = (d.byLang || []).map((l) => ({ k: l.lang, v: l.visitors }));
+    hbars($('geo-langs'), langs, (l) => (LANG_NAMES[l] || l || '—').toUpperCase());
+
+    // Device donut.
+    const devices = (d.byDevice || []).map((x) => ({ k: x.device || 'unknown', v: x.visitors }));
+    const devTotal = devices.reduce((n, x) => n + x.v, 0) || 1;
+    let acc = 0;
+    const stops = devices.map((x, i) => {
+      const from = (acc / devTotal) * 360;
+      acc += x.v;
+      const to = (acc / devTotal) * 360;
+      return `${DONUT_COLORS[i % DONUT_COLORS.length]} ${from}deg ${to}deg`;
+    });
+    $('dev-donut').style.background = devices.length
+      ? `conic-gradient(${stops.join(',')})`
+      : 'rgba(255,255,255,0.06)';
+    $('dev-donut').innerHTML = `<div class="center"><span class="n">${devTotal}</span><span class="t">visitors</span></div>`;
+    $('dev-legend').innerHTML = devices.map((x, i) => `
+      <li><span class="dot" style="background:${DONUT_COLORS[i % DONUT_COLORS.length]}"></span>
+        <span class="lg-name">${esc(x.k)}</span>
+        <span class="lg-val">${x.v} · ${Math.round((x.v / devTotal) * 100)}%</span></li>`).join('') || '<li class="muted">No data yet.</li>';
+
+    // Top cities table.
+    const cities = d.topCities || [];
+    $('top-cities').innerHTML = cities.map((c) => `
+      <tr><td>${esc(c.city || '—')}</td><td>${esc((c.country || '').toUpperCase() || '—')}</td><td>${c.visitors}</td></tr>`).join('')
+      || '<tr><td colspan="3" class="muted">No city data yet.</td></tr>';
+    $('cities-empty').hidden = cities.length > 0;
+  }
+
   /* ── visitors ── */
   let uTimer;
   $('u-search').addEventListener('input', () => {
@@ -131,6 +191,7 @@
         (u) => `<tr data-id="${esc(u.visitor_id)}">
           <td title="${esc(u.visitor_id)}">${esc(shortId(u.visitor_id))}</td>
           <td>${esc([u.city, u.country].filter(Boolean).join(', ') || '—')}</td>
+          <td>${esc((u.lang || '').toUpperCase() || '—')}</td>
           <td>${esc(u.device || '—')} · ${esc(u.browser || '—')} · ${esc(u.os || '—')}</td>
           <td>${u.page_views ?? 0}</td>
           <td>${esc(fmtMs(u.total_ms))}</td>
@@ -156,6 +217,7 @@
       ['Page views', u.page_views],
       ['Time on site', fmtMs(u.total_ms)],
       ['Location', [u.city, u.country].filter(Boolean).join(', ') || '—'],
+      ['Language', u.lang ? (LANG_NAMES[u.lang] || u.lang.toUpperCase()) : '—'],
       ['Device', `${u.device || '—'} · ${u.browser || '—'} · ${u.os || '—'}`],
       ['Referrer', u.referrer || '—'],
       ['Landing page', u.landing_path || '—'],
