@@ -1,9 +1,10 @@
 import { useState, type KeyboardEvent } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { skillCategories, skillEvidence, type Skill } from '../data/portfolio';
+import { skillIconFor } from '../data/skillIcons';
 import { EASE, SectionHeading } from './fx';
 
-const HUES = ['#ff3d5a', '#4cc9ff', '#46e3a8', '#ffb547', '#b98bff', '#ff8a5c', '#7ee0ff'];
+const HUES = ['#ff3d5a', '#4cc9ff', '#46e3a8', '#ffb547', '#b98bff', '#ff8a5c', '#7ee0ff', '#ff6fb3', '#5eead4', '#fbbf24'];
 const PANEL_ID = 'skill-panel';
 const tabId = (i: number) => `skill-tab-${i}`;
 
@@ -28,7 +29,7 @@ export default function Skills() {
 
   return (
     <>
-      <SectionHeading kicker="Genres" title="My Capability Universe" aside={<p className="max-w-xs text-sm text-mist">Hover or tap a capability to see where it shows up across the platforms and roles on the CV.</p>} />
+      <SectionHeading kicker="Genres" title="My Capability Universe" script="every skill, staged" aside={<p className="max-w-xs text-sm text-mist">Hover or tap a capability to see where it shows up across the platforms and roles on the CV.</p>} />
 
       <div className="gutter grid gap-8 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-14">
         {/* genre list */}
@@ -91,6 +92,7 @@ export default function Skills() {
 function SkillCard({ skill, hue }: { skill: Skill; hue: string }) {
   const [open, setOpen] = useState(false);
   const evidence = skillEvidence[skill.name];
+  const Icon = skillIconFor(skill.name);
 
   return (
     <motion.button
@@ -110,13 +112,17 @@ function SkillCard({ skill, hue }: { skill: Skill; hue: string }) {
     >
       <div aria-hidden className="absolute -right-10 -top-10 h-32 w-32 rounded-full opacity-0 blur-2xl transition duration-500 group-hover:opacity-60" style={{ background: hue }} />
       <motion.span
-        className="relative flex h-12 w-12 items-center justify-center rounded-lg font-display text-2xl tracking-wide"
-        style={{ background: `${hue}1f`, color: hue, boxShadow: `inset 0 0 0 1px ${hue}55` }}
+        className="relative flex h-12 w-12 items-center justify-center rounded-lg"
+        style={{ background: `${hue}1f`, boxShadow: `inset 0 0 0 1px ${hue}55` }}
         animate={open ? { rotate: [0, -8, 8, 0], scale: 1.08 } : { rotate: 0, scale: 1 }}
         transition={{ duration: 0.5 }}
         aria-hidden
       >
-        {skill.mono}
+        {Icon ? (
+          <Icon size={26} strokeWidth={1.75} className="text-bone drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]" aria-hidden />
+        ) : (
+          <span className="font-display text-2xl tracking-wide" style={{ color: hue }}>{skill.mono}</span>
+        )}
       </motion.span>
       <span className="relative mt-4 flex items-start gap-2 text-[15px] font-semibold text-bone">
         {skill.name}

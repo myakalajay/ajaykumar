@@ -101,6 +101,13 @@ export function useLocale(): Locale {
     // Prefer the browser's own language list — no network needed.
     const browserLang = normLang(navigator.languages?.[0] ?? navigator.language);
 
+    // The /api/geo endpoint only exists in the deployed Worker. In local dev there's
+    // nothing to call, so resolve straight from the browser language (no console 404).
+    if (import.meta.env.DEV) {
+      setLocale({ lang: browserLang ?? 'en', country: null, ready: true });
+      return;
+    }
+
     fetch('/api/geo', { headers: { accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : null))
       .then((geo: { country?: string | null; lang?: string | null } | null) => {

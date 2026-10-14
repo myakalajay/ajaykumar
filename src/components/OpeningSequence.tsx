@@ -1,18 +1,21 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { profile, projects, toolbox } from '../data/portfolio';
+import { achievements, profile, projects, toolbox } from '../data/portfolio';
+import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useReducedMotionPref } from '../hooks/useMedia';
-import { DotList, EASE, Magnetic, Particles } from './fx';
+import { greetingFor, useLocale } from '../i18n';
+import { EASE, Magnetic, Particles } from './fx';
 
 /**
  * The signature moment — an opening title sequence cut like a film leader:
  *
  *   black → projector flicker → countdown leader (3·2·1) → studio card
- *   → AJAY (letter-by-letter) → THE SERIES → metadata strap → ▶ PLAY
+ *   → AJAY (letter-by-letter) → THE SERIES → designation → metadata → ▶ PLAY
  *
- * The portrait carries the centre of the frame, so the metadata strap lives at
- * the top of the picture (clear of the subject) and a light-white Bengaluru
- * skyline silhouettes the floor.
+ * Desktop splits the frame like a one-sheet: the credit block (strap, name,
+ * designation, PLAY) runs down the left, the portrait owns the right.
+ * Mobile keeps the stacked poster layout — title band on top, subject below.
+ * Either way no key line ever crosses the face.
  *
  * Six beats, driven by TIMELINE. `TOTAL_MS` drives the timecode + chapter rail.
  * The component always calls `onDone` via PLAY / SKIP / Enter / Escape, and it
@@ -33,15 +36,33 @@ const TOTAL_MS = 5000;
 /** The six chapters shown on the rail, one per beat. */
 const CHAPTERS = ['Leader', 'Studio', 'Title', 'Series', 'Portrait', 'Watch'];
 
-/** Split into letters so the title can reveal one glyph at a time. */
+/** The display name, split into letters so the title can reveal one glyph at a time. */
 const NAME_LETTERS = profile.firstName.split('');
+
+/** The designation, split into two balanced lines — the intro's billing block. */
+const ROLE_SEGMENTS = profile.role.split('·').map((s) => s.trim());
+const ROLE_SPLIT = (() => {
+  let best = 1;
+  let bestDiff = Number.POSITIVE_INFINITY;
+  for (let i = 1; i < ROLE_SEGMENTS.length; i++) {
+    const top = ROLE_SEGMENTS.slice(0, i).join(' · ').length;
+    const bottom = ROLE_SEGMENTS.slice(i).join(' · ').length;
+    const diff = Math.abs(top - bottom);
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      best = i;
+    }
+  }
+  return best;
+})();
+const ROLE_LINES = [ROLE_SEGMENTS.slice(0, ROLE_SPLIT).join(' · '), ROLE_SEGMENTS.slice(ROLE_SPLIT).join(' · ')];
 
 /**
  * A seamless Bengaluru skyline tile — Vidhana Soudha's dome and colonnade,
  * the Palace's turrets, UB City's tower and a few of the garden city's trees.
  * Drawn on a 720×300 ground-level baseline so `repeat-x` joins the ends flat.
  */
-const BENGALURU_SKYLINE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" fill="rgba(255,255,255,0.20)">
+const BENGALURU_SKYLINE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" fill="rgba(255,255,255,0.09)">
   <rect x="0" y="292" width="720" height="8"/>
   <rect x="24" y="262" width="44" height="38"/><polygon points="18,262 46,238 74,262"/>
   <circle cx="104" cy="268" r="15"/><rect x="101" y="268" width="6" height="30"/>
@@ -79,6 +100,12 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
   const [beat, setBeat] = useState(reduced ? 6 : 0);
   const [progress, setProgress] = useState(reduced ? 1 : 0);
   const [count, setCount] = useState(3);
+  const { lang } = useLocale();
+  const root = useRef<HTMLDivElement>(null);
+  useFocusTrap(root);
+
+  /** The headline impact stat, pulled from the achievements that carry a % figure. */
+  const headline = useMemo(() => achievements.find((a) => /%/.test(a.title)) ?? achievements[0], []);
 
   // Beat timers.
   useEffect(() => {
@@ -129,7 +156,7 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
 
   // SMPTE-ish timecode readout derived from progress (00:00:00 → 00:05:00).
   const timecode = useMemo(() => {
-    const totalCs = Math.round(progress * TOTAL_MS * 10); // centiseconds
+    const totalCs = Math.round((progress * TOTAL_MS) / 10); // centiseconds
     const cs = totalCs % 100;
     const s = Math.floor(totalCs / 100) % 60;
     const m = Math.floor(totalCs / 6000);
@@ -141,10 +168,12 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
 
   return (
     <motion.div
+      ref={root}
       className="fixed inset-0 z-[120] overflow-hidden bg-black"
       exit={{ opacity: 0, scale: 1.04, filter: 'blur(12px)' }}
       transition={{ duration: 0.9, ease: EASE }}
       role="dialog"
+      aria-modal="true"
       aria-label="Opening titles"
     >
       {/* letterbox bars */}
@@ -173,10 +202,11 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
       {/* drifting dust in the projector beam */}
       <Particles className="z-[2] opacity-70" count={38} />
 
-      {/* Bengaluru skyline silhouetting the floor — light white, behind the portrait */}
+      {/* Bengaluru skyline silhouetting the floor — light white, layered above the
+          vignette and readability scrim so the silhouette actually reads */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[30vh] min-h-[150px]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[16] h-[30vh] min-h-[150px]"
         style={{
           backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(BENGALURU_SKYLINE)}")`,
           backgroundRepeat: 'repeat-x',
@@ -313,9 +343,9 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         )}
       </AnimatePresence>
 
-      {/* portrait */}
+      {/* portrait — centred on mobile, the right column of the one-sheet on desktop */}
       <motion.div
-        className="absolute inset-x-0 bottom-0 z-0 mx-auto flex h-[62vh] max-w-[900px] items-end justify-center"
+        className="absolute inset-x-0 bottom-0 z-0 mx-auto flex h-[62vh] max-w-[900px] items-end justify-center lg:left-auto lg:right-0 lg:h-[86vh] lg:w-[48vw] lg:max-w-none"
         initial={{ opacity: 0, scale: 1.12, filter: 'blur(18px) brightness(0.3)' }}
         animate={
           beat >= 5
@@ -327,7 +357,7 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         <img
           src={profile.portrait.src}
           srcSet={profile.portrait.srcSet}
-          sizes="(max-width: 768px) 100vw, 900px"
+          sizes="(max-width: 1023px) 100vw, 48vw"
           alt={profile.portrait.alt}
           className="h-full w-auto max-w-none object-contain object-bottom [mask-image:linear-gradient(to_bottom,black_48%,transparent_92%)]"
         />
@@ -335,14 +365,21 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
       <div aria-hidden className="absolute inset-0 z-[1] bg-[radial-gradient(70%_60%_at_50%_40%,transparent_30%,rgba(0,0,0,0.85)_100%)]" />
 
       {/* ── title ── */}
-      {/* Top-anchored, not viewport-centred: a centred title always lands on the
-          subject's face, because the portrait is bottom-anchored and its head sits
-          near the vertical middle. This parks the name in the clear band between
-          the metadata strap and the head, on every breakpoint. */}
-      <div className="absolute inset-x-0 top-[calc(7vh+132px)] z-10 flex flex-col items-center px-4 text-center sm:top-[calc(7vh+112px)]">
+      {/* Top-anchored on mobile (a centred title always lands on the face), and the
+          left column of the one-sheet on desktop — vertically centred beside the
+          portrait, left-aligned, so the whole credit block reads as one stack. */}
+      <div className="absolute inset-x-0 top-[calc(7vh+132px)] z-10 flex flex-col items-center px-4 text-center sm:top-[calc(7vh+112px)] lg:inset-x-auto lg:left-0 lg:top-0 lg:h-full lg:w-[52vw] lg:items-start lg:justify-center lg:px-[6vw] lg:text-left">
+        {/* localized greeting — welcomes the viewer in their own language */}
+        <motion.p
+          className="mb-1 font-sans text-xs font-semibold tracking-[0.3em] text-crimson-2 sm:text-sm"
+          initial={{ opacity: 0, y: -8 }}
+          animate={beat >= 3 ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, ease: EASE }}
+        >
+          {greetingFor(lang)}
+        </motion.p>
         <h1
-          className="relative flex justify-center font-display leading-[0.82] text-bone drop-shadow-[0_8px_40px_rgba(0,0,0,0.8)]"
-          style={{ fontSize: 'clamp(4.4rem, 16vw, 11rem)' }}
+          className="relative flex justify-center font-display text-[clamp(3.6rem,12.5vw,9rem)] leading-[0.82] text-bone drop-shadow-[0_8px_40px_rgba(0,0,0,0.8)] lg:justify-start lg:text-[clamp(3.5rem,8.4vw,9.5rem)]"
           aria-label={profile.fullName}
         >
           {NAME_LETTERS.map((ch, i) => (
@@ -361,7 +398,7 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
                 }
                 transition={{ duration: 0.85, ease: EASE, delay: i * 0.06 }}
               >
-                {ch}
+                {ch === ' ' ? '\u00A0' : ch}
               </motion.span>
             </span>
           ))}
@@ -375,8 +412,10 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
           />
         </h1>
 
+        {/* negative margin cancels the trailing letter-space so the tracked line
+            optically centres instead of drifting left */}
         <motion.p
-          className="font-sans text-sm font-bold text-crimson-2 [text-shadow:0_2px_20px_rgba(0,0,0,0.9)] sm:text-lg"
+          className="font-sans text-sm font-bold text-crimson-2 [text-shadow:0_2px_20px_rgba(0,0,0,0.9)] [margin-right:-0.7em] sm:text-lg"
           initial={{ opacity: 0, letterSpacing: '1.4em' }}
           animate={
             beat >= 4
@@ -388,18 +427,54 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
           {profile.seriesTag}
         </motion.p>
 
+        {/* designation — two balanced, left-aligned lines: the poster billing block */}
+        <motion.p
+          aria-label={profile.role}
+          className="mt-5 font-sans text-[11px] font-semibold uppercase leading-[1.9] tracking-[0.3em] text-mist [margin-right:-0.3em] sm:text-xs lg:mt-7"
+          initial={{ opacity: 0, y: 10 }}
+          animate={beat >= 5 ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+          transition={{ duration: 0.9, ease: EASE }}
+        >
+          {ROLE_LINES.map((line, i) => (
+            <span key={line} aria-hidden className="block">
+              {i > 0 && <span className="mr-3 hidden h-px w-6 translate-y-[-4px] bg-white/30 lg:inline-block" />}
+              {line}
+            </span>
+          ))}
+        </motion.p>
+
+        {/* signature — a handwritten cursive accent that signs off the billing block */}
+        <motion.p
+          aria-hidden
+          className="pointer-events-none mt-3 select-none font-script text-[clamp(1.7rem,4.6vw,2.9rem)] leading-none text-bone/90 [text-shadow:0_2px_24px_rgba(0,0,0,0.85)] lg:mt-4"
+          initial={{ opacity: 0, y: 14, rotate: -6, filter: 'blur(8px)' }}
+          animate={beat >= 5 ? { opacity: 1, y: 0, rotate: -6, filter: 'blur(0px)' } : { opacity: 0, y: 14, rotate: -6, filter: 'blur(8px)' }}
+          transition={{ duration: 1, ease: EASE, delay: 0.25 }}
+        >
+          {profile.fullName}
+        </motion.p>
+
+        {/* headline impact stat — the CV's measured outcome, as a closing beat */}
+        <motion.p
+          className="mt-4 max-w-md font-sans text-sm leading-relaxed text-bone/80 sm:text-base"
+          initial={{ opacity: 0, y: 10 }}
+          animate={beat >= 5 ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.9, ease: EASE, delay: 0.35 }}
+        >
+          <span className="font-display text-2xl tracking-wide text-crimson-2 sm:text-3xl">{headline.title}</span>
+          <span className="ml-2 text-mist">— {headline.org}</span>
+        </motion.p>
       </div>
 
-      {/* metadata strap: tenure · scale · location — parked at the top of the frame,
-          below the SKIP control, so it never crosses the subject the way an
-          in-flow line under the title did. */}
+      {/* metadata strap: tenure · scale · location — top-centre on mobile, and the
+          top of the credit column on desktop, always clear of the subject. */}
       <motion.div
-        className="absolute inset-x-0 top-[calc(7vh+68px)] z-20 flex justify-center px-4"
+        className="absolute inset-x-0 top-[calc(7vh+68px)] z-20 flex justify-center px-4 lg:inset-x-auto lg:left-0 lg:top-[calc(7vh+40px)] lg:w-[52vw] lg:justify-start lg:px-0 lg:pl-[6vw]"
         initial={{ opacity: 0, y: -10 }}
         animate={beat >= 5 ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
         transition={{ duration: 0.9, ease: EASE }}
       >
-        <div className="flex max-w-[92vw] flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/70 sm:text-xs">
+        <div className="flex max-w-[92vw] flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/70 sm:text-xs lg:justify-start">
           <span className="rounded border border-bone/25 px-1.5 py-px text-bone">{profile.tenure}</span>
           <span className="h-1 w-1 rounded-full bg-smoke" />
           <span>{projects.length} Originals</span>
@@ -417,16 +492,11 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-[36vh] bg-gradient-to-t from-black via-black/85 to-transparent"
       />
 
-      {/* ── tagline + play ── */}
-      <div className="absolute inset-x-0 bottom-[9vh] z-20 flex flex-col items-center gap-6 px-4 text-center">
-        <motion.p
-          className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/90 sm:text-sm sm:tracking-[0.4em]"
-          initial={{ opacity: 0, y: 14 }}
-          animate={beat >= 6 ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, ease: EASE }}
-        >
-          <DotList items={profile.tagline} align="center" />
-        </motion.p>
+      {/* ── play — bottom-centre on mobile, foot of the credit column on desktop.
+          The old tagline sat here too, but it repeated the designation almost
+          word-for-word; one billing block is cleaner. bottom-12vh keeps the pill
+          clear of the timecode HUD during the beat-5 → 6 crossfade. ── */}
+      <div className="absolute inset-x-0 bottom-[12vh] z-20 flex flex-col items-center px-4 text-center lg:inset-x-auto lg:bottom-[12vh] lg:left-0 lg:w-[52vw] lg:items-start lg:px-[6vw] lg:text-left">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={beat >= 6 ? { opacity: 1, scale: 1 } : {}}

@@ -5,6 +5,8 @@ import { useScrollLock } from '../hooks/smoothScroll';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { EASE, Magnetic } from './fx';
 import { ProjectArt } from './Poster';
+import { ScreenMock, WireframeMock, ShowcaseItem } from './OriginalShowcase';
+import { originalDetails } from '../data/originalsExtras';
 
 const block = {
   hidden: { opacity: 0, y: 24, filter: 'blur(8px)' },
@@ -34,6 +36,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
   }, [project.id]);
 
   const more = projects.filter((p) => p.id !== project.id);
+  const detail = originalDetails[project.id];
 
   return (
     <motion.div ref={panel} className="fixed inset-0 z-[140]" role="dialog" aria-modal="true" aria-labelledby={`title-${project.id}-modal`}>
@@ -200,6 +203,58 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
                 </motion.section>
               </div>
             </div>
+
+            {/* product screens — vector reconstructions of the interface families */}
+            {detail && detail.screens.length > 0 && (
+              <motion.section variants={block} className="mt-14">
+                <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Product Screens</h3>
+                <p className="mb-5 text-xs text-smoke">Vector reconstructions of the key surfaces, drawn in the platform&apos;s own palette.</p>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {detail.screens.map((s, i) => (
+                    <ShowcaseItem key={s.title} index={i} label={<>{s.title} — {s.caption}</>}>
+                      <ScreenMock kind={s.kind} accent={project.palette.accent} title={s.title} />
+                    </ShowcaseItem>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
+            {/* wireframes — the lo-fi artifacts behind the screens */}
+            {detail && detail.wireframes.length > 0 && (
+              <motion.section variants={block} className="mt-14">
+                <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Wireframes & Flows</h3>
+                <p className="mb-5 text-xs text-smoke">The lo-fi work behind the UI — flows, architecture and layout studies.</p>
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  {detail.wireframes.map((w, i) => (
+                    <ShowcaseItem key={w.title} index={i} label={<>{w.title} — {w.caption}</>}>
+                      <WireframeMock kind={w.kind} title={w.title} />
+                    </ShowcaseItem>
+                  ))}
+                </div>
+              </motion.section>
+            )}
+
+            {/* deliverables — the tangible outputs */}
+            {detail && detail.deliverables.length > 0 && (
+              <motion.section variants={block} className="mt-14">
+                <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Deliverables</h3>
+                <ul className="grid gap-px overflow-hidden rounded-xl bg-white/10 sm:grid-cols-2">
+                  {detail.deliverables.map((d, i) => (
+                    <li
+                      key={d}
+                      className={`flex items-start gap-3 bg-ink-3 p-4 text-sm leading-relaxed text-bone/85 ${
+                        detail.deliverables.length % 2 === 1 && i === detail.deliverables.length - 1 ? 'sm:col-span-2' : ''
+                      }`}
+                    >
+                      <span aria-hidden className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px]" style={{ background: `${project.palette.accent}22`, color: project.palette.accent }}>
+                        ▸
+                      </span>
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </motion.section>
+            )}
 
             {/* outcome — the closing statement, tinted with the project's own accent */}
             <motion.section

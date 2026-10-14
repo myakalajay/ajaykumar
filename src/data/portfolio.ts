@@ -58,9 +58,9 @@ export const platformStreams = [
 ];
 
 export const profile = {
-  fullName: 'Ajay Kumar Myakala',
-  displayName: 'Ajay Kumar Myakala',
-  firstName: 'AJAY',
+  fullName: 'Ajay Kumar',
+  displayName: 'Ajay Kumar',
+  firstName: 'Ajay Kumar',
   seriesTag: 'THE SERIES',
   /** Fictional studio card shown at the very start of the opening sequence. */
   originalLabel: 'A MYAKALA ORIGINAL',
@@ -82,7 +82,7 @@ export const profile = {
   portrait: {
     src: '/assets/portrait-640.webp',
     srcSet: '/assets/portrait-300.webp 300w, /assets/portrait-420.webp 420w, /assets/portrait-640.webp 640w',
-    alt: 'Portrait of Ajay Kumar Myakala',
+    alt: 'Portrait of Ajay Kumar',
   },
   /** Strategic value proposition — the titles of `strategicValue`, used as chips and CV bullets. */
   interests: strategicValue.map((v) => v.title),
@@ -573,6 +573,12 @@ export const toolbox: Tool[] = [
   { name: 'Jira', group: 'Delivery' },
   { name: 'Confluence', group: 'Delivery' },
   { name: 'Azure DevOps', group: 'Delivery' },
+  { name: 'Word', group: 'Microsoft Office' },
+  { name: 'Excel', group: 'Microsoft Office' },
+  { name: 'PowerPoint', group: 'Microsoft Office' },
+  { name: 'Visio', group: 'Microsoft Office' },
+  { name: 'Teams', group: 'Microsoft Office' },
+  { name: 'Outlook', group: 'Microsoft Office' },
   { name: 'React', group: 'Web' },
   { name: 'Next.js', group: 'Web' },
   { name: 'JavaScript', group: 'Web' },
@@ -589,6 +595,8 @@ export const toolbox: Tool[] = [
   { name: 'Claude', group: 'AI' },
   { name: 'Gemini', group: 'AI' },
   { name: 'Cursor', group: 'AI' },
+  { name: 'Unity', group: '3D & Immersive' },
+  { name: 'Blender', group: '3D & Immersive' },
 ];
 
 export type Skill = { name: string; mono: string; note?: string };
@@ -678,6 +686,41 @@ export const skillCategories: SkillCategory[] = [
       { name: 'Growth Experimentation', mono: 'GE' },
       { name: 'Conversion Optimisation', mono: 'CO' },
       { name: 'Monetisation', mono: 'Mo' },
+    ],
+  },
+  {
+    id: 'fullstack',
+    title: 'Full-Stack',
+    subtitle: 'Design through production code',
+    skills: [
+      { name: 'Design Engineering', mono: 'DE', note: 'Core' },
+      { name: 'React & Next.js', mono: 'RN' },
+      { name: 'JavaScript (ES6+)', mono: 'JS' },
+      { name: 'HTML5 & CSS3', mono: 'H5' },
+      { name: 'Responsive & Fluid Layouts', mono: 'RL' },
+      { name: 'Design-to-Code Handoff', mono: 'DC' },
+      { name: 'Component Architecture', mono: 'CA' },
+      { name: 'REST API Integration', mono: 'RA' },
+      { name: 'PHP & MySQL', mono: 'PM' },
+      { name: 'Web Performance', mono: 'WP' },
+      { name: 'Accessibility Engineering', mono: 'A1' },
+    ],
+  },
+  {
+    id: 'immersive',
+    title: '3D & Immersive',
+    subtitle: 'Real-time 3D & spatial craft',
+    skills: [
+      { name: 'Unity', mono: 'Un' },
+      { name: 'Blender', mono: 'Bl' },
+      { name: '3D Modelling', mono: '3D' },
+      { name: 'Texturing & Materials', mono: 'Tx' },
+      { name: 'Lighting & Rendering', mono: 'Li' },
+      { name: 'Scene Composition', mono: 'Sc' },
+      { name: 'Real-time Rendering', mono: 'Rt' },
+      { name: 'Animation & Rigging', mono: 'Ar' },
+      { name: 'Interactive Prototyping', mono: 'Ip' },
+      { name: 'Spatial Interfaces', mono: 'Si' },
     ],
   },
   {

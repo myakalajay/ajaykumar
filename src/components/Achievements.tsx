@@ -1,8 +1,6 @@
-import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import { achievements, projects, toolbox, type Project } from '../data/portfolio';
+import { achievements, projects, type Project } from '../data/portfolio';
 import { EASE, SectionHeading, Tilt } from './fx';
-import { RailButtons } from './Rail';
 
 function Laurel({ side }: { side: 'l' | 'r' }) {
   return (
@@ -16,14 +14,13 @@ function Laurel({ side }: { side: 'l' | 'r' }) {
 }
 
 export default function Achievements({ onOpen }: { onOpen?: (p: Project) => void }) {
-  const rail = useRef<HTMLDivElement>(null);
-  const groups = Array.from(new Set(toolbox.map((t) => t.group)));
   /** A highlight that names a platform on the CV can open that Original as a case study. */
   const projectFor = (id?: string) => (id ? projects.find((p) => p.id === id) : undefined);
 
   return (
     <>
       <SectionHeading
+        script="the moments that landed"
         kicker="Signature impact"
         title="Career Highlights"
         aside={<p className="max-w-xs text-sm text-mist">The outcomes the CV calls out — measured impact, tenure and the platforms behind them.</p>}
@@ -33,6 +30,9 @@ export default function Achievements({ onOpen }: { onOpen?: (p: Project) => void
         {achievements.map((a, i) => (
           <motion.div
             key={a.id}
+            /* 6 cards in a 5-up grid leave one orphan on the last row — centre it
+               so the leftover reads as a composed finale, not a stranded item */
+            className={i === achievements.length - 1 ? 'xl:col-start-3' : undefined}
             initial={{ opacity: 0, y: 50, rotateX: 18 }}
             whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
             viewport={{ once: true, margin: '-8% 0px' }}
@@ -79,34 +79,6 @@ export default function Achievements({ onOpen }: { onOpen?: (p: Project) => void
             </Tilt>
           </motion.div>
         ))}
-      </div>
-
-      {/* toolbox rail */}
-      <div className="mt-16">
-        <div className="gutter mb-2 flex flex-wrap items-end justify-between gap-2">
-          <h3 className="font-sans text-lg font-semibold text-bone sm:text-2xl">
-            Toolbox <span className="text-mist">· {toolbox.length} tools</span>
-          </h3>
-          <p className="text-xs text-smoke">{groups.join(' · ')}</p>
-        </div>
-        <div className="group/rail relative">
-          <div ref={rail} className="rail gutter flex snap-x gap-3 overflow-x-auto py-5">
-            {toolbox.map((t, i) => (
-              <motion.div
-                key={t.name}
-                className="relative flex w-[190px] shrink-0 snap-start flex-col justify-between rounded-xl bg-ink-2 p-4 ring-1 ring-white/10 transition hover:-translate-y-1 hover:ring-white/30"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: Math.min(i, 6) * 0.04, ease: EASE }}
-              >
-                <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-crimson-2">{t.group}</span>
-                <p className="mt-6 text-sm font-medium leading-snug text-bone">{t.name}</p>
-              </motion.div>
-            ))}
-          </div>
-          <RailButtons rail={rail} />
-        </div>
       </div>
     </>
   );

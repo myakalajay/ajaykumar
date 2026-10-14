@@ -139,14 +139,13 @@ export default function Hero({ onPlay, onResume, profileId }: { onPlay: () => vo
             {locale.country ? ` · ${locale.country}` : ''}
           </motion.span>
         </motion.div>
-        {/* The display type shows the first name only, so the h1 says who this is:
-            assistive tech and crawlers get the full name and role, the design gets "AJAY". */}
-        <motion.h1 variants={item} className="font-display leading-[0.82] tracking-[0.02em] text-bone" style={{ fontSize: 'clamp(4rem, 12vw, 11rem)' }}>
+        {/* The display type carries the full name; assistive tech also gets the role. */}
+        <motion.h1 variants={item} className="font-display leading-[0.82] tracking-[0.02em] text-bone" style={{ fontSize: 'clamp(3.2rem, 8vw, 8.5rem)' }}>
           <span className="sr-only">
             {profile.fullName} — {profile.role}
           </span>
           <span aria-hidden className="shimmer-text">
-            {profile.firstName}
+            {profile.fullName}
           </span>
         </motion.h1>
         <motion.p variants={item} className="mt-1 font-sans text-sm font-bold tracking-[0.62em] text-crimson-2 sm:text-base">

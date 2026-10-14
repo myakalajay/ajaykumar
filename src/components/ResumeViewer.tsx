@@ -14,7 +14,7 @@ export default function ResumeSection({ onView }: { onView: () => void }) {
 
   return (
     <>
-      <SectionHeading kicker="The screenplay" title="The Full Story" />
+      <SectionHeading kicker="The screenplay" title="The Full Story" script="the whole story" />
       <div className="gutter grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-14">
         <motion.div
           initial={{ opacity: 0, y: 60, rotateX: 10 }}

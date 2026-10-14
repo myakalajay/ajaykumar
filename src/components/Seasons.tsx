@@ -50,6 +50,7 @@ export default function Seasons() {
       <SectionHeading
         kicker={`${seasons.length} Seasons`}
         title="My Journey"
+        script="seven seasons, one arc"
         aside={<p className="max-w-xs text-sm text-mist">Every stage of the resume, told as a season — select one to see its episodes.</p>}
       />
 

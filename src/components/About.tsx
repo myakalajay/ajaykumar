@@ -20,6 +20,7 @@ export default function About() {
   return (
     <>
       <SectionHeading
+        script="the short version"
         kicker="The Pilot"
         title="About Me"
         aside={<p className="max-w-sm text-[13px] leading-relaxed text-mist">{profile.headline}</p>}

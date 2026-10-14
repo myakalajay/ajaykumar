@@ -31,6 +31,9 @@ function detectLang(): string | undefined {
 
 /** Fire-and-forget: analytics must never break the page or block paint. */
 function send(payload: TrackPayload) {
+  // The /api/track endpoint only exists in the deployed Worker; skip it in local
+  // dev so the console isn't spammed with404s for a request that can't succeed.
+  if (import.meta.env.DEV) return;
   try {
     const body = JSON.stringify({
       visitorId: visitorId(),

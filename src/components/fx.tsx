@@ -127,7 +127,7 @@ export function DotList({ items, align = 'start', className = '' }: { items: str
 }
 
 /** Small kicker + big title used at the top of every section. */
-export function SectionHeading({ kicker, title, aside }: { kicker: string; title: string; aside?: ReactNode }) {
+export function SectionHeading({ kicker, title, script, aside }: { kicker: string; title: string; script?: string; aside?: ReactNode }) {
   return (
     <div className="gutter mb-6 flex flex-wrap items-end justify-between gap-4 md:mb-9">
       <div>
@@ -142,6 +142,17 @@ export function SectionHeading({ kicker, title, aside }: { kicker: string; title
           {kicker}
         </motion.div>
         <RevealText as="h2" text={title} className="font-display text-[clamp(2.4rem,6vw,5rem)] leading-[0.9] tracking-wide text-bone" />
+        {script && (
+          <motion.span
+            initial={{ opacity: 0, y: 10, rotate: -5 }}
+            whileInView={{ opacity: 1, y: 0, rotate: -5 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.12 }}
+            className="-mt-1 block font-script text-[clamp(1.4rem,3vw,2.2rem)] leading-none text-crimson-2/90 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
+          >
+            {script}
+          </motion.span>
+        )}
       </div>
       {aside}
     </div>
