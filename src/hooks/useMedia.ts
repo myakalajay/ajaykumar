@@ -19,3 +19,16 @@ export function useMedia(query: string, fallback = false) {
 export const useFinePointer = () => useMedia('(hover: hover) and (pointer: fine)');
 export const useReducedMotionPref = () => useMedia('(prefers-reduced-motion: reduce)');
 export const useDesktop = () => useMedia('(min-width: 1024px)');
+
+/** True on phones held sideways — the intro switches to a mini one-sheet there. */
+export const useLandscapePhone = () => useMedia('(max-width: 1023px) and (orientation: landscape)');
+
+/** Portrait phones below ~700px tall — the credit stack has to shrink to stay clear of the face. */
+export const useShortPortrait = () => useMedia('(max-width: 1023px) and (orientation: portrait) and (max-height: 700px)');
+
+/** Portrait phones in the 701–780px tall band — a middle shrink step. */
+export const useMidPortrait = () =>
+  useMedia('(max-width: 1023px) and (orientation: portrait) and (min-height: 701px) and (max-height: 780px)');
+
+/** Larger portrait phones (≥640px wide) — slightly taller poster crop. */
+export const useTallPortrait = () => useMedia('(min-width: 640px) and (orientation: portrait)');

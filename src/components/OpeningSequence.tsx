@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { achievements, profile, projects, toolbox } from '../data/portfolio';
 import { useFocusTrap } from '../hooks/useFocusTrap';
-import { useReducedMotionPref } from '../hooks/useMedia';
+import { useReducedMotionPref, useDesktop, useLandscapePhone, useMidPortrait, useShortPortrait, useTallPortrait } from '../hooks/useMedia';
 import { greetingFor, useLocale } from '../i18n';
 import { EASE, Magnetic, Particles } from './fx';
 
@@ -12,9 +12,14 @@ import { EASE, Magnetic, Particles } from './fx';
  *   black → projector flicker → countdown leader (3·2·1) → studio card
  *   → AJAY (letter-by-letter) → THE SERIES → designation → metadata → ▶ PLAY
  *
- * Desktop splits the frame like a one-sheet: the credit block (strap, name,
- * designation, PLAY) runs down the left, the portrait owns the right.
- * Mobile keeps the stacked poster layout — title band on top, subject below.
+ * Three layouts, selected in JS (a media hook) rather than through arbitrary
+ * media-query utilities, which Tailwind v4 drops when they chain `and`:
+ *
+ *   • Desktop (≥1024px) — a one-sheet: credits run down the left, portrait right.
+ *   • Portrait phones — a stacked poster: title band on top, subject below.
+ *   • Short landscape phones (≤480px tall) — a mini one-sheet: same split, tighter
+ *     type, signature + stat dropped (decorative, no vertical room beside the HUD).
+ *
  * Either way no key line ever crosses the face.
  *
  * Six beats, driven by TIMELINE. `TOTAL_MS` drives the timecode + chapter rail.
@@ -97,12 +102,20 @@ const BENGALURU_SKYLINE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 
 export default function OpeningSequence({ onDone }: { onDone: () => void }) {
   const reduced = useReducedMotionPref();
+  const isDesktop = useDesktop();
+  const isLandscapePhone = useLandscapePhone();
+  const isShortPortrait = useShortPortrait();
+  const isMidPortrait = useMidPortrait();
+  const isTallPortrait = useTallPortrait();
   const [beat, setBeat] = useState(reduced ? 6 : 0);
   const [progress, setProgress] = useState(reduced ? 1 : 0);
   const [count, setCount] = useState(3);
   const { lang } = useLocale();
   const root = useRef<HTMLDivElement>(null);
   useFocusTrap(root);
+
+  /** Layout mode: desktop one-sheet, landscape mini one-sheet, or stacked portrait poster. */
+  const layout = isDesktop ? 'desktop' : isLandscapePhone ? 'landscape' : 'poster';
 
   /** The headline impact stat, pulled from the achievements that carry a % figure. */
   const headline = useMemo(() => achievements.find((a) => /%/.test(a.title)) ?? achievements[0], []);
@@ -165,6 +178,8 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
   }, [progress]);
 
   const dim = beat >= 6;
+  const showSignature = layout !== 'landscape';
+  const showStat = layout !== 'landscape';
 
   return (
     <motion.div
@@ -343,9 +358,19 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         )}
       </AnimatePresence>
 
-      {/* portrait — centred on mobile, the right column of the one-sheet on desktop */}
+      {/* portrait — the right column of the one-sheet on desktop/landscape, bottom-anchored
+          poster subject on portrait phones. Height shrinks as the viewport shortens so the
+          credit stack above never lands on the face. */}
       <motion.div
-        className="absolute inset-x-0 bottom-0 z-0 mx-auto flex h-[62vh] max-w-[900px] items-end justify-center lg:left-auto lg:right-0 lg:h-[86vh] lg:w-[48vw] lg:max-w-none"
+        className={`absolute bottom-0 z-0 flex items-end justify-center ${
+          layout === 'desktop'
+            ? 'right-0 left-auto h-[86vh] w-[48vw] max-w-none'
+            : layout === 'landscape'
+              ? 'right-0 left-auto h-[100vh] w-[46vw] max-w-none'
+              : `inset-x-0 mx-auto max-w-[900px] ${
+                  isShortPortrait ? 'h-[34vh]' : isMidPortrait ? 'h-[40vh]' : isTallPortrait ? 'h-[58vh]' : 'h-[50vh]'
+                }`
+        }`}
         initial={{ opacity: 0, scale: 1.12, filter: 'blur(18px) brightness(0.3)' }}
         animate={
           beat >= 5
@@ -365,10 +390,20 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
       <div aria-hidden className="absolute inset-0 z-[1] bg-[radial-gradient(70%_60%_at_50%_40%,transparent_30%,rgba(0,0,0,0.85)_100%)]" />
 
       {/* ── title ── */}
-      {/* Top-anchored on mobile (a centred title always lands on the face), and the
-          left column of the one-sheet on desktop — vertically centred beside the
-          portrait, left-aligned, so the whole credit block reads as one stack. */}
-      <div className="absolute inset-x-0 top-[calc(7vh+132px)] z-10 flex flex-col items-center px-4 text-center sm:top-[calc(7vh+112px)] lg:inset-x-auto lg:left-0 lg:top-0 lg:h-full lg:w-[52vw] lg:items-start lg:justify-center lg:px-[6vw] lg:text-left">
+      {/* Top-anchored on portrait phones (a centred title always lands on the face), and the
+          left column of the one-sheet on desktop/landscape — left-aligned, so the whole credit
+          block reads as one stack beside the subject. */}
+      <div
+        className={`z-10 flex flex-col text-center ${
+          layout === 'desktop'
+            ? 'absolute inset-y-0 left-0 top-0 h-full w-[52vw] items-start justify-center overflow-visible px-[6vw] pt-0 text-left'
+            : layout === 'landscape'
+              ? 'absolute left-0 top-[calc(3vh+48px)] w-[54vw] max-h-[calc(100vh-3vh-48px-56px)] items-start gap-y-1 overflow-visible px-6 pt-0 text-left'
+              : `absolute inset-x-0 px-4 pt-2 items-center overflow-hidden ${
+                  isTallPortrait ? 'top-[calc(7vh+104px)]' : 'top-[calc(7vh+116px)]'
+                } max-h-[calc(88vh-7vh-116px)]`
+        }`}
+      >
         {/* localized greeting — welcomes the viewer in their own language */}
         <motion.p
           className="mb-1 font-sans text-xs font-semibold tracking-[0.3em] text-crimson-2 sm:text-sm"
@@ -379,7 +414,13 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
           {greetingFor(lang)}
         </motion.p>
         <h1
-          className="relative flex justify-center font-display text-[clamp(3.6rem,12.5vw,9rem)] leading-[0.82] text-bone drop-shadow-[0_8px_40px_rgba(0,0,0,0.8)] lg:justify-start lg:text-[clamp(3.5rem,8.4vw,9.5rem)]"
+          className={`relative flex font-display leading-[0.82] text-bone drop-shadow-[0_8px_40px_rgba(0,0,0,0.8)] ${
+            layout === 'landscape'
+              ? 'justify-start text-[clamp(2.6rem,7vw,4rem)]'
+              : layout === 'desktop'
+                ? 'justify-start text-[clamp(3.5rem,8.4vw,9.5rem)]'
+                : 'justify-center text-[clamp(3.6rem,12.5vw,9rem)]'
+          }`}
           aria-label={profile.fullName}
         >
           {NAME_LETTERS.map((ch, i) => (
@@ -412,10 +453,10 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
           />
         </h1>
 
-        {/* negative margin cancels the trailing letter-space so the tracked line
+        {/* THE SERIES — the trailing letter-space is cancelled so the tracked line
             optically centres instead of drifting left */}
         <motion.p
-          className="font-sans text-sm font-bold text-crimson-2 [text-shadow:0_2px_20px_rgba(0,0,0,0.9)] [margin-right:-0.7em] sm:text-lg"
+          className="font-sans text-sm font-bold text-crimson-2 [text-shadow:0_2px_20px_rgba(0,0,0,0.9)] sm:text-lg"
           initial={{ opacity: 0, letterSpacing: '1.4em' }}
           animate={
             beat >= 4
@@ -430,7 +471,9 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         {/* designation — two balanced, left-aligned lines: the poster billing block */}
         <motion.p
           aria-label={profile.role}
-          className="mt-5 font-sans text-[11px] font-semibold uppercase leading-[1.9] tracking-[0.3em] text-mist [margin-right:-0.3em] sm:text-xs lg:mt-7"
+          className={`mt-4 max-w-full px-1 font-sans text-[11px] font-semibold uppercase leading-[1.9] tracking-[0.24em] text-bone/85 [text-shadow:0_2px_16px_rgba(0,0,0,0.95)] sm:text-xs sm:tracking-[0.3em] ${
+            layout === 'poster' ? '' : 'text-left'
+          } lg:mt-7 lg:tracking-[0.3em]`}
           initial={{ opacity: 0, y: 10 }}
           animate={beat >= 5 ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
           transition={{ duration: 0.9, ease: EASE }}
@@ -444,37 +487,47 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         </motion.p>
 
         {/* signature — a handwritten cursive accent that signs off the billing block */}
-        <motion.p
-          aria-hidden
-          className="pointer-events-none mt-3 select-none font-script text-[clamp(1.7rem,4.6vw,2.9rem)] leading-none text-bone/90 [text-shadow:0_2px_24px_rgba(0,0,0,0.85)] lg:mt-4"
-          initial={{ opacity: 0, y: 14, rotate: -6, filter: 'blur(8px)' }}
-          animate={beat >= 5 ? { opacity: 1, y: 0, rotate: -6, filter: 'blur(0px)' } : { opacity: 0, y: 14, rotate: -6, filter: 'blur(8px)' }}
-          transition={{ duration: 1, ease: EASE, delay: 0.25 }}
-        >
-          {profile.fullName}
-        </motion.p>
+        {showSignature && (
+          <motion.p
+            aria-hidden
+            className="pointer-events-none mt-2 select-none font-script text-[clamp(1.7rem,4.6vw,2.9rem)] leading-none text-bone/90 [text-shadow:0_2px_24px_rgba(0,0,0,0.85)] lg:mt-4"
+            initial={{ opacity: 0, y: 14, rotate: -6, filter: 'blur(8px)' }}
+            animate={beat >= 5 ? { opacity: 1, y: 0, rotate: -6, filter: 'blur(0px)' } : { opacity: 0, y: 14, rotate: -6, filter: 'blur(8px)' }}
+            transition={{ duration: 1, ease: EASE, delay: 0.25 }}
+          >
+            {profile.fullName}
+          </motion.p>
+        )}
 
         {/* headline impact stat — the CV's measured outcome, as a closing beat */}
-        <motion.p
-          className="mt-4 max-w-md font-sans text-sm leading-relaxed text-bone/80 sm:text-base"
-          initial={{ opacity: 0, y: 10 }}
-          animate={beat >= 5 ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, ease: EASE, delay: 0.35 }}
-        >
-          <span className="font-display text-2xl tracking-wide text-crimson-2 sm:text-3xl">{headline.title}</span>
-          <span className="ml-2 text-mist">— {headline.org}</span>
-        </motion.p>
+        {showStat && (
+          <motion.p
+            className="mt-3 max-w-md font-sans text-sm leading-relaxed text-bone/80 [text-shadow:0_2px_14px_rgba(0,0,0,0.9)] sm:text-base"
+            initial={{ opacity: 0, y: 10 }}
+            animate={beat >= 5 ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.35 }}
+          >
+            <span className="font-display text-2xl tracking-wide text-crimson-2 sm:text-3xl">{headline.title}</span>
+            <span className="ml-2 text-mist">— {headline.org}</span>
+          </motion.p>
+        )}
       </div>
 
-      {/* metadata strap: tenure · scale · location — top-centre on mobile, and the
-          top of the credit column on desktop, always clear of the subject. */}
+      {/* metadata strap: tenure · scale · location — top-centre on portrait phones, and the
+          top of the credit column on desktop/landscape, always clear of the subject. */}
       <motion.div
-        className="absolute inset-x-0 top-[calc(7vh+68px)] z-20 flex justify-center px-4 lg:inset-x-auto lg:left-0 lg:top-[calc(7vh+40px)] lg:w-[52vw] lg:justify-start lg:px-0 lg:pl-[6vw]"
+        className={`z-20 flex px-4 ${
+          layout === 'desktop'
+            ? 'absolute left-0 top-[calc(7vh+40px)] w-[52vw] justify-start px-0 pl-[6vw]'
+            : layout === 'landscape'
+              ? 'absolute left-0 top-[calc(3vh+16px)] w-[54vw] justify-start px-6'
+              : 'absolute inset-x-0 top-[calc(7vh+68px)] justify-center'
+        }`}
         initial={{ opacity: 0, y: -10 }}
         animate={beat >= 5 ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
         transition={{ duration: 0.9, ease: EASE }}
       >
-        <div className="flex max-w-[92vw] flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/70 sm:text-xs lg:justify-start">
+        <div className={`flex max-w-[92vw] flex-wrap items-center gap-x-3 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/70 sm:text-xs ${layout === 'poster' ? 'justify-center' : 'justify-start'}`}>
           <span className="rounded border border-bone/25 px-1.5 py-px text-bone">{profile.tenure}</span>
           <span className="h-1 w-1 rounded-full bg-smoke" />
           <span>{projects.length} Originals</span>
@@ -492,11 +545,18 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         className="pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-[36vh] bg-gradient-to-t from-black via-black/85 to-transparent"
       />
 
-      {/* ── play — bottom-centre on mobile, foot of the credit column on desktop.
-          The old tagline sat here too, but it repeated the designation almost
-          word-for-word; one billing block is cleaner. bottom-12vh keeps the pill
-          clear of the timecode HUD during the beat-5 → 6 crossfade. ── */}
-      <div className="absolute inset-x-0 bottom-[12vh] z-20 flex flex-col items-center px-4 text-center lg:inset-x-auto lg:bottom-[12vh] lg:left-0 lg:w-[52vw] lg:items-start lg:px-[6vw] lg:text-left">
+      {/* ── play — bottom-centre on portrait phones, foot of the credit column on desktop,
+          top-right (below SKIP) in landscape where the HUD owns the bottom edge.
+          bottom-12vh keeps the pill clear of the timecode HUD during the beat-5 → 6 crossfade. ── */}
+      <div
+        className={`z-20 flex flex-col ${
+          layout === 'desktop'
+            ? 'absolute bottom-[12vh] left-0 w-[52vw] items-start px-[6vw] text-left'
+            : layout === 'landscape'
+              ? 'absolute right-6 top-[calc(7vh+52px)] w-auto items-end px-0 text-right'
+              : 'absolute inset-x-0 bottom-[12vh] items-center px-4 text-center'
+        }`}
+      >
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={beat >= 6 ? { opacity: 1, scale: 1 } : {}}
@@ -558,7 +618,7 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
       <button
         type="button"
         onClick={onDone}
-        className="absolute right-4 top-[calc(7vh+12px)] z-40 rounded-full border border-white/20 px-4 py-2 font-sans text-[11px] font-semibold tracking-[0.2em] text-mist transition hover:border-white/60 hover:text-bone"
+        className="absolute right-3 top-[calc(7vh+12px)] z-40 max-w-[calc(100vw-1.5rem)] shrink-0 overflow-hidden text-ellipsis whitespace-nowrap rounded-full border border-white/20 px-3 py-2 font-sans text-[11px] font-semibold tracking-[0.16em] text-mist transition hover:border-white/60 hover:text-bone sm:right-4 sm:px-4 sm:tracking-[0.2em]"
       >
         SKIP INTRO
       </button>
