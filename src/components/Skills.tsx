@@ -3,23 +3,19 @@ import { skillIconFor } from '../data/skillIcons';
 import { SectionHeading } from './fx';
 
 /**
- * Capability Universe — the CV's skill map as a capability sheet.
+ * My Capability Universe — deliberately plain.
  *
- * The previous attempt put a discipline rail down the left and then a board of
- * cards on the right, which meant every discipline was printed twice (once as a
- * nav item, once as a card header) and the same list had to be read in two
- * places. It was cluttered, it scrolled for seven screens, and the rail's
- * "active" state was the only thing it did.
+ * This section has now been three things: a rail beside a board of cards (the
+ * same disciplines printed twice), a dense list of chips, and a bento grid with
+ * accent washes, watermarks and a spectrum bar. All three were trying to make a
+ * list look like a product surface. A capability map is reference material — it
+ * should be quiet, scannable and complete.
  *
- * This is one pass instead: each discipline is a heading with its flagship
- * capability's icon, followed by that discipline's capabilities as compact
- * chips. Two columns on desktop, one on phones. Nothing is duplicated, nothing
- * is hidden behind a click, and the whole universe fits in about a screen and a
- * half.
- *
- * Reading order is deliberate: the icon identifies the discipline, the count
- * sets expectations, and the chips carry the CV's own vocabulary. The `Core`
- * marker is the only emphasis — it marks the capabilities the CV foregrounds.
+ * So: a two-column spec sheet. Each discipline is a heading with a small icon
+ * and its count, followed by its capabilities as a single run of text. The only
+ * emphasis is brightness — the capabilities the CV foregrounds read at full
+ * strength, the rest sit a step back. No cards, no pills, no colour coding, no
+ * interaction to discover.
  */
 export default function Skills() {
   return (
@@ -30,52 +26,36 @@ export default function Skills() {
         script="every skill, staged"
         aside={
           <p className="max-w-xs text-sm leading-relaxed text-mist">
-            Every capability on the CV, grouped by discipline. {skillCategories.length} disciplines, one screen and a
-            half — nothing hidden behind a click.
+            Every capability on the CV, grouped by discipline — the full list, nothing hidden behind a click.
           </p>
         }
       />
 
-      <div className="gutter grid gap-x-12 gap-y-9 lg:grid-cols-2">
+      <div className="gutter grid gap-x-16 gap-y-8 md:grid-cols-2">
         {skillCategories.map((cat) => {
-          // The discipline wears its flagship capability's icon: the mapping is
-          // the CV's own, so a group heading can never drift from its contents.
           const Icon = skillIconFor(cat.skills[0]?.name ?? '');
 
           return (
             <section key={cat.id} id={`category-${cat.id}`} aria-labelledby={`h-${cat.id}`} className="min-w-0">
-              <div className="flex items-center gap-2.5 border-b border-white/10 pb-2.5">
-                <span aria-hidden className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-crimson/10 ring-1 ring-white/10">
-                  {Icon ? (
-                    <Icon size={17} strokeWidth={1.6} className="text-crimson-2" aria-hidden />
-                  ) : (
-                    <span className="font-display text-sm font-bold text-bone">{cat.id.slice(0, 2).toUpperCase()}</span>
-                  )}
-                </span>
-                <h3 id={`h-${cat.id}`} className="font-display text-xl leading-none tracking-wide text-bone">
-                  {cat.title}
-                </h3>
-                <span className="text-[10px] font-bold tabular-nums tracking-[0.18em] text-smoke">{cat.skills.length}</span>
-                <span className="ml-auto hidden truncate text-[11px] text-mist sm:block">{cat.subtitle}</span>
-              </div>
-
-              <ul className="mt-3 flex list-none flex-wrap gap-1.5 p-0">
-                {/* Separators instead of per-item pills keeps the group legible at a
-                    glance; the pill is the *skill*, the comma is the list. */}
+              <h3 id={`h-${cat.id}`} className="flex items-center gap-2 border-b border-white/10 pb-2 text-[15px] font-semibold text-bone">
+                {Icon ? (
+                  <Icon size={15} strokeWidth={1.6} className="shrink-0 text-crimson-2" aria-hidden />
+                ) : (
+                  <span aria-hidden className="font-display text-[13px] tracking-wide text-crimson-2">
+                    {cat.id.slice(0, 2).toUpperCase()}
+                  </span>
+                )}
+                {cat.title}
+                <span className="ml-auto text-[11px] font-normal tabular-nums tracking-wider text-smoke">{cat.skills.length}</span>
+              </h3>
+              <p className="mt-2.5 text-[13px] leading-relaxed text-mist">
                 {cat.skills.map((skill, i) => (
-                  <li key={skill.name} className="flex items-center gap-1.5">
-                    {i > 0 && <span aria-hidden className="text-white/15">·</span>}
-                    <span className="flex items-center gap-1.5 text-[13px] leading-snug text-bone/80">
-                      {skill.name}
-                      {skill.note && (
-                        <span className="rounded-full bg-crimson/20 px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-crimson-2">
-                          {skill.note}
-                        </span>
-                      )}
-                    </span>
-                  </li>
+                  <span key={skill.name}>
+                    {i > 0 && <span className="text-white/20"> · </span>}
+                    <span className={skill.note ? 'text-bone' : undefined}>{skill.name}</span>
+                  </span>
                 ))}
-              </ul>
+              </p>
             </section>
           );
         })}
