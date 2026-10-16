@@ -159,6 +159,8 @@
             <button data-view="audience" class="aud">Audience</button>
             <button data-view="visitors">Visitors</button>
             <button data-view="messages">Messages</button>
+            <button data-view="experience">Experience</button>
+            <button data-view="certifications">Credentials</button>
             <button data-view="content">Content</button>
           </nav>
         </div>
@@ -214,6 +216,19 @@
               <div class="empty" id="cities-empty" hidden>No city data yet.</div>
             </div>
           </div>
+          <!-- engagement: arrivals are counted in the deck above; this is what
+               visitors actually pressed, and which sections held them. -->
+          <div class="two-col">
+            <div class="card">
+              <div class="k">What visitors did</div>
+              <div class="hbars" id="ev-bars"></div>
+              <div class="empty" id="ev-empty" hidden>No interactions recorded yet.</div>
+            </div>
+            <div class="card">
+              <div class="k">Attention by section</div>
+              <div class="hbars" id="sec-bars"></div>
+            </div>
+          </div>
         </section>
 
         <!-- visitors -->
@@ -242,10 +257,49 @@
           </div>
         </section>
 
+        <!-- experience -->
+        <section class="section" id="view-experience">
+          <p class="muted" style="margin-top:0">
+            Career history. These rows are published to the site's Résumé module as soon as they are saved — no redeploy.
+            Delete every row and the site falls back to the CV bundled in the build.
+          </p>
+          <div class="toolbar">
+            <button class="btn btn-sm" id="x-add">+ Add role</button>
+            <span class="muted" id="x-msg"></span>
+          </div>
+          <div class="card">
+            <table>
+              <thead><tr><th>Title</th><th>Organisation</th><th>Period</th><th></th></tr></thead>
+              <tbody id="x-body"></tbody>
+            </table>
+            <div class="empty" id="x-empty" hidden>No roles saved — the site is using its bundled CV.</div>
+          </div>
+        </section>
+
+        <!-- certifications -->
+        <section class="section" id="view-certifications">
+          <p class="muted" style="margin-top:0">
+            Credentials shown as a chip row beside the Résumé. Nothing is invented for you: add only what the CV can back up.
+          </p>
+          <div class="toolbar">
+            <button class="btn btn-sm" id="z-add">+ Add credential</button>
+            <span class="muted" id="z-msg"></span>
+          </div>
+          <div class="card">
+            <table>
+              <thead><tr><th>Credential</th><th>Issuer</th><th>Issued</th><th></th></tr></thead>
+              <tbody id="z-body"></tbody>
+            </table>
+            <div class="empty" id="z-empty" hidden>No credentials saved.</div>
+          </div>
+        </section>
+
         <!-- content -->
         <section class="section" id="view-content">
           <p class="muted" style="margin-top:0">
-            Editable site content, stored as JSON in the database. Keys are read by the site at runtime.
+            Editable site content, stored as JSON in the database and read by the site at runtime.
+            The key <code>cv</code> overrides the Résumé module's prose (intro, highlights, closing);
+            career history and credentials have their own views. Leave a key empty to keep the version built into the site.
           </p>
           <div class="toolbar">
             <label for="c-key" style="margin:0">Key</label>

@@ -2,14 +2,15 @@ import { lazy, Suspense, useCallback, useEffect, useState, type ReactNode } from
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { viewerProfiles, type ProfileId, type Project, type SectionId } from './data/portfolio';
 import { SmoothScrollProvider, useSmoothScroll } from './hooks/smoothScroll';
-import { useAnalytics } from './hooks/useAnalytics';
+import { track, useAnalytics } from './hooks/useAnalytics';
+import { useSectionSeo } from './hooks/useSeo';
 import CustomCursor from './components/CustomCursor';
 import OpeningSequence from './components/OpeningSequence';
 import ProfileSelector from './components/ProfileSelector';
 import Navbar from './components/Navbar';
 import SeekBar from './components/SeekBar';
 import Hero from './components/Hero';
-import ContinueWatching from './components/ContinueWatching';
+import { ContinueWatching } from './components/ContinueWatching';
 import Scene from './components/Scene';
 import About from './components/About';
 import Seasons from './components/Seasons';
@@ -53,6 +54,10 @@ function Series() {
 
   const order = viewerProfiles.find((p) => p.id === profileId)!.order;
 
+  // Title/description follow the section being watched, and reset while the
+  // opening sequence and profile picker are on screen.
+  useSectionSeo(order, stage === 'home');
+
   useEffect(() => {
     if (stage === 'home') return;
     lock();
@@ -65,7 +70,9 @@ function Series() {
       if (stage !== 'home') {
         window.scrollTo(0, 0);
         setStage('home');
+        track('profile-switch', id);
       } else {
+        track('profile-switch', id);
         const p = viewerProfiles.find((v) => v.id === id)!;
         setToast(`Now watching as ${p.name} — ${p.blurb.toLowerCase()}`);
         scrollTo(0, { offset: 0 });
@@ -80,6 +87,13 @@ function Series() {
     return () => clearTimeout(t);
   }, [toast]);
 
+  // Opening a case study is the site's strongest signal of interest, so it is
+  // reported by project id rather than inferred from a pageview.
+  const openProject = useCallback((p: Project) => {
+    track('project-open', p.id);
+    setProject(p);
+  }, []);
+
   const closeIntro = useCallback(() => setPlaying(false), []);
   const closeProject = useCallback(() => setProject(null), []);
   const closeResume = useCallback(() => setResumeOpen(false), []);
@@ -87,10 +101,10 @@ function Series() {
   const sections: Record<SectionId, ReactNode> = {
     about: <About />,
     journey: <Seasons />,
-    originals: <Originals onOpen={setProject} />,
+    originals: <Originals onOpen={openProject} />,
     picks: <TopPicks />,
     skills: <Skills />,
-    moments: <Achievements onOpen={setProject} />,
+    moments: <Achievements onOpen={openProject} />,
     story: <ResumeSection onView={() => setResumeOpen(true)} />,
   };
 
@@ -121,8 +135,16 @@ function Series() {
         <motion.div initial={{ opacity: 0, filter: 'blur(10px)' }} animate={{ opacity: 1, filter: 'blur(0px)' }} transition={{ duration: 1, ease: EASE }}>
           <Navbar order={order} profileId={profileId} onSwitch={pickProfile} />
           <main id="main" tabIndex={-1}>
-            <Hero key={`hero-${profileId}`} onPlay={() => setPlaying(true)} onResume={() => setResumeOpen(true)} profileId={profileId} />
-            <ContinueWatching order={order} />
+            <Hero
+              key={`hero-${profileId}`}
+              onPlay={() => {
+                track('cta', 'play-intro');
+                setPlaying(true);
+              }}
+              onResume={() => setResumeOpen(true)}
+              profileId={profileId}
+            />
+            <ContinueWatching />
             {order.map((id) => (
               <Scene key={id} id={id} className={id === 'originals' ? '!py-0 sm:!py-0' : ''}>
                 {sections[id]}
@@ -135,7 +157,7 @@ function Series() {
 
       <Suspense fallback={null}>
         <AnimatePresence>{playing && <PlayIntro key="intro" onClose={closeIntro} />}</AnimatePresence>
-        <AnimatePresence>{project && <ProjectModal key="project" project={project} onClose={closeProject} onSwitch={setProject} />}</AnimatePresence>
+        <AnimatePresence>{project && <ProjectModal key="project" project={project} onClose={closeProject} onSwitch={openProject} />}</AnimatePresence>
         <AnimatePresence>{resumeOpen && <ResumeModal key="resume" onClose={closeResume} />}</AnimatePresence>
       </Suspense>
 

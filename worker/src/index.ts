@@ -31,6 +31,12 @@ const unauthorized = () => json({ error: 'Unauthorized' }, 401);
 const badRequest = (msg: string) => json({ error: msg }, 400);
 const notFound = () => json({ error: 'Not found' }, 404);
 
+/**
+ * The interactions the site is allowed to report. An allowlist, not free text:
+ * the value becomes an events.type, which the admin analytics groups by.
+ */
+const TRACK_EVENTS = new Set(['cta', 'outbound', 'cv-download', 'contact', 'project-open', 'profile-switch']);
+
 async function sha256Hex(input: string): Promise<string> {
   const digest = await crypto.subtle.digest('SHA-256', enc.encode(input));
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -195,6 +201,27 @@ CREATE TABLE IF NOT EXISTS content (
   value     TEXT NOT NULL,
   updatedat TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS experience (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  title      TEXT NOT NULL,
+  org        TEXT NOT NULL,
+  place      TEXT,
+  period     TEXT,
+  tagline    TEXT,
+  url        TEXT,
+  highlight  TEXT,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  createdat  TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS certifications (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  title      TEXT NOT NULL,
+  issuer     TEXT,
+  issued     TEXT,
+  url        TEXT,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  createdat  TEXT NOT NULL
+);
 `;
 
 /**
@@ -208,9 +235,7 @@ function ensureSchema(db: D1Database): Promise<void> {
     // Clear the cache on failure so a later request retries instead of caching a rejection.
     schemaReady = db
       .batch(SCHEMA_SQL.split(';').map((s) => s.trim()).filter(Boolean).map((s) => db.prepare(s)))
-      // Additive migrations for tables created before the column existed. Probed so a
-      // repeat run (column already present) is a no-op instead of a hard D1 error.
-      .then(() => addColumnIfMissing(db, 'users', 'lang', 'TEXT'))
+      .then(() => migrate(db))
       .catch((err) => {
         schemaReady = null;
         throw err;
@@ -219,11 +244,47 @@ function ensureSchema(db: D1Database): Promise<void> {
   return schemaReady;
 }
 
-/** D1 has no `ADD COLUMN IF NOT EXISTS`; probe the table info, then add only if absent. */
-async function addColumnIfMissing(db: D1Database, table: string, column: string, type: string): Promise<void> {
+/** Coerce an untrusted JSON value to a trimmed string, or null when empty. */
+function str(value: unknown): string | null {
+  if (typeof value !== 'string') return null;
+  const trimmed = value.trim();
+  return trimmed ? trimmed.slice(0, 2000) : null;
+}
+
+/**
+ * Additive migrations, run after the create-table batch.
+ *
+ * `CREATE TABLE IF NOT EXISTS` cannot widen a table that already exists, so a
+ * column added to the DDL later never reaches a database provisioned before it.
+ * Each column is probed first, which makes a repeat run a no-op rather than a
+ * hard D1 error.
+ *
+ * The indexes live here rather than in the DDL above for the same reason:
+ * `CREATE INDEX ... ON experience(sort_order)` fails outright on a database whose
+ * `experience` table predates that column — and since the DDL is one batch, that
+ * single failure took every /api route down with it.
+ */
+async function migrate(db: D1Database): Promise<void> {
+  await addColumnsIfMissing(db, 'users', [['lang', 'TEXT']]);
+  await addColumnsIfMissing(db, 'experience', [
+    ['place', 'TEXT'],
+    ['period', 'TEXT'],
+    ['sort_order', 'INTEGER NOT NULL DEFAULT 0'],
+  ]);
+  await addColumnsIfMissing(db, 'certifications', [['sort_order', 'INTEGER NOT NULL DEFAULT 0']]);
+  await db.batch([
+    db.prepare(`CREATE INDEX IF NOT EXISTS idx_experience_sort ON experience(sort_order)`),
+    db.prepare(`CREATE INDEX IF NOT EXISTS idx_certifications_issued ON certifications(issued)`),
+  ]);
+}
+
+/** D1 has no `ADD COLUMN IF NOT EXISTS`; read the table once, then add what is absent. */
+async function addColumnsIfMissing(db: D1Database, table: string, columns: [string, string][]): Promise<void> {
   const info = await db.prepare(`PRAGMA table_info(${table})`).all();
-  const exists = (info.results as { name: string }[]).some((c) => c.name === column);
-  if (!exists) await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`).run();
+  const present = new Set((info.results as { name: string }[]).map((c) => c.name));
+  for (const [column, type] of columns) {
+    if (!present.has(column)) await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${type}`).run();
+  }
 }
 
 /* ───────────────────────── routing ───────────────────────── */
@@ -289,9 +350,26 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
   /* ── public: track a visit (beacon from the site) ── */
   if (pathname === '/api/track' && method === 'POST') {
     const body = (await req.json().catch(() => null)) as
-      | { visitorId?: string; path?: string; section?: string; referrer?: string; dwellMs?: number; lang?: string }
+      | {
+          visitorId?: string;
+          path?: string;
+          section?: string;
+          referrer?: string;
+          dwellMs?: number;
+          lang?: string;
+          event?: string;
+          detail?: string;
+        }
       | null;
     if (!body?.visitorId || !body.path) return badRequest('visitorId and path required');
+
+    // Named interactions arrive in their own field and are stored as their own
+    // event type: they must never be counted as pageviews. An unrecognised name
+    // is still an interaction, not an arrival, so it is stored as a plain 'event'
+    // rather than silently falling through to a pageview.
+    const rawEvent = typeof body.event === 'string' ? body.event.slice(0, 40) : undefined;
+    const event = rawEvent && TRACK_EVENTS.has(rawEvent) ? rawEvent : undefined;
+    const kind = event ?? (rawEvent ? 'event' : body.dwellMs ? 'dwell' : 'pageview');
 
     const visitorId = String(body.visitorId).slice(0, 64);
     const page = String(body.path).slice(0, 2048);
@@ -308,9 +386,9 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
          VALUES (?, ?, ?, ?, ?, ?)`,
       ).bind(
         visitorId,
-        body.dwellMs ? 'dwell' : 'pageview',
+        kind,
         page,
-        body.section ?? null,
+        (event && body.detail ? `${event}:${String(body.detail).slice(0, 120)}` : body.section) ?? null,
         referrer || null,
         ts,
       ),
@@ -329,7 +407,7 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
         visitorId,
         ts,
         ts,
-        body.dwellMs ? 0 : 1,
+        kind === 'pageview' ? 1 : 0,
         Math.min(Math.max(Math.round(body.dwellMs ?? 0), 0), 24 * 3600 * 1000),
         referrer || null,
         cf.country ?? null,
@@ -373,12 +451,47 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
     return json({ ok: true }, 201);
   }
 
+  /* ── public: the published CV module ──
+     The site renders these; the admin portal writes them. Serving them from D1
+     is what lets the CV be edited without a redeploy. When nothing has been
+     published the site falls back to its bundled defaults. */
+  if (pathname === '/api/cv' && method === 'GET') {
+    const row = await env.DB.prepare(`SELECT value, updatedat FROM content WHERE key = 'cv'`).first<{
+      value: string;
+      updatedat: string;
+    }>();
+    let cv: unknown = null;
+    if (row) {
+      try {
+        cv = JSON.parse(row.value);
+      } catch {
+        cv = null; // malformed row: fall back to the bundled default
+      }
+    }
+    return json({ cv, updatedat: row?.updatedat ?? null }, 200, { 'cache-control': 'public, max-age=60' });
+  }
+
+  if (pathname === '/api/experience' && method === 'GET') {
+    const rows = await env.DB.prepare(
+      `SELECT id, title, org, tagline, url, highlight, period, place, createdat
+       FROM experience ORDER BY sort_order, id`,
+    ).all();
+    return json({ experience: rows.results }, 200, { 'cache-control': 'public, max-age=60' });
+  }
+
+  if (pathname === '/api/certifications' && method === 'GET') {
+    const rows = await env.DB.prepare(
+      `SELECT id, title, issuer, issued, url, createdat FROM certifications ORDER BY issued DESC, id`,
+    ).all();
+    return json({ certifications: rows.results }, 200, { 'cache-control': 'public, max-age=60' });
+  }
+
   /* ── everything below requires an authenticated admin ── */
   const isSessionOk = await sessionValid(env.SESSION_SECRET, sessionFrom(req));
   if (!isSessionOk) return unauthorized();
 
   if (pathname === '/api/admin/stats' && method === 'GET') {
-    const [totals, byDay, topPaths, recent, byCountry, byLang, byDevice, topCities] = await Promise.all([
+    const [totals, byDay, topPaths, recent, byCountry, byLang, byDevice, topCities, byEvent, bySection] = await Promise.all([
       env.DB.prepare(
         `SELECT
            (SELECT COUNT(*) FROM users)                          AS visitors,
@@ -423,6 +536,19 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
         `SELECT city, country, COUNT(*) AS visitors FROM users
          WHERE city IS NOT NULL GROUP BY city, country ORDER BY visitors DESC LIMIT 12`,
       ).all(),
+      // What visitors actually did: presses, not just arrivals. Named events are
+      // stored as their own type, so `pageview`/`dwell` never appear here.
+      env.DB.prepare(
+        `SELECT type, COUNT(*) AS count, COUNT(DISTINCT visitor_id) AS visitors
+         FROM events WHERE type NOT IN ('pageview','dwell')
+         GROUP BY type ORDER BY count DESC`,
+      ).all(),
+      // Which sections hold attention.
+      env.DB.prepare(
+        `SELECT section, COUNT(*) AS views FROM events
+         WHERE type = 'pageview' AND section IS NOT NULL
+         GROUP BY section ORDER BY views DESC LIMIT 12`,
+      ).all(),
     ]);
     return json({
       totals,
@@ -433,6 +559,8 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
       byLang: byLang.results,
       byDevice: byDevice.results,
       topCities: topCities.results,
+      byEvent: byEvent.results,
+      bySection: bySection.results,
     });
   }
 
@@ -498,6 +626,96 @@ async function handleApi(req: Request, env: Env, url: URL): Promise<Response> {
       }
     }
     return json({ content: out });
+  }
+
+  /* ── admin: experience ──
+     The career history the site renders in the Résumé module. One row per role;
+     `sort_order` keeps the CV order (newest first) regardless of insertion order. */
+  if (pathname === '/api/admin/experience' && method === 'GET') {
+    const rows = await env.DB.prepare(
+      `SELECT id, title, org, place, period, tagline, url, highlight, sort_order, createdat
+       FROM experience ORDER BY sort_order, id`,
+    ).all();
+    return json({ experience: rows.results });
+  }
+
+  if (pathname === '/api/admin/experience' && method === 'POST') {
+    const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+    const title = str(body?.title);
+    const org = str(body?.org);
+    if (!title || !org) return badRequest('title and org are required');
+    const next = await env.DB.prepare(`SELECT IFNULL(MAX(sort_order), -1) + 1 AS n FROM experience`).first<{ n: number }>();
+    const res = await env.DB.prepare(
+      `INSERT INTO experience (title, org, place, period, tagline, url, highlight, sort_order, createdat)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+      .bind(title, org, str(body?.place), str(body?.period), str(body?.tagline), str(body?.url), str(body?.highlight), next?.n ?? 0, nowIso())
+      .run();
+    return json({ ok: true, id: res.meta.last_row_id }, 201);
+  }
+
+  if (pathname.startsWith('/api/admin/experience/') && (method === 'PUT' || method === 'DELETE')) {
+    const id = Number(pathname.split('/').pop());
+    if (!Number.isInteger(id)) return badRequest('Bad id');
+    if (method === 'DELETE') {
+      await env.DB.prepare(`DELETE FROM experience WHERE id = ?`).bind(id).run();
+      return json({ ok: true });
+    }
+    const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+    if (!body) return badRequest('Body required');
+    const existing = await env.DB.prepare(`SELECT * FROM experience WHERE id = ?`).bind(id).first<Record<string, unknown>>();
+    if (!existing) return notFound();
+    const pick = (key: string) => (key in body ? str(body[key]) : (existing[key] as string | null));
+    const title = pick('title');
+    const org = pick('org');
+    if (!title || !org) return badRequest('title and org are required');
+    await env.DB.prepare(
+      `UPDATE experience SET title=?, org=?, place=?, period=?, tagline=?, url=?, highlight=? WHERE id=?`,
+    )
+      .bind(title, org, pick('place'), pick('period'), pick('tagline'), pick('url'), pick('highlight'), id)
+      .run();
+    return json({ ok: true });
+  }
+
+  /* ── admin: certifications ── */
+  if (pathname === '/api/admin/certifications' && method === 'GET') {
+    const rows = await env.DB.prepare(
+      `SELECT id, title, issuer, issued, url, sort_order, createdat FROM certifications ORDER BY sort_order, id`,
+    ).all();
+    return json({ certifications: rows.results });
+  }
+
+  if (pathname === '/api/admin/certifications' && method === 'POST') {
+    const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+    const title = str(body?.title);
+    if (!title) return badRequest('title is required');
+    const next = await env.DB.prepare(`SELECT IFNULL(MAX(sort_order), -1) + 1 AS n FROM certifications`).first<{ n: number }>();
+    const res = await env.DB.prepare(
+      `INSERT INTO certifications (title, issuer, issued, url, sort_order, createdat) VALUES (?, ?, ?, ?, ?, ?)`,
+    )
+      .bind(title, str(body?.issuer), str(body?.issued), str(body?.url), next?.n ?? 0, nowIso())
+      .run();
+    return json({ ok: true, id: res.meta.last_row_id }, 201);
+  }
+
+  if (pathname.startsWith('/api/admin/certifications/') && (method === 'PUT' || method === 'DELETE')) {
+    const id = Number(pathname.split('/').pop());
+    if (!Number.isInteger(id)) return badRequest('Bad id');
+    if (method === 'DELETE') {
+      await env.DB.prepare(`DELETE FROM certifications WHERE id = ?`).bind(id).run();
+      return json({ ok: true });
+    }
+    const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
+    if (!body) return badRequest('Body required');
+    const existing = await env.DB.prepare(`SELECT * FROM certifications WHERE id = ?`).bind(id).first<Record<string, unknown>>();
+    if (!existing) return notFound();
+    const pick = (key: string) => (key in body ? str(body[key]) : (existing[key] as string | null));
+    const title = pick('title');
+    if (!title) return badRequest('title is required');
+    await env.DB.prepare(`UPDATE certifications SET title=?, issuer=?, issued=?, url=? WHERE id=?`)
+      .bind(title, pick('issuer'), pick('issued'), pick('url'), id)
+      .run();
+    return json({ ok: true });
   }
 
   if (pathname.startsWith('/api/admin/content/') && method === 'PUT') {

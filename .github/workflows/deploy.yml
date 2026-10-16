@@ -1,6 +1,12 @@
 # Auto-deploy: every push to main builds the site and publishes the Worker
 # (which serves dist/ as assets, plus /api/track and the /admin portal).
 #
+# Optional repository *variable* (Settings → Secrets and variables → Actions → Variables):
+#   SITE_URL               — canonical origin, e.g. https://ajaykumar.dev. When it is
+#                            set the build emits <link rel="canonical">, og:url and
+#                            dist/sitemap.xml; when it is not, it emits none of them
+#                            rather than guessing an origin.
+#
 # Required repository secrets (Settings → Secrets and variables → Actions):
 #   CLOUDFLARE_API_TOKEN   — API token with Edit Cloudflare Workers permission
 #   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account id
@@ -39,8 +45,11 @@ jobs:
         run: npm ci
 
       # `npm run build` runs `tsc -b && vite build`, so typecheck failures block the deploy.
+      # SITE_URL comes from a repository variable, not a secret.
       - name: Typecheck & build
         run: npm run build
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
 
       # worker/wrangler.toml keeps a placeholder database_id so `wrangler dev` stays
       # self-contained for local work. CI swaps in the real D1 binding.

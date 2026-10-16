@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { experience, industries, profile, productModels, projects, skillCategories, toolbox } from '../data/portfolio';
+import { useCvContent } from '../hooks/useSiteContent';
+import { trackClick } from '../hooks/useAnalytics';
 import { EASE, Magnetic, SectionHeading } from './fx';
 import { printCv } from '../utils/print';
 
 /** THE FULL STORY — a designed CV preview plus view / download actions. */
 export default function ResumeSection({ onView }: { onView: () => void }) {
+  const { cv, updatedAt, published } = useCvContent();
   const stats = [
     { v: profile.tenure.replace(' years', ''), k: 'Years' },
     { v: String(experience.length), k: 'Roles' },
@@ -37,7 +40,10 @@ export default function ResumeSection({ onView }: { onView: () => void }) {
               <button
                 type="button"
                 data-cursor="view"
-                onClick={onView}
+                onClick={() => {
+                  trackClick('cta', 'view-resume')();
+                  onView();
+                }}
                 className="flex min-h-12 w-full items-center justify-center gap-2 rounded-md bg-bone px-6 text-[15px] font-bold text-ink transition hover:bg-white"
               >
                 ▶ View Resume
@@ -48,6 +54,7 @@ export default function ResumeSection({ onView }: { onView: () => void }) {
                 href={profile.resumePdf}
                 download={profile.resumeFile}
                 data-cursor="link"
+                onClick={trackClick('cv-download', 'pdf')}
                 className="glass flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 text-[15px] font-semibold text-bone transition hover:bg-white/15"
               >
                 ⤓ Download CV
@@ -56,7 +63,10 @@ export default function ResumeSection({ onView }: { onView: () => void }) {
             <Magnetic className="w-full">
               <button
                 type="button"
-                onClick={printCv}
+                onClick={() => {
+                  trackClick('cv-download', 'print')();
+                  printCv();
+                }}
                 data-cursor="view"
                 className="glass flex min-h-12 w-full items-center justify-center gap-2 rounded-md px-6 text-[15px] font-semibold text-bone transition hover:bg-white/15"
               >
@@ -64,9 +74,33 @@ export default function ResumeSection({ onView }: { onView: () => void }) {
               </button>
             </Magnetic>
           </div>
+
+          {cv.certifications.length > 0 && (
+            <div className="mt-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">Credentials</p>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {cv.certifications.map((c) => (
+                  <li key={`${c.title}-${c.issued}`} className="rounded-full bg-white/[0.06] px-3 py-1 text-[11px] text-mist ring-1 ring-white/10">
+                    {c.url ? (
+                      <a href={c.url} target="_blank" rel="noreferrer" className="hover:text-bone">
+                        {c.title}{c.issued ? ` · ${c.issued}` : ''} ↗
+                      </a>
+                    ) : (
+                      <>{c.title}{c.issued ? ` · ${c.issued}` : ''}</>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <p className="mt-3 text-[11px] leading-relaxed text-smoke">
             “Print CV” typesets the sheet on its own, straight from the live data — the original PDF is one click away above.
           </p>
+          {published && updatedAt && (
+            <p className="mt-2 text-[11px] leading-relaxed text-smoke">
+              Live content · updated {new Date(updatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}.
+            </p>
+          )}
           <dl className="mt-8 grid grid-cols-3 gap-px overflow-hidden rounded-xl bg-white/10 text-center">
             {stats.map((s) => (
               // <dt> must precede its <dd>; column-reverse keeps the value on top visually.
@@ -106,6 +140,8 @@ function H({ children }: { children: string }) {
 }
 
 export function ResumeSheet() {
+  // Published content overrides the bundled copy; the bundled copy is the fallback.
+  const { cv } = useCvContent();
   const toolGroups = Array.from(new Set(toolbox.map((t) => t.group)));
 
   return (
@@ -146,7 +182,7 @@ export function ResumeSheet() {
       <div className="grid gap-x-10 md:grid-cols-[1.4fr_1fr]">
         <div>
           <H>Profile</H>
-          <p className="mb-4 text-xs leading-relaxed text-mist">{profile.intro}</p>
+          <p className="mb-4 text-xs leading-relaxed text-mist">{cv.intro}</p>
 
           <H>Work Experience</H>
           {experience.map((x) => (
@@ -225,6 +261,9 @@ export function ResumeSheet() {
           ))}
         </div>
       </div>
+
+      {/* The sheet is a designed document, not the plumbing — it gets a proper ending. */}
+      <p className="mt-8 border-t border-white/10 pt-4 font-serif text-sm italic leading-relaxed text-smoke">{cv.closing}</p>
     </article>
   );
 }

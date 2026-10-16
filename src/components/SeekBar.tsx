@@ -12,6 +12,8 @@ export default function SeekBar({ order }: { order: SectionId[] }) {
   const { scrollYProgress } = useScroll();
   const fill = useSpring(scrollYProgress, { stiffness: 160, damping: 30, mass: 0.3 });
   const { scrollTo } = useSmoothScroll();
+  // Chapter marks are positioned from measured layout, so they start empty and
+  // fill in once the sections have settled.
   const [marks, setMarks] = useState<{ id: string; label: string; at: number }[]>([]);
 
   const chapters = useMemo(() => ['top', ...order, 'contact'], [order]);

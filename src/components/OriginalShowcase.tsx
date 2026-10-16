@@ -262,6 +262,11 @@ export function ScreenMock({ kind, accent, title }: { kind: ScreenKind; accent: 
         <Chrome accent={accent} />
         <ScreenBody kind={kind} a={accent} />
       </svg>
+      {/* Named on the image itself so a screenshot is never mistaken for the
+          interface — every surface in this gallery is a drawn reconstruction. */}
+      <span className="pointer-events-none absolute bottom-2 right-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/25">
+        reconstruction
+      </span>
     </div>
   );
 }

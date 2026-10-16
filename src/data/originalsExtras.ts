@@ -33,6 +33,8 @@ export type ProjectWireframe = {
 };
 
 export type OriginalDetail = {
+  /** What the key art for this Original depicts, in words. */
+  keyArt: string;
   screens: ProjectScreen[];
   wireframes: ProjectWireframe[];
   deliverables: string[];
@@ -40,6 +42,8 @@ export type OriginalDetail = {
 
 export const originalDetails: Record<string, OriginalDetail> = {
   'homeloc-lending': {
+    keyArt:
+      'A house drawn in the platform\u2019s crimson against a dark lending sky, with an approval track running beneath it and a single tick at the end of the bar \u2014 the decision, made faster.',
     screens: [
       {
         kind: 'workflow',
@@ -71,6 +75,8 @@ export const originalDetails: Record<string, OriginalDetail> = {
     ],
   },
   cashtrax: {
+    keyArt:
+      'Four supplier tiles with a rising spend chart in amber underneath: procurement, diversity, spend and reconciliation read as one movement rather than four separate tools.',
     screens: [
       {
         kind: 'dashboard',
@@ -102,6 +108,8 @@ export const originalDetails: Record<string, OriginalDetail> = {
     ],
   },
   epragathi: {
+    keyArt:
+      'A civic building on stepped ground in cool blue \u2014 the citizen and the back office sharing one structure, with the steps standing for the service layers between them.',
     screens: [
       {
         kind: 'portal',
@@ -133,6 +141,8 @@ export const originalDetails: Record<string, OriginalDetail> = {
     ],
   },
   'gaian-broadcast': {
+    keyArt:
+      'A transmitter mast with three arcs of signal radiating past it in violet \u2014 broadcast reach, with the mast doubling as the content, advertising and reporting workstreams beneath.',
     screens: [
       {
         kind: 'dashboard',
@@ -164,6 +174,8 @@ export const originalDetails: Record<string, OriginalDetail> = {
     ],
   },
   'audience-intelligence': {
+    keyArt:
+      'Concentric audience rings in jade over a segmentation chart \u2014 one audience base, read at four distances, with the bars showing how it breaks down into behaviour.',
     screens: [
       {
         kind: 'mobile',
@@ -195,6 +207,8 @@ export const originalDetails: Record<string, OriginalDetail> = {
     ],
   },
   jobsnprofiles: {
+    keyArt:
+      'Two candidate cards linked by a dashed connector, with a message thread beneath in clay \u2014 candidate and employer on one side of the product, conversation on the other.',
     screens: [
       {
         kind: 'form',
@@ -226,6 +240,8 @@ export const originalDetails: Record<string, OriginalDetail> = {
     ],
   },
   'pem-pro': {
+    keyArt:
+      'A drafting grid with an exploded fastener on it in steel blue \u2014 the engineering detail being worked on, with the grid standing for the CAD precision around it.',
     screens: [
       {
         kind: 'command',
@@ -264,6 +280,8 @@ export const originalDetails: Record<string, OriginalDetail> = {
     ],
   },
   kenvision: {
+    keyArt:
+      'A camera frame with a scan beam and a detected box in green \u2014 a store seen as a stream of events, with the box marking the moment vision becomes something an operator can act on.',
     screens: [
       {
         kind: 'command',

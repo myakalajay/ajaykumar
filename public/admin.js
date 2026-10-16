@@ -4,7 +4,7 @@
   const $ = (id) => document.getElementById(id);
   const api = (path, opts = {}) => fetch(path, { credentials: 'same-origin', ...opts });
 
-  const state = { view: 'dashboard', users: [], messages: [], contentKeys: [] };
+  const state = { view: 'dashboard', users: [], messages: [], contentKeys: [], experience: [], certifications: [] };
 
   /* ── helpers ── */
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -88,6 +88,8 @@
       else if (view === 'audience') await loadAudience();
       else if (view === 'visitors') await loadUsers();
       else if (view === 'messages') await loadMessages();
+      else if (view === 'experience') await loadExperience();
+      else if (view === 'certifications') await loadCertifications();
       else if (view === 'content') await loadContent();
     } catch (ex) {
       if (String(ex.message) === 'Unauthorized') {
@@ -171,6 +173,23 @@
       <tr><td>${esc(c.city || '—')}</td><td>${esc((c.country || '').toUpperCase() || '—')}</td><td>${c.visitors}</td></tr>`).join('')
       || '<tr><td colspan="3" class="muted">No city data yet.</td></tr>';
     $('cities-empty').hidden = cities.length > 0;
+
+    // Engagement. These come from named events, which are stored as their own
+    // type, so a press is never counted as an arrival.
+    const EVENTS = {
+      cta: 'Call-to-action press',
+      'cv-download': 'CV download / print',
+      'project-open': 'Case study opened',
+      'profile-switch': 'Viewer profile changed',
+      outbound: 'Outbound link',
+      contact: 'Contact started',
+    };
+    const events = (d.byEvent || []).map((x) => ({ k: x.type, v: x.count }));
+    hbars($('ev-bars'), events, (k) => EVENTS[k] || k || '—');
+    $('ev-empty').hidden = events.length > 0;
+
+    const sections = (d.bySection || []).map((x) => ({ k: x.section, v: x.views }));
+    hbars($('sec-bars'), sections, (k) => (k || '—').replace(/^profile:/, 'profile '));
   }
 
   /* ── visitors ── */
@@ -284,6 +303,160 @@
     `);
   }
 
+  /* ── experience ── */
+  // Field lists drive both the drawer form and the payload, so a column can never
+  // be added to one without the other.
+  const X_FIELDS = [
+    ['title', 'Job title', 'input'],
+    ['org', 'Organisation', 'input'],
+    ['place', 'Location', 'input'],
+    ['period', 'Period (e.g. Apr 2024 – May 2026)', 'input'],
+    ['tagline', 'One-line descriptor', 'input'],
+    ['url', 'Case-study URL (optional)', 'input'],
+    ['highlight', 'Impact highlight (1–2 sentences)', 'text'],
+  ];
+  const Z_FIELDS = [
+    ['title', 'Credential', 'input'],
+    ['issuer', 'Issuer', 'input'],
+    ['issued', 'Issued (year or range)', 'input'],
+    ['url', 'Link (optional)', 'input'],
+  ];
+
+  function formFields(fields) {
+    return fields
+      .map(([k, label, kind]) =>
+        kind === 'text'
+          ? `<label for="f-${k}">${esc(label)}</label><textarea id="f-${k}" rows="4"></textarea>`
+          : `<label for="f-${k}">${esc(label)}</label><input id="f-${k}" type="text" />`,
+      )
+      .join('');
+  }
+
+  function fillFields(fields, row) {
+    for (const [k] of fields) $('f-' + k).value = row && row[k] != null ? row[k] : '';
+  }
+
+  function collect(fields) {
+    const out = {};
+    for (const [k] of fields) out[k] = $('f-' + k).value.trim();
+    return out;
+  }
+
+  async function loadExperience() {
+    const d = await j(await api('/api/admin/experience'));
+    state.experience = d.experience || [];
+    $('x-empty').hidden = state.experience.length > 0;
+    $('x-body').innerHTML = state.experience
+      .map(
+        (x) => `<tr data-id="${x.id}">
+          <td><strong>${esc(x.title)}</strong>${x.tagline ? `<div class="muted">${esc(x.tagline)}</div>` : ''}</td>
+          <td>${esc(x.org)}${x.place ? `<div class="muted">${esc(x.place)}</div>` : ''}</td>
+          <td>${esc(x.period || '—')}</td>
+          <td><button class="btn btn-sm" data-edit="${x.id}">Edit</button>
+              <button class="btn btn-sm" data-del="${x.id}">Delete</button></td>
+        </tr>`,
+      )
+      .join('');
+    $('x-msg').textContent = `${state.experience.length} role${state.experience.length === 1 ? '' : 's'}`;
+  }
+
+  $('x-add').addEventListener('click', () => {
+    openDrawer(`
+      <div class="k" style="color:var(--smoke);font-size:11px;letter-spacing:.18em;text-transform:uppercase">New role</div>
+      <h2 style="margin:8px 0 0">Add experience</h2>
+      ${formFields(X_FIELDS)}
+      <div class="row" style="margin-top:18px">
+        <button class="btn btn-primary" style="width:auto;margin:0;padding:10px 22px" data-save-exp="new">Save role</button>
+      </div>
+      <p class="muted err" id="f-err"></p>
+    `);
+    fillFields(X_FIELDS, null);
+  });
+
+  $('x-body').addEventListener('click', async (e) => {
+    const edit = e.target.closest('button[data-edit]');
+    const del = e.target.closest('button[data-del]');
+    if (edit) {
+      const row = state.experience.find((x) => String(x.id) === edit.dataset.edit);
+      if (!row) return;
+      openDrawer(`
+        <div class="k" style="color:var(--smoke);font-size:11px;letter-spacing:.18em;text-transform:uppercase">Role</div>
+        <h2 style="margin:8px 0 0">${esc(row.title)}</h2>
+        ${formFields(X_FIELDS)}
+        <div class="row" style="margin-top:18px">
+          <button class="btn btn-primary" style="width:auto;margin:0;padding:10px 22px" data-save-exp="${row.id}">Save changes</button>
+        </div>
+        <p class="muted err" id="f-err"></p>
+      `);
+      fillFields(X_FIELDS, row);
+      return;
+    }
+    if (del) {
+      if (!confirm('Delete this role from the published CV?')) return;
+      await j(await api(`/api/admin/experience/${del.dataset.del}`, { method: 'DELETE' }));
+      toast('Role deleted');
+      loadExperience();
+    }
+  });
+
+  /* ── certifications ── */
+  async function loadCertifications() {
+    const d = await j(await api('/api/admin/certifications'));
+    state.certifications = d.certifications || [];
+    $('z-empty').hidden = state.certifications.length > 0;
+    $('z-body').innerHTML = state.certifications
+      .map(
+        (x) => `<tr data-id="${x.id}">
+          <td><strong>${esc(x.title)}</strong></td>
+          <td>${esc(x.issuer || '—')}</td>
+          <td>${esc(x.issued || '—')}</td>
+          <td><button class="btn btn-sm" data-edit="${x.id}">Edit</button>
+              <button class="btn btn-sm" data-del="${x.id}">Delete</button></td>
+        </tr>`,
+      )
+      .join('');
+    $('z-msg').textContent = `${state.certifications.length} credential${state.certifications.length === 1 ? '' : 's'}`;
+  }
+
+  $('z-add').addEventListener('click', () => {
+    openDrawer(`
+      <div class="k" style="color:var(--smoke);font-size:11px;letter-spacing:.18em;text-transform:uppercase">New credential</div>
+      <h2 style="margin:8px 0 0">Add certification</h2>
+      ${formFields(Z_FIELDS)}
+      <div class="row" style="margin-top:18px">
+        <button class="btn btn-primary" style="width:auto;margin:0;padding:10px 22px" data-save-cert="new">Save credential</button>
+      </div>
+      <p class="muted err" id="f-err"></p>
+    `);
+    fillFields(Z_FIELDS, null);
+  });
+
+  $('z-body').addEventListener('click', async (e) => {
+    const edit = e.target.closest('button[data-edit]');
+    const del = e.target.closest('button[data-del]');
+    if (edit) {
+      const row = state.certifications.find((x) => String(x.id) === edit.dataset.edit);
+      if (!row) return;
+      openDrawer(`
+        <div class="k" style="color:var(--smoke);font-size:11px;letter-spacing:.18em;text-transform:uppercase">Credential</div>
+        <h2 style="margin:8px 0 0">${esc(row.title)}</h2>
+        ${formFields(Z_FIELDS)}
+        <div class="row" style="margin-top:18px">
+          <button class="btn btn-primary" style="width:auto;margin:0;padding:10px 22px" data-save-cert="${row.id}">Save changes</button>
+        </div>
+        <p class="muted err" id="f-err"></p>
+      `);
+      fillFields(Z_FIELDS, row);
+      return;
+    }
+    if (del) {
+      if (!confirm('Delete this credential?')) return;
+      await j(await api(`/api/admin/certifications/${del.dataset.del}`, { method: 'DELETE' }));
+      toast('Credential deleted');
+      loadCertifications();
+    }
+  });
+
   /* ── content ── */
   async function refreshContentList() {
     const d = await j(await api('/api/admin/content'));
@@ -356,7 +529,40 @@
     $('drawer-bg').classList.remove('on');
     if (state.view === 'messages') loadMessages();
     if (state.view === 'visitors') loadUsers();
+    if (state.view === 'experience') loadExperience();
+    if (state.view === 'certifications') loadCertifications();
   }
+
+  /** Save handlers live on the drawer so they survive re-rendering its contents. */
+  $('drawer').addEventListener('click', async (e) => {
+    const exp = e.target.closest('button[data-save-exp]');
+    const cert = e.target.closest('button[data-save-cert]');
+    if (!exp && !cert) return;
+    const btn = exp || cert;
+    const isNew = btn.dataset.saveExp === 'new' || btn.dataset.saveCert === 'new';
+    const base = exp ? '/api/admin/experience' : '/api/admin/certifications';
+    const fields = exp ? X_FIELDS : Z_FIELDS;
+    const id = exp ? btn.dataset.saveExp : btn.dataset.saveCert;
+    btn.disabled = true;
+    try {
+      const payload = collect(fields);
+      await j(
+        await api(isNew ? base : `${base}/${id}`, {
+          method: isNew ? 'POST' : 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(payload),
+        }),
+      );
+      closeDrawer();
+      toast(isNew ? 'Saved' : 'Changes saved');
+    } catch (ex) {
+      const err = $('f-err');
+      if (err) err.textContent = ex.message;
+      else toast(ex.message);
+    } finally {
+      btn.disabled = false;
+    }
+  });
   $('drawer-close').addEventListener('click', closeDrawer);
   $('drawer-bg').addEventListener('click', closeDrawer);
   document.addEventListener('keydown', (e) => {

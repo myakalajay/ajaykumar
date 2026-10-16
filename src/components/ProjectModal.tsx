@@ -97,6 +97,17 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               {project.logline}
             </motion.p>
 
+            {/* Every image on this page is labelled: what it is, and what it shows. */}
+            <motion.figure variants={block} className="mt-6 rounded-xl border border-white/10 bg-ink-3 p-4">
+              <figcaption className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">
+                Key art · vector illustration
+              </figcaption>
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-bone/80">
+                {detail?.keyArt ??
+                  `The poster above is drawn from ${project.title}’s own palette and subject matter rather than a stock photograph.`}
+              </p>
+            </motion.figure>
+
             {/* at a glance — who it was for and what part of it was mine */}
             <motion.dl
               variants={block}
@@ -208,7 +219,9 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
             {detail && detail.screens.length > 0 && (
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Product Screens</h3>
-                <p className="mb-5 text-xs text-smoke">Vector reconstructions of the key surfaces, drawn in the platform&apos;s own palette.</p>
+                <p className="mb-5 text-xs text-smoke">
+                  Vector reconstructions — stylised drawings of the interface families this work described, rendered in the platform&apos;s own palette, not screenshots of shipping products.
+                </p>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {detail.screens.map((s, i) => (
                     <ShowcaseItem key={s.title} index={i} label={<>{s.title} — {s.caption}</>}>
@@ -223,7 +236,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
             {detail && detail.wireframes.length > 0 && (
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Wireframes & Flows</h3>
-                <p className="mb-5 text-xs text-smoke">The lo-fi work behind the UI — flows, architecture and layout studies.</p>
+                <p className="mb-5 text-xs text-smoke">The lo-fi work behind the UI — flows, architecture and layout studies, redrawn as diagrams.</p>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {detail.wireframes.map((w, i) => (
                     <ShowcaseItem key={w.title} index={i} label={<>{w.title} — {w.caption}</>}>
