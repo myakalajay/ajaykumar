@@ -127,6 +127,18 @@ export const skillIcons: Record<string, LucideIcon> = {
   'Autonomous Vehicle Interfaces': Car,
   'AI Ethics & Data Privacy': ShieldCheck,
 
+  /* AI & Automation */
+  'AI Workflow Automation': Workflow,
+  'Prompt & Agent Design': Bot,
+  'Workflow Orchestration': GitBranch,
+  'LLM Tooling & Integration': Cpu,
+  'Copilot Experience Design': MonitorSmartphone,
+  'RPA & Process Automation': RefreshCw,
+  'Automation Opportunity Mapping': Route,
+  'AI Governance & Guardrails': ShieldCheck,
+  'ChatGPT · Claude · Gemini': Sparkles,
+  'Cursor · n8n · Make · Zapier': Zap,
+
   /* Consulting */
   'Stakeholder Management': Users,
   'Stakeholder Facilitation': Presentation,

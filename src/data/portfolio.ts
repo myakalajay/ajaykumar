@@ -638,6 +638,25 @@ export const skillCategories: SkillCategory[] = [
     ],
   },
   {
+    // AI automation sits between the AI/ML craft above and the toolchain below:
+    // the places where AI stops being a design topic and becomes a workflow.
+    id: 'automation',
+    title: 'AI & Automation',
+    subtitle: 'Agentic workflows & AI tooling',
+    skills: [
+      { name: 'AI Workflow Automation', mono: 'AW', note: 'Core' },
+      { name: 'Prompt & Agent Design', mono: 'PA' },
+      { name: 'Workflow Orchestration', mono: 'WO' },
+      { name: 'LLM Tooling & Integration', mono: 'LL' },
+      { name: 'Copilot Experience Design', mono: 'CX' },
+      { name: 'RPA & Process Automation', mono: 'RP' },
+      { name: 'Automation Opportunity Mapping', mono: 'AM' },
+      { name: 'AI Governance & Guardrails', mono: 'AG' },
+      { name: 'ChatGPT · Claude · Gemini', mono: 'CG' },
+      { name: 'Cursor · n8n · Make · Zapier', mono: 'Cu' },
+    ],
+  },
+  {
     id: 'consulting',
     title: 'Consulting',
     subtitle: 'Facilitation & stakeholder influence',

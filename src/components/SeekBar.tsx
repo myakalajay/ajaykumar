@@ -56,8 +56,15 @@ export default function SeekBar({ order }: { order: SectionId[] }) {
             onClick={() => jump(m.at)}
             title={`Jump to ${m.label}`}
             aria-label={`Jump to ${m.label}`}
-            className="absolute top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-            style={{ left: `${m.at * 100}%` }}
+            className="absolute top-1/2 h-7 w-7 cursor-pointer"
+            // The hit area is 28px wide around a mark pinned at 0–100%. Centred on
+            // the last mark it hangs 14px past the right edge, which widened the
+            // document and let the whole page be dragged sideways. Edge marks are
+            // flush-aligned instead of centred so they stay inside the viewport.
+            style={{
+              left: `${m.at * 100}%`,
+              transform: `translate(${m.at <= 0.02 ? '0' : m.at >= 0.98 ? '-100%' : '-50%'}, -50%)`,
+            }}
           >
             <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-smoke transition duration-300 hover:scale-150 hover:bg-bone" />
           </button>

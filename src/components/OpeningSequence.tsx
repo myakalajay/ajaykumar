@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { achievements, profile, projects, toolbox } from '../data/portfolio';
+import { achievements, profile } from '../data/portfolio';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useReducedMotionPref, useDesktop, useLandscapePhone, useMidPortrait, useShortPortrait, useTallPortrait } from '../hooks/useMedia';
 import { greetingFor, useLocale } from '../i18n';
@@ -63,42 +63,118 @@ const ROLE_SPLIT = (() => {
 const ROLE_LINES = [ROLE_SEGMENTS.slice(0, ROLE_SPLIT).join(' · '), ROLE_SEGMENTS.slice(ROLE_SPLIT).join(' · ')];
 
 /**
- * A seamless Bengaluru skyline tile — Vidhana Soudha's dome and colonnade,
- * the Palace's turrets, UB City's tower and a few of the garden city's trees.
- * Drawn on a 720×300 ground-level baseline so `repeat-x` joins the ends flat.
+ * Bengaluru, drawn once across the full width.
+ *
+ * The previous version was a 720px tile repeated with `repeat-x`, so on any
+ * laptop the same dome, the same tower and the same three trees appeared two or
+ * three times across the frame — and the tile's trailing buildings were sliced
+ * mid-shape wherever the repeat landed. This is a single composition instead: no
+ * repeats, and `preserveAspectRatio="none"` stretches it to fill whatever width
+ * it is given, so the silhouette always reaches both edges.
+ *
+ * Landmarks, left to right: an apartment block, a roadside water tank, Vidhana
+ * Soudha's colonnade and dome, the elevated metro viaduct, Bangalore Palace's
+ * turrets, UB City's tower, the Kempegowda watchtower, and the garden city's
+ * trees between them — plus a flyover across the base for depth.
  */
-const BENGALURU_SKYLINE = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" fill="rgba(255,255,255,0.09)">
-  <rect x="0" y="292" width="720" height="8"/>
-  <rect x="24" y="262" width="44" height="38"/><polygon points="18,262 46,238 74,262"/>
-  <circle cx="104" cy="268" r="15"/><rect x="101" y="268" width="6" height="30"/>
-  <rect x="132" y="274" width="10" height="24"/>
-  <rect x="140" y="278" width="240" height="14"/><rect x="150" y="266" width="220" height="12"/>
-  <rect x="158" y="254" width="204" height="10"/>
-  <rect x="140" y="214" width="26" height="50"/><rect x="334" y="214" width="26" height="50"/>
-  <rect x="162" y="186" width="196" height="12"/>
-  <rect x="170" y="198" width="10" height="56"/><rect x="190" y="198" width="10" height="56"/>
-  <rect x="210" y="198" width="10" height="56"/><rect x="230" y="198" width="10" height="56"/>
-  <rect x="250" y="198" width="10" height="56"/><rect x="270" y="198" width="10" height="56"/>
-  <rect x="290" y="198" width="10" height="56"/><rect x="310" y="198" width="10" height="56"/>
-  <rect x="330" y="198" width="10" height="56"/>
-  <rect x="240" y="164" width="44" height="22"/>
-  <path d="M 240 164 A 22 22 0 0 1 284 164 Z"/>
-  <rect x="260" y="134" width="4" height="12"/><circle cx="262" cy="130" r="4"/>
-  <rect x="404" y="232" width="96" height="68"/>
-  <rect x="404" y="224" width="6" height="8"/><rect x="416" y="224" width="6" height="8"/>
-  <rect x="428" y="224" width="6" height="8"/><rect x="440" y="224" width="6" height="8"/>
-  <rect x="452" y="224" width="6" height="8"/><rect x="464" y="224" width="6" height="8"/>
-  <rect x="476" y="224" width="6" height="8"/><rect x="488" y="224" width="6" height="8"/>
-  <rect x="398" y="222" width="14" height="78"/><polygon points="393,222 405,194 417,222"/>
-  <rect x="444" y="206" width="16" height="94"/><polygon points="439,206 452,180 465,206"/>
-  <rect x="492" y="222" width="14" height="78"/><polygon points="487,222 499,194 511,222"/>
-  <circle cx="538" cy="270" r="14"/><rect x="535" y="270" width="6" height="28"/>
-  <rect x="564" y="120" width="48" height="180"/>
-  <rect x="572" y="104" width="32" height="16"/><rect x="586" y="74" width="3" height="30"/>
-  <rect x="608" y="150" width="10" height="150"/>
-  <rect x="622" y="208" width="36" height="92"/>
-  <rect x="662" y="232" width="26" height="68"/>
-</svg>`;
+const SKYLINE_BLOCKS: [number, number, number][] = [
+  // [x, width, top y] — every entry a different footprint and height.
+  [0, 52, 238], [60, 74, 196], [142, 26, 264],
+  [176, 30, 252], [214, 62, 214], [284, 22, 276],
+  [470, 58, 180], [536, 34, 244], [578, 44, 226], [630, 66, 198],
+  [874, 44, 202], [926, 34, 258], [968, 26, 270],
+  [1118, 52, 218], [1178, 24, 268],
+  [1276, 48, 176], [1332, 38, 240], [1378, 34, 262],
+  [1482, 66, 206],
+  [1628, 22, 264], [1658, 34, 236],
+  [1724, 58, 190], [1790, 34, 246],
+  [1834, 30, 268], [1872, 48, 224],
+];
+
+/** Trees have their own rhythm — canopies never the same size twice in a row. */
+const SKYLINE_TREES: [number, number][] = [
+  [158, 17], [456, 13], [848, 19], [1102, 14], [1462, 18], [1706, 12], [1826, 16],
+];
+
+function BengaluruSkyline() {
+  return (
+    <svg viewBox="0 0 1920 320" preserveAspectRatio="none" className="h-full w-full" role="img" aria-label="Bengaluru skyline">
+      <g fill="rgba(255,255,255,0.10)">
+        {/* flyover at the base, so the skyline sits on something */}
+        <path d="M-10 306 Q 480 286 960 300 T 1930 292 L1930 320 L-10 320 Z" fill="rgba(255,255,255,0.06)" />
+
+        {/* generic blocks, with a lighter band on the taller ones for texture */}
+        {SKYLINE_BLOCKS.map(([x, w, y], i) => (
+          <g key={`b${i}`}>
+            <rect x={x} y={y} width={w} height={300 - y} />
+            {y < 250 && <rect x={x + 4} y={y + 10} width={w - 8} height={3} fill="rgba(255,255,255,0.07)" />}
+            {y < 220 && <rect x={x + 4} y={y + 24} width={w - 8} height={3} fill="rgba(255,255,255,0.05)" />}
+          </g>
+        ))}
+
+        {/* trees */}
+        {SKYLINE_TREES.map(([cx, r]) => (
+          <g key={`t${cx}`}>
+            <circle cx={cx} cy={300 - r * 2.2} r={r} />
+            <rect x={cx - 2} y={300 - r * 2.2} width={4} height={r * 2.2} />
+          </g>
+        ))}
+
+        {/* road-side water tank on legs */}
+        <rect x={188} y={292} width={5} height={8} />
+        <rect x={206} y={292} width={5} height={8} />
+        <rect x={184} y={252} width={30} height={40} rx={3} />
+        <path d="M184 252 A 15 12 0 0 1 214 252 Z" />
+        <rect x={196} y={240} width={4} height={12} />
+
+        {/* Vidhana Soudha — colonnade, entablature, drum and dome */}
+        <rect x={296} y={240} width={158} height={60} />
+        {Array.from({ length: 9 }, (_, i) => (
+          <rect key={`col${i}`} x={306 + i * 16} y={206} width={9} height={34} />
+        ))}
+        <rect x={290} y={192} width={170} height={14} />
+        <rect x={348} y={170} width={54} height={22} />
+        <path d="M348 170 A 27 27 0 0 1 402 170 Z" />
+        <rect x={373} y={150} width={4} height={20} />
+        <circle cx={375} cy={146} r={5} />
+
+        {/* elevated metro viaduct with a station box */}
+        <rect x={700} y={198} width={168} height={10} />
+        {[712, 752, 792, 832].map((x) => (
+          <rect key={`p${x}`} x={x} y={208} width={11} height={92} />
+        ))}
+        <rect x={758} y={168} width={62} height={30} rx={3} />
+
+        {/* Bangalore Palace — three turrets on a crenellated facade */}
+        {[1004, 1040, 1076].map((x, i) => (
+          <g key={`tur${x}`}>
+            <rect x={x} y={224 - i * 4} width={18} height={76 + i * 4} />
+            <polygon points={`${x - 4},${224 - i * 4} ${x + 9},${196 - i * 4} ${x + 22},${224 - i * 4}`} />
+          </g>
+        ))}
+        <rect x={1022} y={252} width={54} height={48} />
+        {[1026, 1042, 1058, 1066].map((x) => (
+          <rect key={`cr${x}`} x={x} y={244} width={6} height={8} />
+        ))}
+
+        {/* UB City — the tall setback tower and its shorter neighbour */}
+        <rect x={1188} y={96} width={46} height={204} />
+        <rect x={1196} y={76} width={30} height={20} />
+        <rect x={1209} y={40} width={4} height={36} />
+        <rect x={1240} y={152} width={30} height={148} />
+
+        {/* Kempegowda watchtower — tapered stone, capped */}
+        <polygon points="1444,300 1490,300 1479,182 1455,182" />
+        <rect x={1449} y={170} width={26} height={12} rx={2} />
+        <circle cx={1462} cy={162} r={6} />
+
+        {/* tech-park slab with a setback crown */}
+        <rect x={1560} y={214} width={54} height={86} />
+        <rect x={1568} y={196} width={38} height={18} />
+      </g>
+    </svg>
+  );
+}
 
 export default function OpeningSequence({ onDone }: { onDone: () => void }) {
   const reduced = useReducedMotionPref();
@@ -221,17 +297,13 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
           vignette and readability scrim so the silhouette actually reads */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[16] h-[30vh] min-h-[150px]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(BENGALURU_SKYLINE)}")`,
-          backgroundRepeat: 'repeat-x',
-          backgroundPosition: 'bottom center',
-          backgroundSize: 'auto 100%',
-        }}
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-[16] h-[26vh] min-h-[140px] max-h-[250px] overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: beat >= 3 ? 1 : 0 }}
         transition={{ duration: 1.4, ease: EASE }}
-      />
+      >
+        <BengaluruSkyline />
+      </motion.div>
 
       {/* film scanlines + vignette texture */}
       <motion.div
@@ -528,11 +600,10 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         transition={{ duration: 0.9, ease: EASE }}
       >
         <div className={`flex max-w-[92vw] flex-wrap items-center gap-x-3 gap-y-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-bone/70 sm:text-xs ${layout === 'poster' ? 'justify-center' : 'justify-start'}`}>
+          {/* Tenure and place only. The chip counts that used to sit here (how many
+              Originals, how many tools) were inventory, not a reason to keep
+              reading — the line now says who and where, and nothing else. */}
           <span className="rounded border border-bone/25 px-1.5 py-px text-bone">{profile.tenure}</span>
-          <span className="h-1 w-1 rounded-full bg-smoke" />
-          <span>{projects.length} Originals</span>
-          <span className="h-1 w-1 rounded-full bg-smoke" />
-          <span>{toolbox.length} Tools</span>
           <span className="h-1 w-1 rounded-full bg-smoke" />
           <span>{profile.location}</span>
         </div>
