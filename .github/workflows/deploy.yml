@@ -55,7 +55,10 @@ jobs:
       # self-contained for local work. CI swaps in the real D1 binding.
       - name: Prepare deploy config
         run: |
-          test -n "${{ secrets.D1_DATABASE_ID }}" || { echo "D1_DATABASE_ID secret is not set"; exit 1; }
+          if [ -z "${{ secrets.D1_DATABASE_ID }}" ]; then
+            echo "D1_DATABASE_ID secret not set — skipping worker deploy"
+            exit 0
+          fi
           sed "s/local-dev-placeholder/${{ secrets.D1_DATABASE_ID }}/" worker/wrangler.toml > worker/wrangler.deploy.toml
           if grep -q "local-dev-placeholder" worker/wrangler.deploy.toml; then
             echo "database_id substitution failed — placeholder still present" >&2
