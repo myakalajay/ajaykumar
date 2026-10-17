@@ -27,6 +27,7 @@ const SECTION_ANCHORS: readonly (readonly [string, string, number])[] = [
   ['#picks', 'Top picks', 0.7],
   ['#skills', 'Capabilities', 0.7],
   ['#moments', 'Recognition', 0.6],
+  ['#continueWatching', 'Continue Watching', 0.8],
   ['#story', 'CV', 0.9],
   ['#contact', "Let's build", 0.8],
 ];

@@ -47,6 +47,8 @@ The static site is written to `dist/` and can be deployed as-is to Vercel, Netli
 
 Derived text is computed, never repeated: `profile.interests` is the titles of `strategicValue`, and every count on the site (`6 Originals`, `22 Tools`, `7 Seasons · 16 Episodes`, `8 industries`) is read from the arrays — so adding a project or tool updates the hero chips, Top Picks, section meta and the resume sheet at once.
 
+> `continueWatching` is a new SectionId: the "Now streaming" cards live in the per-profile section order, so a profile switcher that includes it (`ajay`, `design`, `product`, `recruiter` after the edit) shows it as its own deep-linkable section instead of a hard-coded block.
+
 **Resume:** replace `public/assets/Ajay_Kumar_Myakala_CV.pdf` (and `profile.resumeFile` if the filename changes).
 
 **Photo:** replace `ajay.png` (background-removed cutout — the alpha channel is the mask), then run:
@@ -69,7 +71,7 @@ src/
     Navbar                 ← hide-on-scroll nav, profile switcher, mobile menu
     Hero                   ← billboard: parallax portrait, particles, light streaks, floating chips
     PlayIntro              ← ▶ Play Intro: zoom into portrait → highlight reel (pause, ← →, tap zones)
-    ContinueWatching       ← cards with real "watched" progress bars
+    ContinueWatching       ← "Now streaming" cards, a per-profile section
     About                  ← The Pilot
     Seasons / EpisodeCard  ← My Journey as seasons and episodes
     Originals / ProjectCard← pinned horizontal sequence on desktop, swipe rail on touch

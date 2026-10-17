@@ -1143,7 +1143,7 @@ export const introSlides: IntroSlide[] = [
 ];
 
 export type ProfileId = 'ajay' | 'recruiter' | 'product' | 'design';
-export type SectionId = 'about' | 'journey' | 'originals' | 'picks' | 'skills' | 'moments' | 'story';
+export type SectionId = 'about' | 'journey' | 'originals' | 'picks' | 'skills' | 'moments' | 'story' | 'continueWatching';
 
 export const viewerProfiles: {
   id: ProfileId;
@@ -1157,28 +1157,28 @@ export const viewerProfiles: {
     name: 'Ajay',
     blurb: 'The full series, in order',
     color: '#e5132b',
-    order: ['about', 'journey', 'originals', 'picks', 'skills', 'moments', 'story'],
+    order: ['about', 'journey', 'originals', 'picks', 'skills', 'moments', 'continueWatching', 'story'],
   },
   {
     id: 'recruiter',
     name: 'Recruiter',
     blurb: 'Resume, impact & capabilities first',
     color: '#4cc9ff',
-    order: ['story', 'moments', 'skills', 'originals', 'about', 'journey', 'picks'],
+    order: ['story', 'moments', 'skills', 'originals', 'about', 'journey', 'picks', 'continueWatching'],
   },
   {
     id: 'product',
     name: 'Product Lead',
     blurb: 'Strategy, platforms & outcomes first',
     color: '#46e3a8',
-    order: ['originals', 'picks', 'moments', 'skills', 'journey', 'about', 'story'],
+    order: ['originals', 'picks', 'moments', 'skills', 'journey', 'about', 'continueWatching', 'story'],
   },
   {
     id: 'design',
     name: 'Design Lead',
     blurb: 'The craft & the story arc first',
     color: '#ffb547',
-    order: ['journey', 'skills', 'originals', 'about', 'picks', 'moments', 'story'],
+    order: ['journey', 'skills', 'originals', 'about', 'picks', 'moments', 'continueWatching', 'story'],
   },
 ];
 
@@ -1189,5 +1189,6 @@ export const sectionMeta: Record<SectionId, { nav: string; card: string; meta: s
   picks: { nav: 'Top Picks', card: 'Top Picks', meta: 'Top 10 from the CV', palette: jade },
   skills: { nav: 'Capabilities', card: 'My Capabilities', meta: `${skillCategories.length} Categories`, palette: ocean },
   moments: { nav: 'Impact', card: 'Signature Impact', meta: `${achievements.length} Moments • ${toolbox.length} Tools`, palette: crimson },
+  continueWatching: { nav: 'Continue Watching', card: 'Now Streaming', meta: '2 Platforms • latest', palette: crimson },
   story: { nav: 'Resume', card: 'The Full Story', meta: 'CV • View & download', palette: violet },
 };

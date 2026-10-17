@@ -17,7 +17,7 @@ import Seasons from './components/Seasons';
 import Originals from './components/Originals';
 import TopPicks from './components/TopPicks';
 import Skills from './components/Skills';
-import RequiredSkills from './components/RequiredSkills';
+
 import Achievements from './components/Achievements';
 import ResumeSection from './components/ResumeViewer';
 import FinalCTA from './components/FinalCTA';
@@ -106,8 +106,8 @@ function Series() {
     picks: <TopPicks />,
     skills: <>
       <Skills />
-      <RequiredSkills />
     </>,
+    continueWatching: <ContinueWatching onOpen={openProject} order={order} profileId={profileId} />,
     moments: <Achievements onOpen={openProject} />,
     story: <ResumeSection onView={() => setResumeOpen(true)} />,
   };
@@ -148,7 +148,6 @@ function Series() {
               onResume={() => setResumeOpen(true)}
               profileId={profileId}
             />
-            <ContinueWatching onOpen={openProject} />
             {order.map((id) => (
               // `overflow-x-clip` on the resume scene only: its sheet enters with a
               // perspective rotateX, and while that is still un-triggered (the section

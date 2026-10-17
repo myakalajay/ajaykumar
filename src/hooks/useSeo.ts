@@ -51,6 +51,10 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
     title: `Impact · ${BASE_TITLE}`,
     description: 'Signature outcomes and the toolchain behind them, from Figma and Miro to React, Next.js and analytics.',
   },
+  continueWatching: {
+    title: `Continue Watching · ${BASE_TITLE}`,
+    description: 'The two most recent platforms on the CV, drawn with original key art and opened as case studies.',
+  },
   story: {
     title: `Résumé · ${BASE_TITLE}`,
     description: 'View and download the full CV — product strategy and design transformation, 2016–2026.',

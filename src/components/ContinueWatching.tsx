@@ -73,7 +73,7 @@ function Panel({ project, onOpen, index }: { project: Project; onOpen?: (p: Proj
   );
 }
 
-export function ContinueWatching({ onOpen }: { onOpen?: (p: Project) => void }) {
+export function ContinueWatching({ onOpen, order, profileId }: { onOpen?: (p: Project) => void; order: string[]; profileId: string }) {
   const isMobile = useMedia('(max-width: 900px)');
 
   return (
@@ -99,6 +99,15 @@ export function ContinueWatching({ onOpen }: { onOpen?: (p: Project) => void }) 
         <p className="max-w-sm text-[13px] leading-relaxed text-mist">
           The two most recent platforms on the CV — open either one for the problem, the approach and the outcome.
         </p>
+      </div>
+
+      <div className="mb-8 flex items-center gap-3">
+        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-mist">
+          {profileId === 'design' ? 'Design Lead' : 'Ajay'}
+        </span>
+        <span className="rounded-full bg-crimson/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-crimson-2">
+          {order.includes('continueWatching') ? 'in order' : 'always on'}
+        </span>
       </div>
 
       <div className={isMobile ? 'flex flex-col gap-4' : 'flex items-stretch gap-4'}>
