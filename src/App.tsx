@@ -17,6 +17,7 @@ import Seasons from './components/Seasons';
 import Originals from './components/Originals';
 import TopPicks from './components/TopPicks';
 import Skills from './components/Skills';
+import RequiredSkills from './components/RequiredSkills';
 import Achievements from './components/Achievements';
 import ResumeSection from './components/ResumeViewer';
 import FinalCTA from './components/FinalCTA';
@@ -103,7 +104,10 @@ function Series() {
     journey: <Seasons />,
     originals: <Originals onOpen={openProject} />,
     picks: <TopPicks />,
-    skills: <Skills />,
+    skills: <>
+      <Skills />
+      <RequiredSkills />
+    </>,
     moments: <Achievements onOpen={openProject} />,
     story: <ResumeSection onView={() => setResumeOpen(true)} />,
   };
@@ -144,9 +148,17 @@ function Series() {
               onResume={() => setResumeOpen(true)}
               profileId={profileId}
             />
-            <ContinueWatching />
+            <ContinueWatching onOpen={openProject} />
             {order.map((id) => (
-              <Scene key={id} id={id} className={id === 'originals' ? '!py-0 sm:!py-0' : ''}>
+              // `overflow-x-clip` on the resume scene only: its sheet enters with a
+              // perspective rotateX, and while that is still un-triggered (the section
+              // is off-screen) the projected box is ~30px wider than the viewport,
+              // which lets an iPad-width page pan sideways before you reach it.
+              <Scene
+                key={id}
+                id={id}
+                className={id === 'originals' ? '!py-0 sm:!py-0' : id === 'story' ? 'overflow-x-clip' : ''}
+              >
                 {sections[id]}
               </Scene>
             ))}

@@ -9,6 +9,7 @@ import {
   type LucideIcon,
   Accessibility,
   Activity,
+  BookMarked,
   ArrowRightLeft,
   Atom,
   BarChart3,
@@ -41,6 +42,7 @@ import {
   FolderTree,
   Frame,
   Gauge,
+  Globe,
   Gamepad2,
   GitBranch,
   GitMerge,
@@ -94,6 +96,7 @@ import {
   Telescope,
   Target,
   TrendingUp,
+  Type,
   Triangle,
   Users,
   Video,
@@ -199,6 +202,17 @@ export const skillIcons: Record<string, LucideIcon> = {
   'Animation & Rigging': Film,
   'Interactive Prototyping': MousePointer2,
   'Spatial Interfaces': Glasses,
+
+  /* Brand & Story */
+  'Brand Systems': Palette,
+  'Visual Identity': Brush,
+  'Art Direction': Frame,
+  'Typography & Type Systems': Type,
+  'Narrative & Storytelling': BookOpen,
+  'Marketing Site Design': Globe,
+  'Pitch & Presentation Design': Presentation,
+  'Campaign & Content Design': Megaphone,
+  'Brand Guidelines': BookMarked,
 
   /* Domains */
   'FinTech': IndianRupee,

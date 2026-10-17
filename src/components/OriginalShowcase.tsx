@@ -271,6 +271,66 @@ export function ScreenMock({ kind, accent, title }: { kind: ScreenKind; accent: 
   );
 }
 
+/**
+ * A product mockup: one of the project's own screens inside a device frame.
+ *
+ * Why the frame is drawn rather than photographed: these are enterprise systems
+ * — mortgage underwriting, supplier compliance, broadcast operations — and there
+ * is no photograph of them to license. Dropping generic stock imagery of
+ * unrelated offices and laptops into a case study would imply a product and a
+ * workplace that do not exist, which is exactly the mismatch this case study is
+ * supposed to be free of. So the mockup is the real screen, framed: laptop for
+ * wide surfaces, phone for the mobile ones, in the project's own palette.
+ */
+export function DeviceMock({
+  kind,
+  accent,
+  title,
+  device,
+}: {
+  kind: ScreenKind;
+  accent: string;
+  title: string;
+  device: 'laptop' | 'phone';
+}) {
+  if (device === 'phone') {
+    return (
+      <div className="mx-auto w-full max-w-[280px] rounded-[2rem] bg-[#0d0d12] p-2.5 shadow-[0_30px_60px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/12">
+        <div className="mb-1.5 flex justify-center">
+          <span aria-hidden className="h-1.5 w-16 rounded-full bg-white/15" />
+        </div>
+        <div className="overflow-hidden rounded-[1.4rem] ring-1 ring-white/10">
+          {/* Phones are portrait, so the same art is cropped taller rather than squeezed. */}
+          <div className="relative aspect-[9/19] w-full overflow-hidden">
+            <div className="absolute inset-0 scale-[1.5]">
+              <ScreenMock kind={kind} accent={accent} title={title} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      <div className="rounded-t-xl bg-[#14141a] px-3 pt-3 ring-1 ring-white/10">
+        <div className="mb-2 flex items-center gap-1.5">
+          <span aria-hidden className="h-2 w-2 rounded-full" style={{ background: `${accent}aa` }} />
+          <span aria-hidden className="h-2 w-2 rounded-full bg-white/15" />
+          <span aria-hidden className="h-2 w-2 rounded-full bg-white/15" />
+          <span aria-hidden className="ml-2 h-1.5 flex-1 rounded-full bg-white/[0.07]" />
+        </div>
+        <div className="overflow-hidden rounded-t-md ring-1 ring-white/10">
+          <ScreenMock kind={kind} accent={accent} title={title} />
+        </div>
+      </div>
+      {/* the deck and foot of the laptop, so the screen reads as a device */}
+      <div className="mx-auto h-2 w-[106%] max-w-none rounded-b-xl bg-[#1b1b22] ring-1 ring-white/10" />
+      <div aria-hidden className="mx-auto h-1 w-24 rounded-b-lg bg-white/10" />
+    </div>
+  );
+}
+
 function WireBody({ kind }: { kind: WireKind }) {
   const s = { stroke: 'rgba(255,255,255,0.4)', strokeWidth: 1.6, fill: 'none' } as const;
   const box = (x: number, y: number, w: number, h: number, rx = 4) => <rect x={x} y={y} width={w} height={h} rx={rx} {...s} />;

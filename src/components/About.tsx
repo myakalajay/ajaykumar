@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Briefcase, Compass, Gauge, Globe2, type LucideIcon } from 'lucide-react';
 import { careerArc, experience, industries, platformStreams, profile, projects, strategicValue } from '../data/portfolio';
 import { EASE, SectionHeading, Tilt } from './fx';
 
@@ -9,6 +10,9 @@ const rise = (delay = 0) => ({
   transition: { duration: 0.8, delay, ease: EASE },
 });
 
+/** Each fact carries the icon for what it states, so the row scans as four ideas. */
+const FACT_ICONS: LucideIcon[] = [Briefcase, Gauge, Compass, Globe2];
+
 export default function About() {
   const facts = [
     { k: 'Now', v: experience[0].role, s: `${experience[0].company} · ${experience[0].period}` },
@@ -16,6 +20,7 @@ export default function About() {
     { k: 'Focus', v: 'Enterprise transformation', s: 'Problem framing · product strategy · AIX' },
     { k: 'Based in', v: profile.location, s: `${industries.length} industries · ${industries.slice(0, 3).join(', ')} +` },
   ];
+  const arcLast = careerArc.length - 1;
 
   return (
     <>
@@ -76,18 +81,32 @@ export default function About() {
             </footer>
           </motion.blockquote>
 
-          {/* career arc */}
+          {/* career arc — a progression, so it reads left to right, not top to bottom */}
           <motion.div className="mt-10" {...rise(0.05)}>
-            <h3 className="mb-4 text-[10px] font-bold uppercase tracking-[0.3em] text-smoke">The arc</h3>
-            <ol className="relative border-l border-white/15 pl-6">
+            <h3 className="mb-1 text-[10px] font-bold uppercase tracking-[0.3em] text-smoke">The arc</h3>
+            <p className="mb-4 text-xs text-mist">Where the work has moved — left is where it started, right is now.</p>
+
+            {/* The rail: a hairline that fills as it travels, with a node per stage.
+                Six columns only fit once the panel is wide enough for the longest
+                word ("Transformation" ~ 89px); below that the stages fold onto two
+                or three rows. A `flex-1` row could not: with `min-width: 0` the item
+                shrinks under its own text, and the word then bleeds ~3px past the
+                viewport, which lets phones pan sideways. */}
+            <ol className="grid list-none grid-cols-2 gap-x-1.5 gap-y-5 p-0 sm:grid-cols-3 lg:grid-cols-6">
               {careerArc.map((stage, i) => (
-                <li key={stage} className="relative pb-4 last:pb-0">
+                <li key={stage} className="min-w-0">
+                  <span aria-hidden className="relative mb-2.5 block h-[3px] w-full overflow-hidden rounded-full bg-white/10">
+                    <span
+                      className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-crimson to-crimson-2"
+                      style={{ width: `${Math.round(((i + 1) / careerArc.length) * 100)}%` }}
+                    />
+                  </span>
                   <span
                     aria-hidden
-                    className="absolute -left-[calc(1.5rem+5px)] top-[7px] h-2.5 w-2.5 rounded-full bg-crimson-2 ring-4 ring-ink"
-                    style={{ opacity: 0.45 + (i / (careerArc.length - 1)) * 0.55 }}
+                    className="mb-1.5 block h-2 w-2 rounded-full"
+                    style={{ background: i === arcLast ? '#ff3d5a' : `rgba(255,61,90,${(0.28 + (i / arcLast) * 0.5).toFixed(2)})` }}
                   />
-                  <p className="text-sm font-semibold text-bone">{stage}</p>
+                  <p className={`text-[12px] font-semibold leading-snug ${i === arcLast ? 'text-bone' : 'text-bone/75'}`}>{stage}</p>
                 </li>
               ))}
             </ol>
@@ -104,11 +123,19 @@ export default function About() {
             {facts.map((f) => (
               <motion.div
                 key={f.k}
-                className="bg-ink-2 p-5"
+                className="group/fact relative bg-ink-2 p-5 transition-colors duration-500 hover:bg-ink-3"
                 variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } } }}
               >
-                <dt className="text-[10px] font-bold uppercase tracking-[0.28em] text-smoke">{f.k}</dt>
-                <dd className="mt-2 text-base font-semibold text-bone">{f.v}</dd>
+                <div className="flex items-center gap-2">
+                  <span aria-hidden className="flex h-6 w-6 items-center justify-center rounded-md bg-crimson/10 ring-1 ring-white/10">
+                    {(() => {
+                      const Icon = FACT_ICONS[facts.indexOf(f)] ?? Briefcase;
+                      return <Icon size={13} strokeWidth={1.7} className="text-crimson-2" />;
+                    })()}
+                  </span>
+                  <dt className="text-[10px] font-bold uppercase tracking-[0.28em] text-smoke">{f.k}</dt>
+                </div>
+                <dd className="mt-2.5 text-base font-semibold leading-snug text-bone">{f.v}</dd>
                 <dd className="mt-0.5 text-xs text-mist">{f.s}</dd>
               </motion.div>
             ))}
@@ -129,6 +156,7 @@ export default function About() {
                   transition={{ duration: 0.6, delay: Math.min(i, 4) * 0.06, ease: EASE }}
                 >
                   <div aria-hidden className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-crimson/25 opacity-0 blur-2xl transition duration-500 group-hover:opacity-100" />
+                  <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-crimson/60 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
                   <p className="relative text-[10px] font-bold tracking-[0.28em] text-crimson-2">{String(i + 1).padStart(2, '0')}</p>
                   <h4 className="relative mt-2 font-display text-2xl leading-tight tracking-wide text-bone">{v.title}</h4>
                   <p className="relative mt-2 text-[13px] leading-relaxed text-mist">{v.detail}</p>
@@ -144,8 +172,11 @@ export default function About() {
               >
                 <p className="text-[10px] font-bold tracking-[0.28em] text-smoke">Platform streams</p>
                 <p className="mt-2 flex flex-wrap gap-x-2 gap-y-1.5 text-[13px] text-mist">
+                  {/* No `nowrap` here: the longest stream ("Customer data & audience
+                      intelligence platforms") is wider than a 320px phone's column, and
+                      an unbreakable run of text bleeds past the viewport. */}
                   {platformStreams.map((p, i) => (
-                    <span key={p} className="whitespace-nowrap">
+                    <span key={p}>
                       {p}
                       {i < platformStreams.length - 1 && <span aria-hidden className="ml-2 text-smoke">·</span>}
                     </span>

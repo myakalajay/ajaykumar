@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { profile, viewerProfiles, type ProfileId } from '../data/portfolio';
 import { EASE } from './fx';
 
+
 export function ProfileAvatar({ id, size = 'lg' }: { id: ProfileId; size?: 'sm' | 'lg' }) {
   const p = viewerProfiles.find((v) => v.id === id)!;
   const box = size === 'lg' ? 'h-24 w-24 sm:h-32 sm:w-32 md:h-36 md:w-36 rounded-2xl' : 'h-8 w-8 rounded-md';
@@ -99,6 +100,7 @@ export default function ProfileSelector({ onPick }: { onPick: (id: ProfileId) =>
       <p className="relative mt-12 max-w-md text-center text-xs leading-relaxed text-smoke">
         Every profile watches the same true story of {profile.displayName} — it only changes what plays first.
       </p>
+
     </motion.div>
   );
 }

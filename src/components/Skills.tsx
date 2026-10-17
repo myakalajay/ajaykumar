@@ -37,16 +37,26 @@ export default function Skills() {
 
           return (
             <section key={cat.id} id={`category-${cat.id}`} aria-labelledby={`h-${cat.id}`} className="min-w-0">
-              <h3 id={`h-${cat.id}`} className="flex items-center gap-2 border-b border-white/10 pb-2 text-[15px] font-semibold text-bone">
-                {Icon ? (
-                  <Icon size={15} strokeWidth={1.6} className="shrink-0 text-crimson-2" aria-hidden />
-                ) : (
-                  <span aria-hidden className="font-display text-[13px] tracking-wide text-crimson-2">
-                    {cat.id.slice(0, 2).toUpperCase()}
-                  </span>
-                )}
-                {cat.title}
-                <span className="ml-auto text-[11px] font-normal tabular-nums tracking-wider text-smoke">{cat.skills.length}</span>
+              {/* The heading uses the same parts as every other card on the site — a
+                  rounded badge holding the discipline's icon, the display face for the
+                  name, a tabular count — so this reference sheet reads as part of the
+                  series rather than as a stand-alone list. */}
+              <h3 id={`h-${cat.id}`} className="flex items-center gap-2.5 border-b border-white/10 pb-2.5">
+                <span
+                  aria-hidden
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-crimson/10 ring-1 ring-white/10"
+                >
+                  {Icon ? (
+                    <Icon size={15} strokeWidth={1.6} className="text-crimson-2" aria-hidden />
+                  ) : (
+                    <span className="font-display text-[12px] font-bold tracking-wide text-crimson-2">
+                      {cat.id.slice(0, 2).toUpperCase()}
+                    </span>
+                  )}
+                </span>
+                <span className="font-display text-xl leading-none tracking-wide text-bone">{cat.title}</span>
+                <span className="ml-1 hidden text-[11px] leading-none text-mist sm:block">{cat.subtitle}</span>
+                <span className="ml-auto text-[10px] font-bold tabular-nums tracking-[0.2em] text-smoke">{cat.skills.length}</span>
               </h3>
               <p className="mt-2.5 text-[13px] leading-relaxed text-mist">
                 {cat.skills.map((skill, i) => (

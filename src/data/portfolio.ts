@@ -216,8 +216,8 @@ export type Project = {
  */
 export const projects: Project[] = [
   {
-    id: 'homeloc-lending',
-    title: 'HomeLoc Lending',
+    id: 'homeratesyard',
+    title: 'Homeratesyard',
     year: '2024 – 2026',
     genre: 'Mortgage • Lending • Enterprise SaaS',
     logline: 'Product strategy and end-to-end design for US mortgage and lending platforms, from origination through servicing.',
@@ -237,7 +237,7 @@ export const projects: Project[] = [
     ],
     palette: { from: '#2a0610', via: '#7a0f24', to: '#0b0710', accent: '#ff3d5a' },
     motif: 'lending',
-    client: 'HomeLoc Solutions LLP · US mortgage & lending market',
+    client: 'Homeratesyard · HomeLoc Solutions LLP · US mortgage & lending market',
     role: 'Lead Product Design Consultant — product strategy and end-to-end design',
     problem:
       'Borrower and operational problems were spread across origination, underwriting, onboarding, servicing and lending operations, with no shared journey or design language tying them together.',
@@ -522,7 +522,7 @@ export const achievements: Achievement[] = [
     org: 'HomeLoc Solutions',
     detail: 'An implemented underwriting workflow improvement, found by mapping end-to-end customer and operational journeys, reduced decision time by 37%.',
     laurel: 'Measured Impact',
-    projectId: 'homeloc-lending',
+    projectId: 'homeratesyard',
   },
   {
     id: 'tenure',
@@ -743,6 +743,24 @@ export const skillCategories: SkillCategory[] = [
     ],
   },
   {
+    // Branding sits with the craft: the CV names branding and marketing websites
+    // in the Nitya role, and art direction has been part of every platform since.
+    id: 'brand',
+    title: 'Brand & Story',
+    subtitle: 'Identity, art direction & narrative',
+    skills: [
+      { name: 'Brand Systems', mono: 'BS', note: 'Core' },
+      { name: 'Visual Identity', mono: 'VI' },
+      { name: 'Art Direction', mono: 'AD' },
+      { name: 'Typography & Type Systems', mono: 'TY' },
+      { name: 'Narrative & Storytelling', mono: 'NS' },
+      { name: 'Marketing Site Design', mono: 'MS' },
+      { name: 'Pitch & Presentation Design', mono: 'PD' },
+      { name: 'Campaign & Content Design', mono: 'CD' },
+      { name: 'Brand Guidelines', mono: 'BG' },
+    ],
+  },
+  {
     id: 'domains',
     title: 'Domains',
     subtitle: 'Industry coverage',
@@ -768,7 +786,7 @@ export const skillCategories: SkillCategory[] = [
  */
 export const skillEvidence: Record<string, string[]> = {
   'Business Problem Framing': ['HomeLoc · borrower & operational problems', 'Computech · stakeholder discovery'],
-  'Product Strategy': ['HomeLoc Lending', 'CashTrax & DiversityTrax'],
+  'Product Strategy': ['Homeratesyard', 'CashTrax & DiversityTrax'],
   'Product Discovery': ['Discovery workshops · HomeLoc, Computech'],
   'Solution Strategy': ['Origination → servicing solution direction'],
   'Service Design': ['ePragathi citizen-service ecosystems'],
@@ -795,7 +813,7 @@ export const skillEvidence: Record<string, string[]> = {
   'Cross-Functional Leadership': ['Product, Engineering, business stakeholders'],
   'Product & Engineering Partnership': ['ATSC 3.0 initiatives · Gaian Solution'],
   'Executive Communication': ['CEO partnership · Computech'],
-  'Enterprise UX': ['CashTrax & DiversityTrax', 'HomeLoc Lending'],
+  'Enterprise UX': ['CashTrax & DiversityTrax', 'Homeratesyard'],
   'UX Architecture': ['Role-based IA for enterprise users'],
   'Information Architecture': ['Computech · ePragathi'],
   'User Research': ['Stakeholder discovery & usability work'],
@@ -818,7 +836,7 @@ export const skillEvidence: Record<string, string[]> = {
   'Conversion Optimisation': ['Retention, engagement & adoption'],
   Monetisation: ['Media monetisation · Gaian Solution', 'AdTech platforms'],
   FinTech: ['Enterprise SaaS · CV summary'],
-  'Mortgage Technology': ['HomeLoc Lending · US mortgage'],
+  'Mortgage Technology': ['Homeratesyard · US mortgage'],
   Procurement: ['CashTrax & DiversityTrax'],
   GovTech: ['ePragathi & citizen services'],
   Media: ['Gaian Solution · broadcasting'],
@@ -1110,7 +1128,7 @@ export const introSlides: IntroSlide[] = [
   {
     kicker: 'Platforms',
     title: 'Six originals.',
-    lines: ['HomeLoc Lending · CashTrax · ePragathi', 'Broadcast & Monetisation · Audience Intelligence · JobsNProfiles'],
+    lines: ['Homeratesyard · CashTrax · ePragathi', 'Broadcast & Monetisation · Audience Intelligence · JobsNProfiles'],
   },
   {
     kicker: 'Domains',

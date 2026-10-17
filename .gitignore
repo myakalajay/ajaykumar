@@ -17,3 +17,6 @@ dist-worker/
 .admin-password-hash.txt
 .session-secret.txt
 *.dev.vars
+
+# Local visual-audit gallery (scripts/audit-visual.mjs writes here)
+reports/

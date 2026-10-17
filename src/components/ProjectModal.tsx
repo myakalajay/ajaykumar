@@ -1,23 +1,109 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import {
+  Accessibility,
+  BarChart3,
+  Boxes,
+  Gauge,
+  Globe,
+  Layers,
+  Smartphone,
+  Target,
+  TrendingUp,
+  Users,
+  type LucideIcon,
+} from 'lucide-react';
 import { profile, projects, type Project } from '../data/portfolio';
 import { useScrollLock } from '../hooks/smoothScroll';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { EASE, Magnetic } from './fx';
 import { ProjectArt } from './Poster';
-import { ScreenMock, WireframeMock, ShowcaseItem } from './OriginalShowcase';
-import { originalDetails } from '../data/originalsExtras';
+import { DeviceMock, ScreenMock, WireframeMock, ShowcaseItem } from './OriginalShowcase';
+import { BoardGallery, BoardLightbox } from './Boards';
+import { originalDetails, type Board } from '../data/originalsExtras';
 
 const block = {
   hidden: { opacity: 0, y: 24, filter: 'blur(8px)' },
   show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: EASE } },
 };
 
+/**
+ * An icon per metric, chosen from what the label is actually measuring.
+ *
+ * The metrics are `{ value, label }` pairs, so the icon is resolved from the
+ * label rather than stored per row: a tile reading "37% faster" gets a gauge, one
+ * reading "AWS · Azure" gets a stack. Anything unrecognised falls back to a
+ * target, so a new metric never renders blank.
+ */
+function metricIcon(label: string): LucideIcon {
+  const l = label.toLowerCase();
+  if (/accessib|wcag|privacy|ethics/.test(l)) return Accessibility;
+  if (/audience|user|role|team|stakeholder|c-suite|pod|reader|borrower|operator/.test(l)) return Users;
+  if (/year|tenure|faster|time|decision|month|week/.test(l)) return Gauge;
+  if (/%|lift|growth|optimis|conversion|reduc/.test(l)) return TrendingUp;
+  if (/stage|phase|step|layer|workstream|journey|lifecycle/.test(l)) return Layers;
+  if (/dashboard|data|analytic|report|insight|behaviour/.test(l)) return BarChart3;
+  if (/mobile|responsive|discovery/.test(l)) return Smartphone;
+  if (/domain|industry|market|sector|govtech|procurement/.test(l)) return Globe;
+  if (/platform|brand|suite|marketplace|tool|stack|technology|saas|app/.test(l)) return Boxes;
+  return Target;
+}
+
+/**
+ * The problem, as an infographic.
+ *
+ * The left half is the problem's shape: separate boxes with gaps between them,
+ * one per concern the approach went on to address. The right half is the answer:
+ * a single continuous bar. The counts under each side are real — the number of
+ * concerns comes from the length of the approach list, so the diagram can never
+ * drift from the case study it illustrates.
+ */
+function ProblemDiagram({ project }: { project: Project }) {
+  const concerns = project.approach.length;
+  const accent = project.palette.accent;
+
+  return (
+    <div className="mt-6 grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center sm:gap-4" aria-hidden>
+      <div>
+        <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.22em] text-smoke">Before · disconnected</p>
+        <div className="flex h-3 items-stretch gap-1.5">
+          {Array.from({ length: concerns }, (_, i) => (
+            <span
+              key={i}
+              className="flex-1 rounded-[3px]"
+              style={{ background: `linear-gradient(180deg, ${accent}55, ${accent}22)`, transform: `translateY(${i % 2 ? 1.5 : -1.5}px)` }}
+            />
+          ))}
+        </div>
+        <p className="mt-2 text-[11px] text-mist">{concerns} separate concerns, no shared spine</p>
+      </div>
+
+      <div className="hidden items-center justify-center sm:flex">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-white/15" style={{ background: `${accent}1a` }}>
+          <span className="text-sm" style={{ color: accent }}>→</span>
+        </span>
+      </div>
+
+      <div>
+        <p className="mb-2.5 text-[10px] font-bold uppercase tracking-[0.22em] text-smoke">After · one approach</p>
+        <div className="h-3 overflow-hidden rounded-[3px]" style={{ background: `linear-gradient(90deg, ${accent}, ${accent}66)` }} />
+        <p className="mt-2 text-[11px] text-mist">a single spine: {project.approach.length} steps, one direction</p>
+      </div>
+    </div>
+  );
+}
+
 export default function ProjectModal({ project, onClose, onSwitch }: { project: Project; onClose: () => void; onSwitch: (p: Project) => void }) {
   useScrollLock(true);
   const panel = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
+  /**
+   * The board open full-screen, if any. One piece of state for both galleries:
+   * a viewer holds its own list so previous/next work identically for the screens
+   * and for the hand-drawn flows.
+   */
+  const [viewer, setViewer] = useState<{ boards: Board[]; index: number; kicker: string } | null>(null);
   useFocusTrap(panel);
 
   useEffect(() => {
@@ -33,6 +119,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
 
   useEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
+    setViewer(null);
   }, [project.id]);
 
   const more = projects.filter((p) => p.id !== project.id);
@@ -97,17 +184,6 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               {project.logline}
             </motion.p>
 
-            {/* Every image on this page is labelled: what it is, and what it shows. */}
-            <motion.figure variants={block} className="mt-6 rounded-xl border border-white/10 bg-ink-3 p-4">
-              <figcaption className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">
-                Key art · vector illustration
-              </figcaption>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-bone/80">
-                {detail?.keyArt ??
-                  `The poster above is drawn from ${project.title}’s own palette and subject matter rather than a stock photograph.`}
-              </p>
-            </motion.figure>
-
             {/* at a glance — who it was for and what part of it was mine */}
             <motion.dl
               variants={block}
@@ -143,27 +219,71 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               {/* lg:grid-cols-4, not 5 — every project carries exactly 4 metrics, so a 5th
                   column left a dead empty cell at desktop. 2 → 4 keeps each row full. */}
               <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10 sm:grid-cols-4">
-                {project.metrics.map((m, i) => (
-                  <motion.div
-                    key={m.label}
-                    className="bg-ink p-4 sm:p-5"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5 + i * 0.07, duration: 0.5, ease: EASE }}
-                  >
-                    <p className="font-display text-4xl leading-none text-bone sm:text-5xl" style={{ color: i === 0 ? project.palette.accent : undefined }}>
-                      {m.value}
-                    </p>
-                    <p className="mt-2 text-xs leading-snug text-mist">{m.label}</p>
-                  </motion.div>
-                ))}
+                {project.metrics.map((m, i) => {
+                  const Icon = metricIcon(m.label);
+                  return (
+                    <motion.div
+                      key={m.label}
+                      className="group/tile relative bg-ink p-4 sm:p-5"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5 + i * 0.07, duration: 0.5, ease: EASE }}
+                    >
+                      <span
+                        className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg"
+                        style={{ background: `${project.palette.accent}1f`, boxShadow: `inset 0 0 0 1px ${project.palette.accent}40` }}
+                      >
+                        <Icon size={16} strokeWidth={1.7} style={{ color: project.palette.accent }} aria-hidden />
+                      </span>
+                      <p className="font-display text-3xl leading-none text-bone sm:text-4xl">{m.value}</p>
+                      <p className="mt-2 text-xs leading-snug text-mist">{m.label}</p>
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.section>
+
+            {/* visual design — the shipped screens, before any of the writing, because
+                the work is the argument. Only Originals that supplied real screens
+                have this section; the rest keep the drawn reconstructions below. */}
+            {detail?.visualDesign && detail.visualDesign.length > 0 && (
+              <motion.section variants={block} className="mt-14">
+                <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Visual Design</h3>
+                <p className="mb-6 max-w-3xl text-xs leading-relaxed text-smoke">
+                  The {detail.visualDesign.length} screens that carry the journey, from first sign-in to disbursement
+                  confirmation. Shown as designed — open any screen full screen to read it. Applicant names, amounts
+                  and reference numbers on the screens are sample data.
+                </p>
+                <BoardGallery
+                  boards={detail.visualDesign}
+                  columns={1}
+                  onOpen={(i) => setViewer({ boards: detail.visualDesign!, index: i, kicker: 'Screen' })}
+                />
+              </motion.section>
+            )}
 
             {/* the case study — problem, approach, outcome */}
             <motion.section variants={block} className="mt-12">
               <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">The Problem</h3>
-              <p className="max-w-3xl text-[15px] leading-relaxed text-bone/80 sm:text-base">{project.problem}</p>
+              <div
+                className="relative overflow-hidden rounded-2xl p-6 sm:p-8"
+                style={{
+                  background: `linear-gradient(150deg, ${project.palette.from}, ${project.palette.to} 70%)`,
+                  boxShadow: `inset 0 0 0 1px ${project.palette.accent}33`,
+                }}
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -left-6 -top-8 font-serif text-[9rem] leading-none opacity-[0.14]"
+                  style={{ color: project.palette.accent }}
+                >
+                  “
+                </span>
+                <p className="relative max-w-3xl font-serif text-[clamp(1.15rem,2.1vw,1.55rem)] italic leading-[1.4] text-bone">
+                  {project.problem}
+                </p>
+                <ProblemDiagram project={project} />
+              </div>
             </motion.section>
 
             <div className="mt-12 grid gap-10 lg:grid-cols-[3fr_2fr]">
@@ -215,16 +335,52 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </div>
             </div>
 
+            {/* product mockups — drawn screens inside device frames, for the Originals
+                that have no real screens to show */}
+            {detail?.screens && detail.screens.length > 0 && (
+              <motion.section variants={block} className="mt-14">
+                <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Product Mockups</h3>
+                <p className="mb-6 text-xs text-smoke">
+                  Drawn reconstructions, framed as the devices they ran on — stylised renderings of the interface
+                  families this case study describes, not photographs of a shipping product.
+                </p>
+                <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,240px)]">
+                  <DeviceMock kind={detail.screens[0].kind} accent={project.palette.accent} title={detail.screens[0].title} device="laptop" />
+                  {detail.screens[1] && (
+                    <DeviceMock
+                      kind={detail.screens[1].kind}
+                      accent={project.palette.accent}
+                      title={detail.screens[1].title}
+                      device="phone"
+                    />
+                  )}
+                </div>
+                <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,240px)]">
+                  <figcaption className="text-[13px] leading-snug text-mist">
+                    <span className="font-semibold text-bone">{detail.screens[0].title}</span> — {detail.screens[0].caption}
+                  </figcaption>
+                  {detail.screens[1] && (
+                    <figcaption className="text-[13px] leading-snug text-mist">
+                      <span className="font-semibold text-bone">{detail.screens[1].title}</span> — {detail.screens[1].caption}
+                    </figcaption>
+                  )}
+                </div>
+              </motion.section>
+            )}
+
             {/* product screens — vector reconstructions of the interface families */}
-            {detail && detail.screens.length > 0 && (
+            {detail?.screens && detail.screens.length > 0 && (
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Product Screens</h3>
                 <p className="mb-5 text-xs text-smoke">
                   Vector reconstructions — stylised drawings of the interface families this work described, rendered in the platform&apos;s own palette, not screenshots of shipping products.
                 </p>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {/* Full width, one per row: these are the surfaces the case study is
+                    about, so they get the width to be read rather than three-up
+                    thumbnails. */}
+                <div className="grid gap-8">
                   {detail.screens.map((s, i) => (
-                    <ShowcaseItem key={s.title} index={i} label={<>{s.title} — {s.caption}</>}>
+                    <ShowcaseItem key={s.title} index={i} label={<><span className="font-semibold text-bone">{s.title}</span> — {s.caption}</>}>
                       <ScreenMock kind={s.kind} accent={project.palette.accent} title={s.title} />
                     </ShowcaseItem>
                   ))}
@@ -233,17 +389,36 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
             )}
 
             {/* wireframes — the lo-fi artifacts behind the screens */}
-            {detail && detail.wireframes.length > 0 && (
+            {detail?.wireframes && detail.wireframes.length > 0 && (
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Wireframes & Flows</h3>
                 <p className="mb-5 text-xs text-smoke">The lo-fi work behind the UI — flows, architecture and layout studies, redrawn as diagrams.</p>
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {/* Two-up, not four-up: a flow diagram at a quarter of the width was
+                    unreadable, and these are the artifacts that explain the thinking. */}
+                <div className="grid gap-6 sm:grid-cols-2">
                   {detail.wireframes.map((w, i) => (
-                    <ShowcaseItem key={w.title} index={i} label={<>{w.title} — {w.caption}</>}>
+                    <ShowcaseItem key={w.title} index={i} label={<><span className="font-semibold text-bone">{w.title}</span> — {w.caption}</>}>
                       <WireframeMock kind={w.kind} title={w.title} />
                     </ShowcaseItem>
                   ))}
                 </div>
+              </motion.section>
+            )}
+
+            {/* the flow boards — the hand-drawn artifacts, photographed */}
+            {detail?.flows && detail.flows.length > 0 && (
+              <motion.section variants={block} className="mt-14">
+                <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">User Flows · Hand-Drawn</h3>
+                <p className="mb-6 max-w-3xl text-xs leading-relaxed text-smoke">
+                  {detail.flows.length} boards from the journey mapping — the loan application drawn end to end, then
+                  again from the borrower&apos;s side, at screen-by-screen depth, with the clarification and rejection
+                  rails pulled out. Photographed as drawn; open any board full screen to read the writing on it. The
+                  figures on the boards are the illustrative ones pencilled in during the exercise, not borrower data.
+                </p>
+                <BoardGallery
+                  boards={detail.flows}
+                  onOpen={(i) => setViewer({ boards: detail.flows!, index: i, kicker: 'Hand-drawn flow' })}
+                />
               </motion.section>
             )}
 
@@ -281,6 +456,18 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               <p className="max-w-3xl text-[15px] leading-relaxed text-bone sm:text-base">{project.outcome}</p>
             </motion.section>
 
+            {/* Every image on this page is labelled: what it is, and what it shows.
+                The disclosure sits last, once the work has been seen. */}
+            <motion.figure variants={block} className="mt-12 rounded-xl border border-white/10 bg-ink-3 p-4">
+              <figcaption className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">
+                Key art · vector illustration
+              </figcaption>
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-bone/80">
+                {detail?.keyArt ??
+                  `The poster at the top of this page is drawn from ${project.title}’s own palette and subject matter rather than a stock photograph.`}
+              </p>
+            </motion.figure>
+
             {/* more like this */}
             <motion.section variants={block} className="mt-14 border-t border-white/10 pt-8">
               <h3 className="mb-4 font-sans text-lg font-semibold text-bone">More Originals</h3>
@@ -307,6 +494,18 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
           </motion.div>
         </motion.div>
       </div>
+
+      {/* The board viewer sits on the dialog itself rather than inside the scroller,
+          so it is fixed to the viewport however far down the case study has scrolled. */}
+      {viewer && (
+        <BoardLightbox
+          boards={viewer.boards}
+          index={viewer.index}
+          kicker={viewer.kicker}
+          onClose={() => setViewer(null)}
+          onNav={(index) => setViewer({ ...viewer, index })}
+        />
+      )}
     </motion.div>
   );
 }

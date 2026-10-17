@@ -36,7 +36,7 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
   originals: {
     title: `Originals · ${BASE_TITLE}`,
     description:
-      'HomeLoc Lending, CashTrax & DiversityTrax, ePragathi, broadcast monetisation, audience intelligence, JobsNProfiles and more — the platforms, told as case studies.',
+      'Homeratesyard, CashTrax & DiversityTrax, ePragathi, broadcast monetisation, audience intelligence, JobsNProfiles and more — the platforms, told as case studies.',
   },
   picks: {
     title: `Top Picks · ${BASE_TITLE}`,
