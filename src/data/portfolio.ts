@@ -265,6 +265,10 @@ export type Project = {
   client: string;
   role: string;
   problem: string;
+  /** What I personally owned on this work, as distinct from what the team shipped. */
+  contribution: string;
+  /** Why the work mattered — the change it was meant to make, in the client's terms. */
+  purpose: string;
   approach: string[];
   outcome: string;
 };
@@ -298,6 +302,10 @@ export const projects: Project[] = [
     motif: 'lending',
     client: 'Homeratesyard · HomeLoc Solutions LLP · US mortgage & lending market',
     role: 'Lead Product Design Consultant — product strategy and end-to-end design',
+    contribution:
+      'Owned product strategy and end-to-end design: framed the business, user and operational constraints into product opportunities, mapped the borrower and operational journeys across origination, underwriting, onboarding and servicing, facilitated discovery and design-review sessions, and set the reusable design standards and interaction patterns.',
+    purpose:
+      'To replace lending processes that each ran on their own tooling with one shared journey and design language, so a decision stops waiting on handoffs — the work that took 37% off underwriting decision time.',
     problem:
       'Borrower and operational problems were spread across origination, underwriting, onboarding, servicing and lending operations, with no shared journey or design language tying them together.',
     approach: [
@@ -333,6 +341,10 @@ export const projects: Project[] = [
     motif: 'supplier',
     client: 'Computech Corporation · enterprise procurement',
     role: 'Sr UX Designer — UX strategy and product design across two platforms',
+    contribution:
+      'Designed across both platforms: stakeholder discovery with the CEO, product managers and engineering, service and supplier-onboarding flows, the role-based information architecture, and the operational dashboards that made spend and reconciliation legible to non-analyst users.',
+    purpose:
+      'To give procurement, supplier-diversity and finance teams one role-based structure over the same supplier data, so compliance, spend visibility and reconciliation stop being separate tools.',
     problem:
       'Procurement, supplier diversity, compliance, spend visibility and reconciliation lived in separate enterprise tools, each with its own roles, rules and reporting.',
     approach: [
@@ -368,6 +380,10 @@ export const projects: Project[] = [
     motif: 'civic',
     client: 'Visual IT Solution · Government & public sector (ePragathi)',
     role: 'Sr UX Designer — citizen and administrative workflow design',
+    contribution:
+      'Mapped the service processes before drawing screens, then designed the citizen-facing and administrative workflows, wireframes, prototypes and production-ready interfaces, with accessibility treated as a design requirement rather than a final check.',
+    purpose:
+      'To make public services usable by citizens with very different access needs, while keeping the front office and the back office on one consistent design language.',
     problem:
       'Public-service processes were complex and written for the institution, not the citizen, and had to serve audiences with very different access needs.',
     approach: [
@@ -403,6 +419,10 @@ export const projects: Project[] = [
     motif: 'broadcast',
     client: 'Gaian Solution · enterprise broadcasting & media',
     role: 'Sr UX Designer — broadcast operations, advertising and reporting',
+    contribution:
+      'Designed the content-management workflows, advertising and monetisation screens and operational reporting dashboards, and set the interaction models that carried across the media estate, alongside the ATSC 3.0 initiative work.',
+    purpose:
+      'To give broadcast operations one coherent layer across content, advertising and reporting, and a shared interaction model ready for the ATSC 3.0 shift.',
     problem:
       'Broadcast and monetisation operations ran across content management, advertising workflows and reporting, each with its own tooling and no shared interaction model.',
     approach: [
@@ -438,6 +458,10 @@ export const projects: Project[] = [
     motif: 'audience',
     client: 'Way2News Interactive · five consumer & enterprise brands',
     role: 'Sr UI/UX Designer — consumer media and enterprise audience platforms',
+    contribution:
+      'Designed the mobile-first consumer experiences and the enterprise segmentation, campaign-management and monetisation tooling built on the same audience data, using behaviour analytics and reporting to steer the next iteration.',
+    purpose:
+      'To grow daily engagement on the reader side while making that same audience legible and sellable to advertisers and brands — one audience base, two surfaces.',
     problem:
       'Five brands needed both mobile-first content discovery for readers and enterprise tooling for segmentation, campaigns and monetisation — two very different surfaces from one audience base.',
     approach: [
@@ -473,6 +497,10 @@ export const projects: Project[] = [
     motif: 'recruit',
     client: 'Nitya Software India · recruitment & communication products',
     role: 'UI/UX Designer — concept through front-end implementation',
+    contribution:
+      'Took JobsNProfiles and VioTalk from wireframes and information architecture through responsive interface design to front-end implementation, plus the branding and marketing sites around them.',
+    purpose:
+      'To ship recruitment and communication products end to end on a small stack, where a design decision had to survive straight through into the build.',
     problem:
       'Recruitment and communication products needed to be designed and shipped end to end, on a stack where design and front-end were the same pair of hands.',
     approach: [
@@ -510,6 +538,10 @@ export const projects: Project[] = [
     motif: 'engineering',
     client: 'PennEngineering (PEM®) · precision fastening & manufacturing',
     role: 'Product Strategy & Design — enterprise engineering portal & AI lifecycle tooling',
+    contribution:
+      'Set the product structure — secure first-run provisioning, the Engineering Command Center, the Product Lifecycle Engine and the AI Copilot — and the role-aware design system, trust signals and guided tour around it.',
+    purpose:
+      'To give engineering teams one trusted workspace from CAD assembly to manufacturing validation, instead of four tools and a handoff in between.',
     problem:
       'Manufacturing and engineering teams had no single secure workspace that tied enterprise identity, CAD assemblies, AI component analysis and manufacturing validation together — each step lived in a different tool with no shared lifecycle or design language.',
     approach: [
@@ -548,6 +580,10 @@ export const projects: Project[] = [
     motif: 'vision',
     client: 'KenVision (by Intelense) · AI video intelligence for retail & smart spaces',
     role: 'Product Strategy & Design — real-time video intelligence & retail analytics UX',
+    contribution:
+      'Designed the Store Health Score, the layered Store Intelligence Map, the AI Recommended Actions and the executive reporting, working within privacy-first constraints that reuse the cameras stores already have.',
+    purpose:
+      'To turn footage retail teams already own into decisions they can act on — queue congestion, staff coverage and revenue risk — without buying new hardware.',
     problem:
       'Retail and operations teams had cameras everywhere but no operational picture — footfall, dwell time, queue congestion, conversion and staffing decisions were made on intuition because the video data was never turned into insight.',
     approach: [

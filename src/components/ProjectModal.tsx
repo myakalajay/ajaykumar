@@ -262,9 +262,10 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </motion.section>
             )}
 
-            {/* the case study — problem, approach, outcome */}
+            {/* the brief — the same three questions in every case study: what was wrong,
+                what I personally did about it, and why it mattered */}
             <motion.section variants={block} className="mt-12">
-              <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">The Problem</h3>
+              <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Problem / Contribution / Purpose</h3>
               <div
                 className="relative overflow-hidden rounded-2xl p-6 sm:p-8"
                 style={{
@@ -283,6 +284,17 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
                   {project.problem}
                 </p>
                 <ProblemDiagram project={project} />
+              </div>
+
+              <div className="mt-4 grid gap-px overflow-hidden rounded-xl bg-white/10 sm:grid-cols-2">
+                <div className="bg-ink-3 p-5 sm:p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">My Contribution</p>
+                  <p className="mt-2.5 text-[15px] leading-relaxed text-bone/85">{project.contribution}</p>
+                </div>
+                <div className="bg-ink-3 p-5 sm:p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-smoke">Purpose</p>
+                  <p className="mt-2.5 text-[15px] leading-relaxed text-bone/85">{project.purpose}</p>
+                </div>
               </div>
             </motion.section>
 
