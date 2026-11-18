@@ -1,6 +1,15 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Compass, Gauge, Globe2, type LucideIcon } from 'lucide-react';
-import { careerArc, experience, industries, platformStreams, profile, projects, strategicValue } from '../data/portfolio';
+import {
+  careerArc,
+  experience,
+  industries,
+  leadershipCapabilities,
+  platformStreams,
+  profile,
+  projects,
+  strategicValue,
+} from '../data/portfolio';
 import { EASE, SectionHeading, Tilt } from './fx';
 
 const rise = (delay = 0) => ({
@@ -16,9 +25,9 @@ const FACT_ICONS: LucideIcon[] = [Briefcase, Gauge, Compass, Globe2];
 export default function About() {
   const facts = [
     { k: 'Now', v: experience[0].role, s: `${experience[0].company} · ${experience[0].period}` },
+    { k: 'Team', v: '5 designers', s: 'Ownership · mentoring · design reviews' },
     { k: 'Track record', v: profile.tenure, s: `${experience.length} roles · ${projects.length} platforms` },
-    { k: 'Focus', v: 'Enterprise transformation', s: 'Problem framing · product strategy · AIX' },
-    { k: 'Based in', v: profile.location, s: `${industries.length} industries · ${industries.slice(0, 3).join(', ')} +` },
+    { k: 'Based in', v: 'Hyderabad, India', s: `${industries.length} industries · open to relocation` },
   ];
   const arcLast = careerArc.length - 1;
 
@@ -74,10 +83,10 @@ export default function About() {
           <motion.blockquote className="border-l-2 border-crimson/60 pl-5" {...rise()}>
             <p className="font-serif text-[clamp(1.4rem,2.4vw,2.05rem)] italic leading-[1.25] text-bone">
               “Career progression from UX/UI craft into product discovery, business problem framing, workflow transformation, solution
-              strategy and cross-functional influence.”
+              strategy and design leadership.”
             </p>
             <footer className="mt-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-smoke">
-              Executive summary · {profile.fullName}
+              Lead product designer · {profile.fullName}
             </footer>
           </motion.blockquote>
 
@@ -143,8 +152,8 @@ export default function About() {
 
           {/* what I actually do — the CV's five statements, verbatim */}
           <motion.div className="mt-12" {...rise(0.05)}>
-            <h3 className="mb-1 font-sans text-lg font-semibold text-bone sm:text-2xl">What I do</h3>
-            <p className="mb-5 text-xs text-smoke">The CV's five value statements, word for word.</p>
+            <h3 className="mb-1 font-sans text-lg font-semibold text-bone sm:text-2xl">How I lead</h3>
+            <p className="mb-5 text-xs text-smoke">The CV's five strategic responsibilities, word for word.</p>
             <div className="grid gap-3 sm:grid-cols-2">
               {strategicValue.map((v, i) => (
                 <motion.article
@@ -183,6 +192,32 @@ export default function About() {
                   ))}
                 </p>
               </motion.article>
+            </div>
+          </motion.div>
+
+          {/* the operating model behind the five responsibilities — eight lines, no cards */}
+          <motion.div className="mt-12" {...rise(0.05)}>
+            <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-2.5">
+              <div>
+                <h3 className="font-sans text-lg font-semibold text-bone sm:text-2xl">Leadership &amp; design capabilities</h3>
+                <p className="mt-1 text-xs text-smoke">The eight capabilities the CV leads with.</p>
+              </div>
+              <span className="rounded-full border border-crimson/40 bg-crimson/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-crimson-2">
+                5-member team
+              </span>
+            </div>
+            <div className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
+              {leadershipCapabilities.map((c, i) => (
+                <div key={c.title} className="flex gap-3 border-t border-white/[0.07] pt-3">
+                  <span aria-hidden className="font-display text-sm tabular-nums leading-5 text-crimson-2/80">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-semibold leading-snug text-bone">{c.title}</p>
+                    <p className="mt-0.5 text-[12px] leading-relaxed text-mist">{c.detail}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </motion.div>
         </div>

@@ -66,7 +66,7 @@ await sharp({ create: { width: 1200, height: 630, channels: 4, background: '#070
         <text x="72" y="282" font-family="Impact, 'Arial Narrow', sans-serif" font-size="92" fill="#f4f1ec" letter-spacing="3">AJAY KUMAR</text>
         <text x="72" y="370" font-family="Impact, 'Arial Narrow', sans-serif" font-size="92" fill="#f4f1ec" letter-spacing="3">MYAKALA</text>
         <text x="76" y="412" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="20" fill="#ff3d5a" letter-spacing="8">THE SERIES</text>
-        <text x="76" y="452" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="16" fill="#a7a6ad" letter-spacing="2">PRODUCT STRATEGY &amp; DESIGN · AI-ENABLED PRODUCT DEVELOPMENT</text>
+        <text x="76" y="452" font-family="Helvetica, Arial, sans-serif" font-weight="600" font-size="16" fill="#a7a6ad" letter-spacing="2">LEAD PRODUCT DESIGNER · UX STRATEGY · DESIGN LEADERSHIP</text>
       </svg>`),
     },
   ])

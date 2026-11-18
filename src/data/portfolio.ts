@@ -1,6 +1,6 @@
 /**
  * Central portfolio data — generated from Ajay Kumar Myakala's CV
- * (Ajay_Kumar_Myakala-Design_Strategist_CV.pdf).
+ * (Ajay_Kumar_Myakala-Design_Leader_CV.pdf).
  * Every fact on the site comes from this file. Update it here and the whole site follows.
  * Nothing here should be added unless it appears on the CV.
  */
@@ -8,44 +8,83 @@
 export type Palette = { from: string; via: string; to: string; accent: string };
 
 /**
- * The CV's "Strategic Value Positioning" — five statements, kept verbatim.
+ * The CV's "Strategic Responsibilities" — five statements, kept verbatim.
  * `profile.interests` is derived from these titles, so the two can never drift apart.
  */
 export const strategicValue = [
   {
-    title: 'Problem Framing & Product Strategy',
+    title: 'Product Alignment',
     detail:
-      'Translating ambiguity, business goals, user needs and operational constraints into product opportunities and solution direction.',
+      'Address fragmented requirements by translating business priorities and user needs into clear product direction and prioritised experiences.',
   },
   {
-    title: 'Transformation & Systems Thinking',
-    detail: 'Simplifying complex workflows, service journeys and enterprise operating models into scalable digital experiences.',
+    title: 'People Accountability',
+    detail: 'Lead a team of five designers through clear ownership, mentoring, design reviews and delivery expectations.',
   },
   {
-    title: 'AI-Native Experience Design',
+    title: 'Platform Modernisation',
     detail:
-      'Human-Computer Interaction (HCI), Artificial Intelligence Experience (AIX), Machine Learning UX (MLUX), human-centered AI, voice, computer vision and AI ethics.',
+      'Simplify legacy interfaces and complex workflows through scalable information architecture and consistent interaction patterns.',
   },
   {
-    title: 'Data, Marketing & Growth Platforms',
+    title: 'Responsible AI Adoption',
     detail:
-      'Audience intelligence, customer data, campaign management, monetisation, behaviour analytics, customer engagement and marketing technology collaboration.',
+      'Identify suitable AI-enabled experience opportunities while considering transparency, usability and human oversight.',
   },
   {
-    title: 'Consulting & Stakeholder Influence',
-    detail:
-      'Discovery sessions, workshops, roadmap conversations, product/engineering partnership and executive stakeholder communication.',
+    title: 'Design Governance',
+    detail: 'Reduce inconsistent experiences and design rework through reusable systems, accessibility standards and quality reviews.',
   },
 ];
 
-/** The executive summary's career progression, as stages — the arc the About section draws. */
+/**
+ * The CV's "Leadership & Design Capabilities" — eight lines the About section lays out
+ * as the operating model behind the five responsibilities above.
+ */
+export const leadershipCapabilities = [
+  {
+    title: 'Product Strategy',
+    detail: 'Product vision, UX strategy, discovery, roadmap alignment and prioritisation.',
+  },
+  {
+    title: 'Design Leadership',
+    detail: 'Leadership and management of a 5-member design team, mentoring, ownership and design quality.',
+  },
+  {
+    title: 'Enterprise UX',
+    detail: 'Complex workflows, dashboards, role-based experiences and platform modernisation.',
+  },
+  {
+    title: 'Design Systems',
+    detail: 'Component architecture, reusable patterns, design standards and governance.',
+  },
+  {
+    title: 'AI & Emerging Technology',
+    detail: 'AI-enabled experience concepts, intelligent automation and responsible UX principles.',
+  },
+  {
+    title: 'Data & Research',
+    detail: 'User research, usability evaluation, behavioural insights and outcome measurement.',
+  },
+  {
+    title: 'Cross-functional Delivery',
+    detail:
+      'Product, Engineering, Architecture and QA collaboration; design specifications and implementation reviews.',
+  },
+  {
+    title: 'Stakeholder Management',
+    detail: 'Client communication, executive presentations, strategic workshops and decision alignment.',
+  },
+];
+
+/** The career progression the CV describes, as stages — the arc the About section draws. */
 export const careerArc = [
   'UX/UI Craft',
   'Product Discovery',
   'Business Problem Framing',
   'Workflow Transformation',
   'Solution Strategy',
-  'Cross-Functional Influence',
+  'Design Leadership',
 ];
 
 /** The CV's "Platform streams" line, split into the kinds of system that get built. */
@@ -64,14 +103,14 @@ export const profile = {
   seriesTag: 'THE SERIES',
   /** Fictional studio card shown at the very start of the opening sequence. */
   originalLabel: 'A MYAKALA ORIGINAL',
-  role: 'Product Strategy · AI-Native Design · Transformation',
+  role: 'Lead Product Designer · UX Strategy · Design Leadership',
   /** The CV's own sub-headline, kept verbatim. */
-  headline: 'Business Problem Framing • Product Strategy • Enterprise Transformation • AI-Enabled Product Development',
-  tagline: ['Product Strategy', 'Enterprise Transformation', 'AI-Enabled Product Development'],
+  headline: 'Lead Product Designer • UX Strategy • Enterprise Product Experience • Design Leadership',
+  tagline: ['UX Strategy', 'Enterprise Product Experience', 'Design Leadership'],
   intro:
-    'Ten years from UX craft to product strategy across eight industries — FinTech, GovTech, media and more. An implemented underwriting workflow I shaped cut decision time by 37%.',
+    'Ten years from UI/UX craft to lead product designer and design leader — 13 industries, a five-member design team and a career of turning complex enterprise workflows into products people can use. An implemented underwriting improvement I shaped cut decision time by 37%.',
   tenure: '10+ years',
-  location: 'Bengaluru, India',
+  location: 'Hyderabad, India · open to relocation',
   email: 'ajaykumarmyakala@outlook.com',
   phone: '+91 7382328066',
   links: {
@@ -88,7 +127,7 @@ export const profile = {
   interests: strategicValue.map((v) => v.title),
 };
 
-/** Industry domains, straight from "Product Models & Industry Domains". */
+/** Industry domains, straight from the CV's "Domain Experience". */
 export const industries = [
   'FinTech',
   'Mortgage Technology',
@@ -98,6 +137,11 @@ export const industries = [
   'AdTech',
   'MarTech',
   'Recruitment Technology',
+  'Healthcare',
+  'Health Insurance',
+  'Care Management',
+  'Clinical Systems',
+  'E-commerce',
 ];
 
 export const productModels = ['B2B', 'B2C', 'B2B2C', 'SaaS', 'Marketplace / P2P', 'D2C'];
@@ -109,10 +153,10 @@ export const experience = [
     place: 'Hyderabad, India',
     period: 'Apr 2024 – May 2026',
     points: [
-      'Led product strategy and end-to-end design for US mortgage and lending platforms, partnering with Product, Engineering and business stakeholders to shape roadmap priorities and scalable customer experiences.',
-      'Framed complex borrower and operational problems across origination, underwriting, onboarding, servicing and lending operations; translated requirements into journeys, workflows and solution direction.',
-      'Facilitated discovery, product-vision and design-review conversations, aligning business objectives, user needs, operational constraints and implementation realities.',
-      'Mapped end-to-end customer and operational journeys and drove workflow optimisation; an implemented underwriting workflow improvement reduced decision time by 37%.',
+      'Lead product discovery and UX strategy across origination, underwriting, onboarding and servicing, addressing complex US mortgage and lending workflows and improving enterprise usability.',
+      'Translated borrower and operational requirements into structured journeys, dashboards and scalable interface experiences, supporting faster business decisions.',
+      'Managed client discussions and presented design recommendations to senior leadership, aligning product direction with business priorities.',
+      'Led underwriting workflow improvements that reduced decision time by 37%, mentored designers and established reusable design frameworks.',
       'Established reusable design standards and scalable interaction patterns across customer and operational experiences; collaborated with teams working across AWS and Azure ecosystems.',
     ],
   },
@@ -122,20 +166,21 @@ export const experience = [
     place: '',
     period: 'Mar 2023 – Mar 2024',
     points: [
-      'Led UX strategy and product design for CashTrax and DiversityTrax enterprise platforms spanning procurement, supplier diversity, compliance, spend visibility and reconciliation.',
-      'Conducted stakeholder discovery and translated complex business requirements into service experiences, supplier onboarding workflows, reporting systems and operational dashboards.',
+      'Led end-to-end UX strategy and product design for CashTrax and DiversityTrax across financial and supplier operations, spanning procurement, supplier diversity, compliance, spend visibility and reconciliation.',
+      'Simplified financial analytics, reconciliation, supplier onboarding, compliance and reporting workflows, improving enterprise information access.',
       'Structured role-based information architecture and workflows for enterprise users, balancing business process requirements with usability and scalability.',
-      'Worked closely with CEO, Product Managers and Engineering teams to align business goals, product priorities and delivery constraints.',
+      'Presented product designs and recommendations to the CEO and senior stakeholders, aligning experience decisions with business requirements.',
+      'Contributed to a team redesign associated with a 20% improvement in operational reporting efficiency.',
     ],
   },
   {
-    company: 'Visual IT Solution',
+    company: 'Visual IT Solutions Pvt. Ltd',
     role: 'Sr UX Designer',
     place: '',
-    period: 'Sep 2022 – Mar 2023',
+    period: 'Oct 2022 – Feb 2023',
     points: [
-      'Contributed to digital transformation initiatives for government and public-sector platforms, including ePragathi and citizen-service ecosystems.',
-      'Designed citizen-facing and administrative workflows, simplifying complex service processes through information architecture, process mapping and responsive interaction design.',
+      'Addressed complex citizen and administrative service journeys across ePragathi and government digital platforms.',
+      'Structured information architecture, user flows and responsive interfaces to simplify access to public services.',
       'Applied accessibility-focused design to improve service usability for diverse public audiences and collaborated with business analysts, architects and engineering teams.',
       'Produced process flows, wireframes, prototypes and production-ready interfaces.',
     ],
@@ -146,34 +191,48 @@ export const experience = [
     place: '',
     period: 'Oct 2021 – Aug 2022',
     points: [
-      'Designed enterprise broadcasting, television technology and media monetisation experiences supporting digital content distribution and audience engagement.',
+      'Addressed fragmented enterprise media and broadcasting experiences through UX strategy and end-to-end product design.',
+      'Designed experiences for media and ATSC 3.0 initiatives, supporting content and operational workflows.',
+      'Created a self-service low-code workflow builder to simplify automation configuration and reduce dependence on engineering support.',
+      'Designed monetisation and performance analytics dashboards to improve visibility into operational and product performance.',
       'Designed content-management workflows, operational dashboards and scalable interaction models for complex media ecosystems.',
-      'Contributed to ATSC 3.0-related product initiatives and partnered with Engineering on next-generation broadcasting experiences.',
-      'Worked across advertising workflows, reporting dashboards and audience-engagement experiences.',
     ],
   },
   {
-    company: 'Way2News Interactive Pvt. Ltd',
+    company: 'Way2Online Interactive Pvt. Ltd',
     role: 'Sr UI/UX Designer',
     place: '',
     period: 'May 2018 – Jun 2021',
     points: [
-      'Worked across Way2News, AudiencePlay, AudiencePrime, DigitalKites and TheTasteCompany across consumer media, AdTech, MarTech, audience intelligence and customer engagement products.',
-      'Designed mobile-first content discovery and engagement experiences alongside enterprise interfaces for customer segmentation, campaign management, audience intelligence and monetisation.',
-      'Supported data-driven platform experiences using audience insights, behaviour analytics and reporting to improve retention, engagement and platform adoption.',
+      'Addressed content discovery and audience engagement challenges through mobile-first product design for Way2News.',
+      'Designed audience intelligence and campaign management experiences for AudiencePlay, supporting segmentation and monetisation workflows.',
+      'Contributed to product improvements associated with a 30% team-level increase in daily active users (DAU).',
       'Collaborated with product, editorial, marketing and engineering teams across customer engagement and campaign experience initiatives.',
     ],
   },
   {
     company: 'Nitya Software India Pvt. Ltd',
-    role: 'UI/UX Designer',
+    role: 'UI Designer',
     place: '',
     period: 'Jan 2016 – May 2018',
     points: [
-      'Designed recruitment technology, communication products, enterprise web applications and client-facing digital solutions including JobsNProfiles and VioTalk.',
-      'Created wireframes, information architecture and responsive product experiences and collaborated with development teams through front-end implementation.',
+      'Addressed recruitment and communication product needs through end-to-end UX/UI design for JobsNProfiles and VioTalk.',
+      'Translated product requirements into user journeys, wireframes, information architecture and responsive interfaces.',
+      'Collaborated with stakeholders and developers on prototypes, visual design and implementation handoff.',
       'Supported branding, marketing websites and digital product initiatives using WordPress, Joomla, PHP and MySQL.',
     ],
+  },
+];
+
+/** Education, straight from the CV — no institution is named there, so none is named here. */
+export const education = [
+  {
+    title: 'B.Com — Mass Communication and Public Relations',
+    detail: 'Bachelor of Commerce · communication, media and public relations.',
+  },
+  {
+    title: 'Diploma in Graphic and Web Design',
+    detail: 'Graphic design and web design.',
   },
 ];
 
@@ -520,30 +579,52 @@ export const achievements: Achievement[] = [
     id: 'underwriting-37',
     title: '37% Faster',
     org: 'HomeLoc Solutions',
-    detail: 'An implemented underwriting workflow improvement, found by mapping end-to-end customer and operational journeys, reduced decision time by 37%.',
+    detail:
+      'An implemented underwriting workflow improvement, found by mapping end-to-end customer and operational journeys, reduced decision time by 37%.',
     laurel: 'Measured Impact',
     projectId: 'homeratesyard',
   },
   {
+    id: 'dau-30',
+    title: '30% DAU',
+    org: 'Way2News',
+    detail:
+      'Mobile-first content discovery and engagement work contributed to a 30% team-level increase in daily active users.',
+    laurel: 'Audience Growth',
+    projectId: 'audience-intelligence',
+  },
+  {
+    id: 'reporting-20',
+    title: '20% Efficiency',
+    org: 'Computech Corporation',
+    detail:
+      'A team redesign of financial analytics, reconciliation and reporting workflows was associated with a 20% improvement in operational reporting efficiency.',
+    laurel: 'Operational Impact',
+    projectId: 'cashtrax',
+  },
+  {
+    id: 'team-five',
+    title: '5 Designers',
+    org: 'Design Leadership',
+    detail:
+      'Leads a five-member design team through clear ownership, mentoring, design reviews and delivery expectations.',
+    laurel: 'People Leadership',
+  },
+  {
     id: 'tenure',
     title: '10+ Years',
-    org: 'Product Strategy & Design',
-    detail: 'Career progression from UX/UI craft into product discovery, business problem framing, workflow transformation and cross-functional influence.',
+    org: 'Product Design & Leadership',
+    detail:
+      'Career progression from UI/UX craft into product discovery, business problem framing, workflow transformation and design leadership.',
     laurel: 'Career Arc',
   },
   {
     id: 'domains',
-    title: '8 Domains',
-    org: 'Enterprise SaaS → GovTech',
-    detail: 'FinTech, mortgage and lending, procurement, GovTech, media, AdTech, MarTech and recruitment technology.',
+    title: `${industries.length} Domains`,
+    org: 'Enterprise SaaS → Healthcare',
+    detail:
+      'FinTech, mortgage and lending, procurement, GovTech, media, AdTech, MarTech, recruitment, healthcare, insurance, care management, clinical systems and e-commerce.',
     laurel: 'Industry Range',
-  },
-  {
-    id: 'seven-roles',
-    title: '7 Companies',
-    org: '2016 – 2026',
-    detail: 'Six senior in-house roles and a lead consulting engagement, each owning product direction for a new domain.',
-    laurel: 'Track Record',
   },
   {
     id: 'govtech',
@@ -570,6 +651,8 @@ export const toolbox: Tool[] = [
   { name: 'Figma', group: 'Design & Workshop' },
   { name: 'FigJam', group: 'Design & Workshop' },
   { name: 'Miro', group: 'Design & Workshop' },
+  { name: 'Design Systems', group: 'Design & Workshop' },
+  { name: 'SAP Fiori', group: 'Enterprise' },
   { name: 'Jira', group: 'Delivery' },
   { name: 'Confluence', group: 'Delivery' },
   { name: 'Azure DevOps', group: 'Delivery' },
@@ -581,6 +664,7 @@ export const toolbox: Tool[] = [
   { name: 'Outlook', group: 'Microsoft Office' },
   { name: 'React', group: 'Web' },
   { name: 'Next.js', group: 'Web' },
+  { name: 'TypeScript', group: 'Web' },
   { name: 'JavaScript', group: 'Web' },
   { name: 'HTML5', group: 'Web' },
   { name: 'CSS3', group: 'Web' },
@@ -619,6 +703,8 @@ export const skillCategories: SkillCategory[] = [
       { name: 'Workflow Transformation', mono: 'WF' },
       { name: 'Product Vision', mono: 'PV' },
       { name: 'Roadmap Definition', mono: 'RD' },
+      { name: 'Platform Modernisation', mono: 'PM' },
+      { name: 'Design Governance', mono: 'DG' },
     ],
   },
   {
@@ -633,6 +719,7 @@ export const skillCategories: SkillCategory[] = [
       { name: 'Voice Interfaces', mono: 'Vo' },
       { name: 'Computer Vision', mono: 'CV' },
       { name: 'Machine Learning', mono: 'ML' },
+      { name: 'Responsible AI', mono: 'RA' },
       { name: 'Autonomous Vehicle Interfaces', mono: 'AV' },
       { name: 'AI Ethics & Data Privacy', mono: 'AE' },
     ],
@@ -662,6 +749,9 @@ export const skillCategories: SkillCategory[] = [
     subtitle: 'Facilitation & stakeholder influence',
     skills: [
       { name: 'Stakeholder Management', mono: 'SM' },
+      { name: 'Design Team Leadership', mono: 'DL', note: 'Core' },
+      { name: 'Mentoring & Coaching', mono: 'MC' },
+      { name: 'Design Quality Reviews', mono: 'DQ' },
       { name: 'Stakeholder Facilitation', mono: 'SF' },
       { name: 'Discovery Workshops', mono: 'DW' },
       { name: 'Ideation Workshops', mono: 'IW' },
@@ -805,7 +895,13 @@ export const skillEvidence: Record<string, string[]> = {
   'Machine Learning': ['CV: Machine Learning UX (MLUX)'],
   'Autonomous Vehicle Interfaces': ['CV: AI / ML / HCI capability'],
   'AI Ethics & Data Privacy': ['CV: AI ethics & data privacy'],
-  'Stakeholder Management': ['CEO, PM & Engineering alignment · Computech'],
+  'Stakeholder Management': ['Client discussions & senior leadership · HomeLoc', 'CEO, PM & Engineering alignment · Computech'],
+  'Design Team Leadership': ['5-member design team · HomeLoc'],
+  'Mentoring & Coaching': ['Mentored designers · HomeLoc'],
+  'Design Quality Reviews': ['Design reviews & delivery expectations'],
+  'Platform Modernisation': ['Legacy interfaces & complex workflows'],
+  'Design Governance': ['Reusable systems, accessibility standards & quality reviews'],
+  'Responsible AI': ['AI-enabled experience opportunities with human oversight'],
   'Stakeholder Facilitation': ['Discovery sessions across 7 roles'],
   'Discovery Workshops': ['Computech · HomeLoc'],
   'Ideation Workshops': ['CV: ideation workshops'],
@@ -930,7 +1026,7 @@ export const seasons: Season[] = [
       {
         code: 'S02 E01',
         title: 'The Audience',
-        description: 'Designed mobile-first content discovery and engagement experiences for Way2News across consumer media.',
+        description: 'Addressed content discovery and audience engagement through mobile-first product design for Way2News.',
         tags: ['Mobile-first', 'Content Discovery', 'Consumer Media'],
         runtime: 'Way2News',
         palette: crimson,
@@ -938,7 +1034,7 @@ export const seasons: Season[] = [
       {
         code: 'S02 E02',
         title: 'The Platform',
-        description: 'Enterprise interfaces for customer segmentation, campaign management, audience intelligence and monetisation across AudiencePlay, AudiencePrime, DigitalKites and TheTasteCompany.',
+        description: 'Designed audience intelligence and campaign management experiences for AudiencePlay, supporting segmentation and monetisation workflows across the brand family.',
         tags: ['AdTech', 'MarTech', 'Segmentation'],
         runtime: 'AudiencePlay → TheTasteCompany',
         palette: violet,
@@ -946,7 +1042,7 @@ export const seasons: Season[] = [
       {
         code: 'S02 E03',
         title: 'The Analyst',
-        description: 'Supported data-driven platform experiences using audience insights, behaviour analytics and reporting to improve retention, engagement and platform adoption.',
+        description: 'Product improvements associated with a 30% team-level increase in daily active users (DAU), steered by audience insights, behaviour analytics and reporting.',
         tags: ['Behaviour Analytics', 'Reporting', 'Retention'],
         runtime: 'Way2News',
         palette: jade,
@@ -974,6 +1070,14 @@ export const seasons: Season[] = [
         tags: ['ATSC 3.0', 'Advertising', 'Reporting'],
         runtime: 'Gaian Solution',
         palette: amber,
+      },
+      {
+        code: 'S03 E03',
+        title: 'The Workflow Builder',
+        description: 'Created a self-service low-code workflow builder to simplify automation configuration and reduce dependence on engineering support, alongside monetisation and performance analytics dashboards.',
+        tags: ['Low-code', 'Automation', 'Analytics'],
+        runtime: 'Gaian Solution',
+        palette: jade,
       },
     ],
   },
@@ -1031,6 +1135,14 @@ export const seasons: Season[] = [
         runtime: 'Computech Corporation',
         palette: violet,
       },
+      {
+        code: 'S05 E04',
+        title: 'Efficiency, Measured',
+        description: 'Simplified financial analytics, reconciliation, supplier onboarding, compliance and reporting workflows — a team redesign associated with a 20% improvement in operational reporting efficiency.',
+        tags: ['Financial Analytics', 'Reporting', '20% efficiency'],
+        runtime: 'Computech Corporation',
+        palette: jade,
+      },
     ],
   },
   {
@@ -1058,7 +1170,7 @@ export const seasons: Season[] = [
       {
         code: 'S06 E03',
         title: 'Scaling the Language',
-        description: 'Established reusable design standards and scalable interaction patterns across customer and operational experiences, partnering with teams across AWS and Azure ecosystems.',
+        description: 'Established reusable design standards and scalable interaction patterns across customer and operational experiences, mentored designers and partnered with teams across AWS and Azure ecosystems.',
         tags: ['Design Standards', 'Interaction Patterns', 'AWS · Azure'],
         runtime: 'HomeLoc Solutions',
         palette: ocean,
@@ -1086,15 +1198,15 @@ export const seasons: Season[] = [
 export type TopPick = { label: string; title: string; detail: string; palette: Palette };
 
 export const topPicks: TopPick[] = [
-  { label: 'Tenure', title: '10+ Years', detail: 'UX/UI craft → product strategy', palette: amber },
+  { label: 'Tenure', title: '10+ Years', detail: 'UI/UX craft → design leadership', palette: amber },
   { label: 'Measured impact', title: '37% Faster', detail: 'underwriting decision time', palette: crimson },
-  { label: 'Industry range', title: '8 Domains', detail: 'FinTech → Recruitment Tech', palette: ocean },
+  { label: 'Audience growth', title: '30% DAU', detail: 'team-level daily active users', palette: jade },
+  { label: 'Operational impact', title: '20% Efficiency', detail: 'reporting workflow redesign', palette: ocean },
+  { label: 'People leadership', title: '5 Designers', detail: 'team led, mentored & reviewed', palette: violet },
+  { label: 'Industry range', title: `${industries.length} Domains`, detail: 'FinTech → Healthcare', palette: ocean },
   { label: 'Current chapter', title: 'HomeLoc', detail: 'Lead Product Design Consultant', palette: crimson },
-  { label: 'Longest run', title: 'Way2News', detail: '3 years · 5 audience brands', palette: jade },
   { label: 'Public sector', title: 'ePragathi', detail: 'GovTech citizen services', palette: ocean },
-  { label: 'Broadcast', title: 'ATSC 3.0', detail: 'next-gen TV initiatives', palette: violet },
-  { label: 'Enterprise', title: 'CashTrax', detail: 'procurement & diversity', palette: amber },
-  { label: 'AI fluency', title: 'AIX · MLUX', detail: 'HCI & human-centred AI', palette: violet },
+  { label: 'Enterprise UX', title: 'CashTrax', detail: 'procurement & diversity', palette: amber },
   { label: 'Toolbox', title: `${toolbox.length} Tools`, detail: 'Figma → Cursor', palette: jade },
 ];
 
@@ -1105,40 +1217,46 @@ export const introSlides: IntroSlide[] = [
   {
     kicker: 'The Lead',
     title: '10+ years.',
-    lines: ['Product strategy and design transformation leader', 'Enterprise SaaS · FinTech · Mortgage · GovTech · Media'],
+    lines: ['Lead product designer · UX strategy · enterprise product experience', 'FinTech · Mortgage · Healthcare · Procurement · GovTech · Media'],
     chips: ['10+ years'],
   },
   {
     kicker: 'The Arc',
-    title: 'Craft to strategy.',
-    lines: ['Career progression from UX/UI craft into product discovery,', 'business problem framing and cross-functional influence.'],
-    chips: ['Discovery', 'Problem Framing', 'Influence'],
+    title: 'Craft to leadership.',
+    lines: ['Progression from UI/UX craft into product discovery,', 'problem framing, workflow transformation and design leadership.'],
+    chips: ['Discovery', 'Problem Framing', 'Leadership'],
   },
   {
-    kicker: 'Value',
-    title: 'Problem framing.',
-    lines: ['Translating ambiguity, business goals, user needs and', 'operational constraints into product opportunities and direction.'],
-    chips: ['Strategy', 'Systems Thinking', 'Roadmaps'],
+    kicker: 'People',
+    title: 'Five designers.',
+    lines: ['Leading a five-member design team through clear ownership,', 'mentoring, design reviews and delivery expectations.'],
+    chips: ['Team Leadership', 'Mentoring', 'Design Quality'],
+  },
+  {
+    kicker: 'Strategy',
+    title: 'Governance.',
+    lines: ['Reducing inconsistent experiences and design rework', 'through reusable systems, accessibility standards and reviews.'],
+    chips: ['Design Systems', 'Accessibility', 'Governance'],
   },
   {
     kicker: 'AI-native',
     title: 'HCI · AIX · MLUX',
-    lines: ['Human-Computer Interaction, Artificial Intelligence Experience', 'and Machine Learning UX — with AI ethics and data privacy.'],
+    lines: ['Responsible AI adoption — AI-enabled experience concepts', 'with transparency, usability and human oversight.'],
   },
   {
     kicker: 'Platforms',
-    title: 'Six originals.',
-    lines: ['Homeratesyard · CashTrax · ePragathi', 'Broadcast & Monetisation · Audience Intelligence · JobsNProfiles'],
+    title: `${projects.length} originals.`,
+    lines: ['Homeratesyard · CashTrax · ePragathi · Broadcast & Monetisation', 'Audience Intelligence · JobsNProfiles · PEM Pro · KenVision'],
   },
   {
     kicker: 'Domains',
-    title: 'Eight industries.',
-    lines: ['FinTech · Mortgage · Procurement · GovTech', 'Media · AdTech · MarTech · Recruitment Technology'],
+    title: `${industries.length} industries.`,
+    lines: ['FinTech · Mortgage · Healthcare · Procurement · GovTech', 'Media · AdTech · MarTech · Recruitment · E-commerce'],
   },
   {
     kicker: 'Next',
     title: 'Now exploring.',
-    lines: ['Product strategy and design transformation leadership', 'for AI-enabled product development.'],
+    lines: ['Design leadership and product strategy', 'for AI-enabled product development.'],
   },
 ];
 

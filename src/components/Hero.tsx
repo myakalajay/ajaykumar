@@ -39,7 +39,7 @@ export default function Hero({ onPlay, onResume, profileId }: { onPlay: () => vo
 
   const meta = [
     profile.tenure,
-    'Product Strategy & Design',
+    'UX Strategy & Design Leadership',
     `${projects.length} Originals`,
     `${toolbox.length} Tools`,
   ];

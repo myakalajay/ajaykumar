@@ -1,6 +1,6 @@
 # AJAY KUMAR MYAKALA — THE SERIES
 
-A cinematic, streaming-inspired portfolio for **Ajay Kumar Myakala**: Product Strategy & Design Transformation Leader with 10+ years across enterprise SaaS, FinTech, mortgage, procurement, GovTech, media, AdTech and MarTech.
+A cinematic, streaming-inspired portfolio for **Ajay Kumar Myakala**: Lead Product Designer and design leader with 10+ years across FinTech, healthcare, mortgage, procurement, GovTech, media, AdTech, MarTech and recruitment technology.
 Every section is an episode, every platform is an Original, and the whole site plays like a series.
 
 > A personal portfolio with a fictional streaming-platform look. It is not affiliated with Netflix or any other streaming service and uses none of their logos.
@@ -41,15 +41,24 @@ The static site is written to `dist/` and can be deployed as-is to Vercel, Netli
 | ▶ Play Intro highlight reel | `introSlides` |
 | Profile order (Recruiter / Product Lead / Design Lead) | `viewerProfiles` |
 | Opening studio card text | `profile.originalLabel` |
-| The CV's five value statements (About + resume sheet) | `strategicValue` |
+| The CV's five strategic responsibilities (About + resume sheet) | `strategicValue` |
+| The CV's eight leadership & design capabilities | `leadershipCapabilities` |
+| Education | `education` (and `education` in `src/data/cv.ts`) |
+| Certification | `certifications` in `src/data/cv.ts` |
 | Career arc on the About poster | `careerArc` |
 | Platform streams line | `platformStreams` |
 
-Derived text is computed, never repeated: `profile.interests` is the titles of `strategicValue`, and every count on the site (`6 Originals`, `22 Tools`, `7 Seasons · 16 Episodes`, `8 industries`) is read from the arrays — so adding a project or tool updates the hero chips, Top Picks, section meta and the resume sheet at once.
+Derived text is computed, never repeated: `profile.interests` is the titles of `strategicValue`, and every count on the site (Originals, Tools, Seasons · Episodes, industries) is read from the arrays — so adding a project or tool updates the hero chips, Top Picks, section meta and the resume sheet at once.
 
 > `continueWatching` is a new SectionId: the "Now streaming" cards live in the per-profile section order, so a profile switcher that includes it (`ajay`, `design`, `product`, `recruiter` after the edit) shows it as its own deep-linkable section instead of a hard-coded block.
 
-**Resume:** replace `public/assets/Ajay_Kumar_Myakala_CV.pdf` (and `profile.resumeFile` if the filename changes).
+**Resume:** the downloadable PDF is generated from the same data the page renders — never hand-maintain a second copy:
+
+```bash
+npm run cv-pdf   # → public/assets/Ajay_Kumar_Myakala_CV.pdf (fonts inlined, no system fonts needed)
+```
+
+It reads `cv` from `src/data/cv.ts` plus `industries` / `toolbox` from `src/data/portfolio.ts`, so editing the CV data and re-running keeps the download in sync. Change `profile.resumeFile` only if the filename itself changes.
 
 **Photo:** replace `ajay.png` (background-removed cutout — the alpha channel is the mask), then run:
 
@@ -58,6 +67,14 @@ npm run images
 ```
 
 This rebuilds the responsive WebP portraits and the social share image in `public/assets/`.
+
+To derive that cutout from a new full-length photo (head → mid-thigh, 2:3 framing, subject-centred), drop the photo in the project root and run:
+
+```bash
+npm install --no-save --onnxruntime-node-install-cuda=skip @imgly/background-removal-node
+node scripts/build-portrait.mjs portrait-source.jpg   # → ajay.jpg + ajay.png
+npm run images
+```
 
 ## What's inside
 

@@ -63,7 +63,7 @@ const ROLE_SPLIT = (() => {
 const ROLE_LINES = [ROLE_SEGMENTS.slice(0, ROLE_SPLIT).join(' · '), ROLE_SEGMENTS.slice(ROLE_SPLIT).join(' · ')];
 
 /**
- * Bengaluru, drawn once across the full width.
+ * Hyderabad, drawn once across the full width.
  *
  * The previous version was a 720px tile repeated with `repeat-x`, so on any
  * laptop the same dome, the same tower and the same three trees appeared two or
@@ -96,9 +96,9 @@ const SKYLINE_TREES: [number, number][] = [
   [158, 17], [456, 13], [848, 19], [1102, 14], [1462, 18], [1706, 12], [1826, 16],
 ];
 
-function BengaluruSkyline() {
+function HyderabadSkyline() {
   return (
-    <svg viewBox="0 0 1920 320" preserveAspectRatio="none" className="h-full w-full" role="img" aria-label="Bengaluru skyline">
+    <svg viewBox="0 0 1920 320" preserveAspectRatio="none" className="h-full w-full" role="img" aria-label="Hyderabad skyline">
       <g fill="rgba(255,255,255,0.10)">
         {/* flyover at the base, so the skyline sits on something */}
         <path d="M-10 306 Q 480 286 960 300 T 1930 292 L1930 320 L-10 320 Z" fill="rgba(255,255,255,0.06)" />
@@ -293,7 +293,7 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
       {/* drifting dust in the projector beam */}
       <Particles className="z-[2] opacity-70" count={38} />
 
-      {/* Bengaluru skyline silhouetting the floor — light white, layered above the
+      {/* Hyderabad skyline silhouetting the floor — light white, layered above the
           vignette and readability scrim so the silhouette actually reads */}
       <motion.div
         aria-hidden
@@ -302,7 +302,7 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
         animate={{ opacity: beat >= 3 ? 1 : 0 }}
         transition={{ duration: 1.4, ease: EASE }}
       >
-        <BengaluruSkyline />
+        <HyderabadSkyline />
       </motion.div>
 
       {/* film scanlines + vignette texture */}

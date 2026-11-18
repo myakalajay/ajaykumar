@@ -20,3 +20,4 @@ dist-worker/
 
 # Local visual-audit gallery (scripts/audit-visual.mjs writes here)
 reports/
+/freebuff-sites-build/

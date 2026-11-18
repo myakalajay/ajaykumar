@@ -1,30 +1,26 @@
 import { motion } from 'framer-motion';
-import { Building2, Gauge, Globe, Layers, TrendingUp, Video, type LucideIcon } from 'lucide-react';
+import { Activity, BarChart3, Building2, Gauge, Globe, TrendingUp, Users, Video, type LucideIcon } from 'lucide-react';
 import { achievements, projects, type Project } from '../data/portfolio';
 import { EASE, SectionHeading, Tilt } from './fx';
 
 /**
- * Career Highlights — one row, six cards, no second row to fall into.
+ * Career Highlights — two rows of four at desktop widths.
  *
- * Before: a 5-up grid of 6 cards, which meant the last highlight sat alone on a
- * row of its own and the layout had a special case to centre it. It also leaned
- * on a pair of laurel wreaths and a gold gradient, which read as decoration
- * rather than as evidence.
- *
- * Now: a single row of six at desktop widths (2-up on tablets, 1-up on phones),
- * each card built from the same parts so they read as a set — a gold hairline, a
- * label, an icon for what the highlight measures, the headline number, the
- * organisation, the evidence, and the way through to the case study. The laurels
- * are gone; the icon badge carries the honour instead, and the numbers do the
- * talking.
+ * Eight highlights is a 4 × 2 set, so the grid holds them evenly instead of
+ * letting a seventh and eighth card fall onto a ragged second row: 1-up on
+ * phones, 2-up on tablets, 4-up from lg. Each card is built from the same parts —
+ * a gold hairline, a label, an icon for what the highlight measures, the headline
+ * number, the organisation, the evidence, and the way through to the case study.
  */
 
 /** What each highlight measures, by id — the icon is a fact about the row, not decoration. */
 const ICONS: Record<string, LucideIcon> = {
   'underwriting-37': TrendingUp,
+  'dau-30': Activity,
+  'reporting-20': BarChart3,
+  'team-five': Users,
   tenure: Gauge,
   domains: Globe,
-  'seven-roles': Layers,
   govtech: Building2,
   atsc: Video,
 };
@@ -44,7 +40,7 @@ export default function Achievements({ onOpen }: { onOpen?: (p: Project) => void
         aside={<p className="max-w-xs text-sm text-mist">The outcomes the CV calls out — measured impact, tenure and the platforms behind them. Open any one for the full case study.</p>}
       />
 
-      <div className="gutter grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 [perspective:1400px]">
+      <div className="gutter grid gap-3 sm:grid-cols-2 lg:grid-cols-4 [perspective:1400px]">
         {achievements.map((a, i) => {
           const Icon = ICONS[a.id] ?? Gauge;
           const project = projectFor(a.projectId);

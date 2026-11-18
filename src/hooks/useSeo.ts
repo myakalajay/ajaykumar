@@ -9,10 +9,10 @@ import type { SectionId } from '../data/portfolio';
  * shares, browser tabs and reader views describe what is actually on screen.
  */
 
-const BASE_TITLE = 'Ajay Kumar Myakala — Product Strategy & Design Transformation Leader';
+const BASE_TITLE = 'Ajay Kumar Myakala — Lead Product Designer & Design Leader';
 
 const BASE_DESCRIPTION =
-  'Ajay Kumar Myakala — Product Strategy & Design Transformation Leader with 10+ years across Enterprise SaaS, FinTech, mortgage and lending, procurement, GovTech, media, AdTech, MarTech and recruitment technology.';
+  'Ajay Kumar Myakala — Lead Product Designer and design leader with 10+ years across FinTech, healthcare, mortgage and lending, procurement, GovTech, media, AdTech, MarTech and recruitment technology. UX strategy, enterprise UX and design systems.';
 
 /** The hero and the closing CTA frame the series but are not (SectionId)s. */
 type SeoId = SectionId | 'top' | 'contact';
@@ -27,11 +27,12 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
   },
   about: {
     title: `About · ${BASE_TITLE}`,
-    description: 'Ten years from UX/UI craft to product strategy — the positioning, focus and method behind the work.',
+    description: 'Ten years from UI/UX craft to design leadership — the positioning, focus and operating model behind the work.',
   },
   journey: {
     title: `Journey · ${BASE_TITLE}`,
-    description: 'Six roles across eight industries, told as seasons: media and audience, broadcast, public service, procurement and mortgage.',
+    description:
+      'Six roles across thirteen industries, told as seasons: media and audience, broadcast, public service, procurement and mortgage.',
   },
   originals: {
     title: `Originals · ${BASE_TITLE}`,
@@ -40,7 +41,8 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
   },
   picks: {
     title: `Top Picks · ${BASE_TITLE}`,
-    description: 'The ten facts worth knowing first: 37% faster underwriting decisions, eight domains, seven companies.',
+    description:
+      'The ten facts worth knowing first: 37% faster underwriting decisions, 30% DAU growth, a five-member design team and thirteen domains.',
   },
   skills: {
     title: `Capabilities · ${BASE_TITLE}`,
@@ -57,7 +59,7 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
   },
   story: {
     title: `Résumé · ${BASE_TITLE}`,
-    description: 'View and download the full CV — product strategy and design transformation, 2016–2026.',
+    description: 'View and download the full CV — lead product design, UX strategy and design leadership, 2016–2026.',
   },
 };
 

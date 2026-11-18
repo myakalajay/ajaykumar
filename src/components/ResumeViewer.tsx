@@ -259,6 +259,37 @@ export function ResumeSheet() {
                 .join(', ')}
             </p>
           ))}
+
+          <H>Education</H>
+          {cv.education.map((e) => (
+            <div key={e.title} className="mb-2">
+              <p className="text-xs font-semibold leading-snug text-bone">{e.title}</p>
+              <p className="text-xs leading-relaxed text-mist">{e.detail}</p>
+            </div>
+          ))}
+
+          {cv.certifications.length > 0 && (
+            <>
+              <H>Certification</H>
+              {cv.certifications.map((c) => (
+                <div key={`${c.title}-${c.issued}`} className="mb-2">
+                  <p className="text-xs font-semibold leading-snug text-bone">
+                    {c.url ? (
+                      <a href={c.url} target="_blank" rel="noreferrer" className="hover:text-crimson-2">
+                        {c.title} ↗
+                      </a>
+                    ) : (
+                      c.title
+                    )}
+                  </p>
+                  <p className="text-xs leading-relaxed text-mist">
+                    {c.issuer}
+                    {c.issued ? ` · ${c.issued}` : ''}
+                  </p>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
 
