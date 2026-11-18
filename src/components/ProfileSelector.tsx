@@ -6,12 +6,18 @@ import { EASE } from './fx';
 
 export function ProfileAvatar({ id, size = 'lg' }: { id: ProfileId; size?: 'sm' | 'lg' }) {
   const p = viewerProfiles.find((v) => v.id === id)!;
-  const box = size === 'lg' ? 'h-24 w-24 sm:h-32 sm:w-32 md:h-36 md:w-36 rounded-2xl' : 'h-8 w-8 rounded-md';
+  const radius = size === 'lg' ? 'rounded-2xl' : 'rounded-md';
+  const box = size === 'lg' ? `h-24 w-24 sm:h-32 sm:w-32 md:h-36 md:w-36 ${radius}` : `h-8 w-8 ${radius}`;
   if (id === 'ajay') {
     return (
       <span className={`relative block overflow-hidden ${box}`} style={{ background: 'radial-gradient(circle at 50% 30%, #7a0f24, #1a0509)' }}>
-        <img src="/assets/portrait-420.webp" alt="" className="absolute inset-x-0 bottom-0 mx-auto h-[115%] w-auto max-w-none -translate-x-[3%] object-cover object-top" />
-        <span aria-hidden className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/15" />
+        {/* object-top keeps the head inside the frame; the slight zoom tightens the shot to a head-and-chest crop */}
+        <img
+          src="/assets/portrait-420.webp"
+          alt=""
+          className="absolute inset-0 h-full w-full origin-top scale-[1.12] object-cover object-top"
+        />
+        <span aria-hidden className={`absolute inset-0 ${radius} ring-1 ring-inset ring-white/15`} />
       </span>
     );
   }
