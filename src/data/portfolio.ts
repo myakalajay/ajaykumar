@@ -301,7 +301,7 @@ export const projects: Project[] = [
     palette: { from: '#2a0610', via: '#7a0f24', to: '#0b0710', accent: '#ff3d5a' },
     motif: 'lending',
     client: 'Homeratesyard · HomeLoc Solutions LLP · US mortgage & lending market',
-    role: 'Lead Product Design Consultant — product strategy and end-to-end design',
+    role: 'Lead Product Design Consultant - product strategy and end-to-end design',
     contribution:
       'Owned product strategy and end-to-end design: framed the business, user and operational constraints into product opportunities, mapped the borrower and operational journeys across origination, underwriting, onboarding and servicing, facilitated discovery and design-review sessions, and set the reusable design standards and interaction patterns.',
     purpose:
