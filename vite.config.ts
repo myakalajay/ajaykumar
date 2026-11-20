@@ -132,6 +132,7 @@ export default defineConfig({
     allowedHosts: [
       'pv-368e1c2f0384-af8fecbe-c733-4a1f-8761-4f20a965c2ca.style.dev',
       'pv-368e1c2f0384-b5555cb8-b6f4-40e9-9d12-75728b0627e0.style.dev',
+      'pv-368e1c2f0384-00cda9d5-ee1f-484e-bc03-1b6bda267d02.style.dev',
     ],
   },
   define: {
