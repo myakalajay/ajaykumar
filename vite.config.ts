@@ -125,6 +125,15 @@ function seoPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), seoPlugin()],
+  clearScreen: false,
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    allowedHosts: [
+      'pv-368e1c2f0384-af8fecbe-c733-4a1f-8761-4f20a965c2ca.style.dev',
+      'pv-368e1c2f0384-b5555cb8-b6f4-40e9-9d12-75728b0627e0.style.dev',
+    ],
+  },
   define: {
     'import.meta.env.VITE_SITE_URL': JSON.stringify(hasSiteUrl ? siteUrl : ''),
   },

@@ -31,7 +31,7 @@ export default function Skills() {
         }
       />
 
-      <div className="gutter grid gap-x-16 gap-y-8 md:grid-cols-2">
+      <div className="gutter grid gap-x-12 gap-y-8 md:grid-cols-2">
         {skillCategories.map((cat) => {
           const Icon = skillIconFor(cat.skills[0]?.name ?? '');
 
@@ -41,7 +41,7 @@ export default function Skills() {
                   rounded badge holding the discipline's icon, the display face for the
                   name, a tabular count — so this reference sheet reads as part of the
                   series rather than as a stand-alone list. */}
-              <h3 id={`h-${cat.id}`} className="flex items-center gap-2.5 border-b border-white/10 pb-2.5">
+              <h3 id={`h-${cat.id}`} className="flex items-center gap-2.5 border-b border-white/10 pb-3">
                 <span
                   aria-hidden
                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-crimson/10 ring-1 ring-white/10"
@@ -56,12 +56,12 @@ export default function Skills() {
                 </span>
                 <span className="font-display text-xl leading-none tracking-wide text-bone">{cat.title}</span>
                 <span className="ml-1 hidden text-[11px] leading-none text-mist sm:block">{cat.subtitle}</span>
-                <span className="ml-auto text-[10px] font-bold tabular-nums tracking-[0.2em] text-smoke">{cat.skills.length}</span>
+                <span className="ml-auto text-[10px] font-bold tabular-nums tracking-[0.2em] text-smoke">× {cat.skills.length}</span>
               </h3>
               <p className="mt-2.5 text-[13px] leading-relaxed text-mist">
                 {cat.skills.map((skill, i) => (
-                  <span key={skill.name}>
-                    {i > 0 && <span className="text-white/20"> · </span>}
+                  <span key={skill.name} className="inline-block">
+                    {i > 0 && <span className="text-white/20 mr-1">·</span>}
                     <span className={skill.note ? 'text-bone' : undefined}>{skill.name}</span>
                   </span>
                 ))}

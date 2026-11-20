@@ -35,12 +35,12 @@ export default function Achievements({ onOpen }: { onOpen?: (p: Project) => void
     <>
       <SectionHeading
         script="the moments that landed"
-        kicker="Signature impact"
+        kicker="Signature Impact"
         title="Career Highlights"
         aside={<p className="max-w-xs text-sm text-mist">The outcomes the CV calls out — measured impact, tenure and the platforms behind them. Open any one for the full case study.</p>}
       />
 
-      <div className="gutter grid gap-3 sm:grid-cols-2 lg:grid-cols-4 [perspective:1400px]">
+      <div className="gutter grid gap-4 sm:grid-cols-2 lg:grid-cols-4 [perspective:1400px]">
         {achievements.map((a, i) => {
           const Icon = ICONS[a.id] ?? Gauge;
           const project = projectFor(a.projectId);
@@ -59,9 +59,9 @@ export default function Achievements({ onOpen }: { onOpen?: (p: Project) => void
                 >
                   {/* gold hairline + a glow that only appears on hover */}
                   <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d9b46a]/70 to-transparent" />
-                  <span
+                                    <span
                     aria-hidden
-                    className="pointer-events-none absolute -top-20 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-[#d9b46a]/10 opacity-0 blur-3xl transition duration-700 group-hover:opacity-100"
+                    className="pointer-events-none absolute -top-28 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-[#d9b46a]/10 opacity-0 blur-3xl transition duration-700 group-hover:opacity-100"
                   />
 
                   <div className="relative flex items-center justify-between gap-2">

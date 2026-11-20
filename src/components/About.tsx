@@ -82,8 +82,8 @@ export default function About() {
         <div>
           <motion.blockquote className="border-l-2 border-crimson/60 pl-5" {...rise()}>
             <p className="font-serif text-[clamp(1.4rem,2.4vw,2.05rem)] italic leading-[1.25] text-bone">
-              “Career progression from UX/UI craft into product discovery, business problem framing, workflow transformation, solution
-              strategy and design leadership.”
+              “Career progression from UX/UI craft into product discovery, business problem framing, workflow transformation,
+              solution strategy and design leadership.”
             </p>
             <footer className="mt-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-smoke">
               Lead product designer · {profile.fullName}
@@ -93,7 +93,7 @@ export default function About() {
           {/* career arc — a progression, so it reads left to right, not top to bottom */}
           <motion.div className="mt-10" {...rise(0.05)}>
             <h3 className="mb-1 text-[10px] font-bold uppercase tracking-[0.3em] text-smoke">The arc</h3>
-            <p className="mb-4 text-xs text-mist">Where the work has moved — left is where it started, right is now.</p>
+            <p className="mb-4 text-xs text-mist">Where the work has moved — left is where it started, right is where it is now.</p>
 
             {/* The rail: a hairline that fills as it travels, with a node per stage.
                 Six columns only fit once the panel is wide enough for the longest
@@ -152,7 +152,7 @@ export default function About() {
 
           {/* what I actually do — the CV's five statements, verbatim */}
           <motion.div className="mt-12" {...rise(0.05)}>
-            <h3 className="mb-1 font-sans text-lg font-semibold text-bone sm:text-2xl">How I lead</h3>
+            <h3 className="mb-1 font-sans text-lg font-semibold text-bone sm:text-2xl">How I Lead</h3>
             <p className="mb-5 text-xs text-smoke">The CV's five strategic responsibilities, word for word.</p>
             <div className="grid gap-3 sm:grid-cols-2">
               {strategicValue.map((v, i) => (
@@ -199,11 +199,11 @@ export default function About() {
           <motion.div className="mt-12" {...rise(0.05)}>
             <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-2.5">
               <div>
-                <h3 className="font-sans text-lg font-semibold text-bone sm:text-2xl">Leadership &amp; design capabilities</h3>
+                <h3 className="font-sans text-lg font-semibold text-bone sm:text-2xl">Leadership &amp; Design Capabilities</h3>
                 <p className="mt-1 text-xs text-smoke">The eight capabilities the CV leads with.</p>
               </div>
               <span className="rounded-full border border-crimson/40 bg-crimson/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-crimson-2">
-                5-member team
+                5-MEMBER TEAM
               </span>
             </div>
             <div className="grid gap-x-8 gap-y-4 sm:grid-cols-2">
