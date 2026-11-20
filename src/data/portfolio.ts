@@ -108,7 +108,7 @@ export const profile = {
   headline: 'Lead Product Designer • UX Strategy • Enterprise Product Experience • Design Leadership',
   tagline: ['UX Strategy', 'Enterprise Product Experience', 'Design Leadership'],
   intro:
-    'Ten years from UI/UX craft to lead product designer and design leader — 13 industries, a five-member design team and a career of turning complex enterprise workflows into products people can use. An implemented underwriting improvement I shaped cut decision time by 37%.',
+    'Ten years from UI/UX craft to lead product designer and design leader - 13 industries, a five-member design team and a career of turning complex enterprise workflows into products people can use. An implemented underwriting improvement I shaped cut decision time by 37%.',
   tenure: '10+ years',
   location: 'Hyderabad, India · open to relocation',
   email: 'ajaykumarmyakala@outlook.com',
@@ -305,7 +305,7 @@ export const projects: Project[] = [
     contribution:
       'Owned product strategy and end-to-end design: framed the business, user and operational constraints into product opportunities, mapped the borrower and operational journeys across origination, underwriting, onboarding and servicing, facilitated discovery and design-review sessions, and set the reusable design standards and interaction patterns.',
     purpose:
-      'To replace lending processes that each ran on their own tooling with one shared journey and design language, so a decision stops waiting on handoffs — the work that took 37% off underwriting decision time.',
+      'To replace lending processes that each ran on their own tooling with one shared journey and design language, so a decision stops waiting on handoffs - the work that took 37% off underwriting decision time.',
     problem:
       'Borrower and operational problems were spread across origination, underwriting, onboarding, servicing and lending operations, with no shared journey or design language tying them together.',
     approach: [
@@ -340,7 +340,7 @@ export const projects: Project[] = [
     palette: { from: '#1a0d02', via: '#8a4a07', to: '#0a0806', accent: '#ffb547' },
     motif: 'supplier',
     client: 'Computech Corporation · enterprise procurement',
-    role: 'Sr UX Designer — UX strategy and product design across two platforms',
+    role: 'Sr UX Designer - UX strategy and product design across two platforms',
     contribution:
       'Designed across both platforms: stakeholder discovery with the CEO, product managers and engineering, service and supplier-onboarding flows, the role-based information architecture, and the operational dashboards that made spend and reconciliation legible to non-analyst users.',
     purpose:
@@ -354,7 +354,7 @@ export const projects: Project[] = [
       'Designed operational dashboards that made spend and reconciliation legible to non-analyst users.',
     ],
     outcome:
-      'Two enterprise platforms — CashTrax and DiversityTrax — now cover the full procurement path from onboarding through reconciliation under one role-based structure.',
+      'Two enterprise platforms - CashTrax and DiversityTrax - now cover the full procurement path from onboarding through reconciliation under one role-based structure.',
   },
   {
     id: 'epragathi',
@@ -379,7 +379,7 @@ export const projects: Project[] = [
     palette: { from: '#04121f', via: '#0f4c6e', to: '#05080d', accent: '#4cc9ff' },
     motif: 'civic',
     client: 'Visual IT Solution · Government & public sector (ePragathi)',
-    role: 'Sr UX Designer — citizen and administrative workflow design',
+    role: 'Sr UX Designer - citizen and administrative workflow design',
     contribution:
       'Mapped the service processes before drawing screens, then designed the citizen-facing and administrative workflows, wireframes, prototypes and production-ready interfaces, with accessibility treated as a design requirement rather than a final check.',
     purpose:
@@ -418,7 +418,7 @@ export const projects: Project[] = [
     palette: { from: '#120822', via: '#3d1a6e', to: '#07060c', accent: '#b98bff' },
     motif: 'broadcast',
     client: 'Gaian Solution · enterprise broadcasting & media',
-    role: 'Sr UX Designer — broadcast operations, advertising and reporting',
+    role: 'Sr UX Designer - broadcast operations, advertising and reporting',
     contribution:
       'Designed the content-management workflows, advertising and monetisation screens and operational reporting dashboards, and set the interaction models that carried across the media estate, alongside the ATSC 3.0 initiative work.',
     purpose:
@@ -439,7 +439,7 @@ export const projects: Project[] = [
     title: 'Audience Intelligence Suite',
     year: '2018 – 2021',
     genre: 'AdTech • MarTech • Audience Platforms',
-    logline: 'Consumer media and enterprise audience platforms — content discovery, segmentation, campaigns and monetisation.',
+    logline: 'Consumer media and enterprise audience platforms - content discovery, segmentation, campaigns and monetisation.',
     stack: ['Mobile-first UX', 'Customer Segmentation', 'Behaviour Analytics', 'Campaign Management', 'Figma'],
     features: [
       'Mobile-first content discovery and engagement',
@@ -457,13 +457,13 @@ export const projects: Project[] = [
     palette: { from: '#03150f', via: '#0d5a40', to: '#050a08', accent: '#46e3a8' },
     motif: 'audience',
     client: 'Way2News Interactive · five consumer & enterprise brands',
-    role: 'Sr UI/UX Designer — consumer media and enterprise audience platforms',
+    role: 'Sr UI/UX Designer - consumer media and enterprise audience platforms',
     contribution:
       'Designed the mobile-first consumer experiences and the enterprise segmentation, campaign-management and monetisation tooling built on the same audience data, using behaviour analytics and reporting to steer the next iteration.',
     purpose:
-      'To grow daily engagement on the reader side while making that same audience legible and sellable to advertisers and brands — one audience base, two surfaces.',
+      'To grow daily engagement on the reader side while making that same audience legible and sellable to advertisers and brands - one audience base, two surfaces.',
     problem:
-      'Five brands needed both mobile-first content discovery for readers and enterprise tooling for segmentation, campaigns and monetisation — two very different surfaces from one audience base.',
+      'Five brands needed both mobile-first content discovery for readers and enterprise tooling for segmentation, campaigns and monetisation - two very different surfaces from one audience base.',
     approach: [
       'Designed mobile-first content discovery and engagement experiences for the consumer media products.',
       'Built enterprise interfaces for customer segmentation, campaign management and monetisation on the same audience data.',
@@ -471,7 +471,7 @@ export const projects: Project[] = [
       'Worked across product, editorial, marketing and engineering to keep the platforms moving together.',
     ],
     outcome:
-      'One suite spanning five brands and three platform families — consumer, AdTech and MarTech — from discovery through to monetisation.',
+      'One suite spanning five brands and three platform families - consumer, AdTech and MarTech - from discovery through to monetisation.',
   },
   {
     id: 'jobsnprofiles',
@@ -496,7 +496,7 @@ export const projects: Project[] = [
     palette: { from: '#1c1003', via: '#6b3c06', to: '#0a0806', accent: '#ffb547' },
     motif: 'recruit',
     client: 'Nitya Software India · recruitment & communication products',
-    role: 'UI/UX Designer — concept through front-end implementation',
+    role: 'UI/UX Designer - concept through front-end implementation',
     contribution:
       'Took JobsNProfiles and VioTalk from wireframes and information architecture through responsive interface design to front-end implementation, plus the branding and marketing sites around them.',
     purpose:
@@ -510,7 +510,7 @@ export const projects: Project[] = [
       'Supported branding, marketing websites and digital product initiatives across WordPress, Joomla, PHP and MySQL.',
     ],
     outcome:
-      'Two flagship products shipped end to end — from concept and wireframes through to front-end implementation on a PHP and MySQL stack.',
+      'Two flagship products shipped end to end - from concept and wireframes through to front-end implementation on a PHP and MySQL stack.',
   },
   {
     id: 'pem-pro',
@@ -518,7 +518,7 @@ export const projects: Project[] = [
     year: '2025 – 2026',
     genre: 'Manufacturing • Precision Engineering • Enterprise SaaS',
     logline:
-      'An engineering workspace portal for PennEngineering — a secure enclave that provisions a full design environment, guides first-run onboarding and drives an AI-assisted product lifecycle from CAD import to validation.',
+      'An engineering workspace portal for PennEngineering - a secure enclave that provisions a full design environment, guides first-run onboarding and drives an AI-assisted product lifecycle from CAD import to validation.',
     stack: ['Product Strategy', 'Enterprise Onboarding', 'Design Systems', 'AI-Assisted Workflows', 'Figma'],
     features: [
       'First-run workspace provisioning with a live 4-step status sequence',
@@ -537,22 +537,22 @@ export const projects: Project[] = [
     palette: { from: '#041a33', via: '#0b4a86', to: '#05070d', accent: '#4cc9ff' },
     motif: 'engineering',
     client: 'PennEngineering (PEM®) · precision fastening & manufacturing',
-    role: 'Product Strategy & Design — enterprise engineering portal & AI lifecycle tooling',
+    role: 'Product Strategy & Design - enterprise engineering portal & AI lifecycle tooling',
     contribution:
-      'Set the product structure — secure first-run provisioning, the Engineering Command Center, the Product Lifecycle Engine and the AI Copilot — and the role-aware design system, trust signals and guided tour around it.',
+      'Set the product structure - secure first-run provisioning, the Engineering Command Center, the Product Lifecycle Engine and the AI Copilot - and the role-aware design system, trust signals and guided tour around it.',
     purpose:
       'To give engineering teams one trusted workspace from CAD assembly to manufacturing validation, instead of four tools and a handoff in between.',
     problem:
-      'Manufacturing and engineering teams had no single secure workspace that tied enterprise identity, CAD assemblies, AI component analysis and manufacturing validation together — each step lived in a different tool with no shared lifecycle or design language.',
+      'Manufacturing and engineering teams had no single secure workspace that tied enterprise identity, CAD assemblies, AI component analysis and manufacturing validation together - each step lived in a different tool with no shared lifecycle or design language.',
     approach: [
       'Framed the first-run experience as a secure provisioning sequence so users trust the workspace before they ever touch a project.',
-      'Structured the whole platform around one Product Lifecycle Engine — Project, CAD Import, AI Analysis, Fasteners, Validation — so every screen reinforces the same journey.',
+      'Structured the whole platform around one Product Lifecycle Engine - Project, CAD Import, AI Analysis, Fasteners, Validation - so every screen reinforces the same journey.',
       'Designed the Engineering Command Center as the operational home: lifecycle integrity, AI synthesis results and manufacturing readiness at a glance.',
       'Embedded an AI Engineering Copilot and a guided product tour so complex engineering decisions stay assisted, not intimidating.',
-      'Built a role-aware design system around enterprise trust signals — SOC 2, ISO 9001 and a secure enclave — for a manufacturing audience.',
+      'Built a role-aware design system around enterprise trust signals - SOC 2, ISO 9001 and a secure enclave - for a manufacturing audience.',
     ],
     outcome:
-      'A cohesive engineering portal where a new user provisions a secure workspace in seconds, then drives projects from CAD import through AI analysis to validation — all inside one AI-assisted lifecycle.',
+      'A cohesive engineering portal where a new user provisions a secure workspace in seconds, then drives projects from CAD import through AI analysis to validation - all inside one AI-assisted lifecycle.',
   },
   {
     id: 'kenvision',
@@ -560,7 +560,7 @@ export const projects: Project[] = [
     year: '2025 – 2026',
     genre: 'AI • Video Analytics • Retail & Smart Spaces',
     logline:
-      'An AI video intelligence platform that turns existing CCTV into real-time operational insight — footfall, dwell, conversion, heatmaps and AI-recommended store actions.',
+      'An AI video intelligence platform that turns existing CCTV into real-time operational insight - footfall, dwell, conversion, heatmaps and AI-recommended store actions.',
     stack: ['Product Strategy', 'Data Visualisation', 'AI/ML UX', 'Dashboard Design', 'Figma'],
     features: [
       'Store Health Score with a live AI Command Center',
@@ -579,13 +579,13 @@ export const projects: Project[] = [
     palette: { from: '#0a0730', via: '#2b1a8c', to: '#05060f', accent: '#7c5cff' },
     motif: 'vision',
     client: 'KenVision (by Intelense) · AI video intelligence for retail & smart spaces',
-    role: 'Product Strategy & Design — real-time video intelligence & retail analytics UX',
+    role: 'Product Strategy & Design - real-time video intelligence & retail analytics UX',
     contribution:
       'Designed the Store Health Score, the layered Store Intelligence Map, the AI Recommended Actions and the executive reporting, working within privacy-first constraints that reuse the cameras stores already have.',
     purpose:
-      'To turn footage retail teams already own into decisions they can act on — queue congestion, staff coverage and revenue risk — without buying new hardware.',
+      'To turn footage retail teams already own into decisions they can act on - queue congestion, staff coverage and revenue risk - without buying new hardware.',
     problem:
-      'Retail and operations teams had cameras everywhere but no operational picture — footfall, dwell time, queue congestion, conversion and staffing decisions were made on intuition because the video data was never turned into insight.',
+      'Retail and operations teams had cameras everywhere but no operational picture - footfall, dwell time, queue congestion, conversion and staffing decisions were made on intuition because the video data was never turned into insight.',
     approach: [
       'Designed a Store Health Score that collapses many signals into one number operators can act on immediately.',
       'Built the Store Intelligence Map so footfall, dwell, conversion, revenue and staff coverage read as layered heatmaps over the real floor plan.',
@@ -594,7 +594,7 @@ export const projects: Project[] = [
       'Gave executives a weekly revenue trend and per-store ranking so location-level and portfolio-level decisions share one interface.',
     ],
     outcome:
-      'Existing store cameras became a measurement layer — queue congestion, revenue risk and staffing moves now surface as AI-recommended actions inside a single real-time command center.',
+      'Existing store cameras became a measurement layer - queue congestion, revenue risk and staffing moves now surface as AI-recommended actions inside a single real-time command center.',
   },
 ];
 
@@ -1033,12 +1033,12 @@ export const seasons: Season[] = [
     number: 1,
     title: 'The Craft Years',
     period: '2016 – 2018',
-    synopsis: 'Nitya Software India — recruitment technology, communication products and client-facing web applications.',
+    synopsis: 'Nitya Software India - recruitment technology, communication products and client-facing web applications.',
     episodes: [
       {
         code: 'S01 E01',
         title: 'The Designer',
-        description: 'Designed recruitment technology and communication products, including JobsNProfiles and VioTalk — wireframes, information architecture and responsive product experiences.',
+        description: 'Designed recruitment technology and communication products, including JobsNProfiles and VioTalk - wireframes, information architecture and responsive product experiences.',
         tags: ['UI/UX', 'Wireframes', 'Information Architecture'],
         runtime: 'Nitya Software',
         palette: amber,
@@ -1057,7 +1057,7 @@ export const seasons: Season[] = [
     number: 2,
     title: 'Media & Audience',
     period: '2018 – 2021',
-    synopsis: 'Way2News Interactive — consumer media, AdTech, MarTech and audience intelligence products across five brands.',
+    synopsis: 'Way2News Interactive - consumer media, AdTech, MarTech and audience intelligence products across five brands.',
     episodes: [
       {
         code: 'S02 E01',
@@ -1089,7 +1089,7 @@ export const seasons: Season[] = [
     number: 3,
     title: 'The Broadcast Chapter',
     period: '2021 – 2022',
-    synopsis: 'Gaian Solution — enterprise broadcasting, television technology and media monetisation experiences.',
+    synopsis: 'Gaian Solution - enterprise broadcasting, television technology and media monetisation experiences.',
     episodes: [
       {
         code: 'S03 E01',
@@ -1121,7 +1121,7 @@ export const seasons: Season[] = [
     number: 4,
     title: 'The Public Service Season',
     period: '2022 – 2023',
-    synopsis: 'Visual IT Solution — digital transformation for government and public-sector citizen-service platforms.',
+    synopsis: 'Visual IT Solution - digital transformation for government and public-sector citizen-service platforms.',
     episodes: [
       {
         code: 'S04 E01',
@@ -1145,7 +1145,7 @@ export const seasons: Season[] = [
     number: 5,
     title: 'The Enterprise Procurement Season',
     period: '2023 – 2024',
-    synopsis: 'Computech Corporation — procurement, supplier diversity, compliance, spend visibility and reconciliation platforms.',
+    synopsis: 'Computech Corporation - procurement, supplier diversity, compliance, spend visibility and reconciliation platforms.',
     episodes: [
       {
         code: 'S05 E01',
@@ -1174,7 +1174,7 @@ export const seasons: Season[] = [
       {
         code: 'S05 E04',
         title: 'Efficiency, Measured',
-        description: 'Simplified financial analytics, reconciliation, supplier onboarding, compliance and reporting workflows — a team redesign associated with a 20% improvement in operational reporting efficiency.',
+        description: 'Simplified financial analytics, reconciliation, supplier onboarding, compliance and reporting workflows - a team redesign associated with a 20% improvement in operational reporting efficiency.',
         tags: ['Financial Analytics', 'Reporting', '20% efficiency'],
         runtime: 'Computech Corporation',
         palette: jade,
@@ -1185,7 +1185,7 @@ export const seasons: Season[] = [
     number: 6,
     title: 'The Mortgage Season',
     period: '2024 – 2026',
-    synopsis: 'HomeLoc Solutions — product strategy and end-to-end design for US mortgage and lending platforms.',
+    synopsis: 'HomeLoc Solutions - product strategy and end-to-end design for US mortgage and lending platforms.',
     episodes: [
       {
         code: 'S06 E01',
@@ -1198,7 +1198,7 @@ export const seasons: Season[] = [
       {
         code: 'S06 E02',
         title: 'The Operator',
-        description: 'Mapped end-to-end customer and operational journeys and drove workflow optimisation — an implemented underwriting workflow improvement cut decision time by 37%.',
+        description: 'Mapped end-to-end customer and operational journeys and drove workflow optimisation - an implemented underwriting workflow improvement cut decision time by 37%.',
         tags: ['37% faster decisions', 'Workflow Optimisation'],
         runtime: 'HomeLoc Solutions',
         palette: jade,
@@ -1222,7 +1222,7 @@ export const seasons: Season[] = [
       {
         code: 'S07 E01',
         title: 'The Next Episode',
-        description: 'Product strategy, enterprise transformation and AI-native experience design — HCI, AIX and MLUX — for the next set of platforms.',
+        description: 'Product strategy, enterprise transformation and AI-native experience design - HCI, AIX and MLUX - for the next set of platforms.',
         tags: ['Product Strategy', 'AIX · MLUX · HCI', 'Transformation'],
         runtime: 'In production',
         palette: violet,
@@ -1277,7 +1277,7 @@ export const introSlides: IntroSlide[] = [
   {
     kicker: 'AI-native',
     title: 'HCI · AIX · MLUX',
-    lines: ['Responsible AI adoption — AI-enabled experience concepts', 'with transparency, usability and human oversight.'],
+    lines: ['Responsible AI adoption - AI-enabled experience concepts', 'with transparency, usability and human oversight.'],
   },
   {
     kicker: 'Platforms',

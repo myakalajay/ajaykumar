@@ -9,10 +9,10 @@ import type { SectionId } from '../data/portfolio';
  * shares, browser tabs and reader views describe what is actually on screen.
  */
 
-const BASE_TITLE = 'Ajay Kumar Myakala — Lead Product Designer & Design Leader';
+const BASE_TITLE = 'Ajay Kumar Myakala - Lead Product Designer & Design Leader';
 
 const BASE_DESCRIPTION =
-  'Ajay Kumar Myakala — Lead Product Designer and design leader with 10+ years across FinTech, healthcare, mortgage and lending, procurement, GovTech, media, AdTech, MarTech and recruitment technology. UX strategy, enterprise UX and design systems.';
+  'Ajay Kumar Myakala - Lead Product Designer and design leader with 10+ years across FinTech, healthcare, mortgage and lending, procurement, GovTech, media, AdTech, MarTech and recruitment technology. UX strategy, enterprise UX and design systems.';
 
 /** The hero and the closing CTA frame the series but are not (SectionId)s. */
 type SeoId = SectionId | 'top' | 'contact';
@@ -23,11 +23,11 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
   contact: {
     title: `Let's build · ${BASE_TITLE}`,
     description:
-      'Open to product strategy, design transformation and AI-enabled product work — start a conversation, or take the CV with you.',
+      'Open to product strategy, design transformation and AI-enabled product work - start a conversation, or take the CV with you.',
   },
   about: {
     title: `About · ${BASE_TITLE}`,
-    description: 'Ten years from UI/UX craft to design leadership — the positioning, focus and operating model behind the work.',
+    description: 'Ten years from UI/UX craft to design leadership - the positioning, focus and operating model behind the work.',
   },
   journey: {
     title: `Journey · ${BASE_TITLE}`,
@@ -37,7 +37,7 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
   originals: {
     title: `Originals · ${BASE_TITLE}`,
     description:
-      'Homeratesyard, CashTrax & DiversityTrax, ePragathi, broadcast monetisation, audience intelligence, JobsNProfiles and more — the platforms, told as case studies.',
+      'Homeratesyard, CashTrax & DiversityTrax, ePragathi, broadcast monetisation, audience intelligence, JobsNProfiles and more - the platforms, told as case studies.',
   },
   picks: {
     title: `Top Picks · ${BASE_TITLE}`,
@@ -59,7 +59,7 @@ const SECTION_COPY: Record<SeoId, { title: string; description: string }> = {
   },
   story: {
     title: `Résumé · ${BASE_TITLE}`,
-    description: 'View and download the full CV — lead product design, UX strategy and design leadership, 2016–2026.',
+    description: 'View and download the full CV - lead product design, UX strategy and design leadership, 2016–2026.',
   },
 };
 

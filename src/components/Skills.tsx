@@ -26,7 +26,7 @@ export default function Skills() {
         script="every skill, staged"
         aside={
           <p className="max-w-xs text-sm leading-relaxed text-mist">
-            Every capability on the CV, grouped by discipline — the full list, nothing hidden behind a click.
+            Every capability on the CV, grouped by discipline - the full list, nothing hidden behind a click.
           </p>
         }
       />

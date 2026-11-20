@@ -54,7 +54,7 @@ function metricIcon(label: string): LucideIcon {
  *
  * The left half is the problem's shape: separate boxes with gaps between them,
  * one per concern the approach went on to address. The right half is the answer:
- * a single continuous bar. The counts under each side are real — the number of
+ * a single continuous bar. The counts under each side are real - the number of
  * concerns comes from the length of the approach list, so the diagram can never
  * drift from the case study it illustrates.
  */
@@ -251,7 +251,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Visual Design</h3>
                 <p className="mb-6 max-w-3xl text-xs leading-relaxed text-smoke">
                   The {detail.visualDesign.length} screens that carry the journey, from first sign-in to disbursement
-                  confirmation. Shown as designed — open any screen full screen to read it. Applicant names, amounts
+                  confirmation. Shown as designed - open any screen full screen to read it. Applicant names, amounts
                   and reference numbers on the screens are sample data.
                 </p>
                 <BoardGallery
@@ -262,7 +262,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </motion.section>
             )}
 
-            {/* the brief — the same three questions in every case study: what was wrong,
+            {/* the brief - the same three questions in every case study: what was wrong,
                 what I personally did about it, and why it mattered */}
             <motion.section variants={block} className="mt-12">
               <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Problem / Contribution / Purpose</h3>
@@ -347,13 +347,13 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </div>
             </div>
 
-            {/* product mockups — drawn screens inside device frames, for the Originals
+            {/* product mockups - drawn screens inside device frames, for the Originals
                 that have no real screens to show */}
             {detail?.screens && detail.screens.length > 0 && (
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Product Mockups</h3>
                 <p className="mb-6 text-xs text-smoke">
-                  Drawn reconstructions, framed as the devices they ran on — stylised renderings of the interface
+                  Drawn reconstructions, framed as the devices they ran on - stylised renderings of the interface
                   families this case study describes, not photographs of a shipping product.
                 </p>
                 <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,240px)]">
@@ -369,11 +369,11 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
                 </div>
                 <div className="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,240px)]">
                   <figcaption className="text-[13px] leading-snug text-mist">
-                    <span className="font-semibold text-bone">{detail.screens[0].title}</span> — {detail.screens[0].caption}
+                    <span className="font-semibold text-bone">{detail.screens[0].title}</span> - {detail.screens[0].caption}
                   </figcaption>
                   {detail.screens[1] && (
                     <figcaption className="text-[13px] leading-snug text-mist">
-                      <span className="font-semibold text-bone">{detail.screens[1].title}</span> — {detail.screens[1].caption}
+                      <span className="font-semibold text-bone">{detail.screens[1].title}</span> - {detail.screens[1].caption}
                     </figcaption>
                   )}
                 </div>
@@ -385,14 +385,14 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Product Screens</h3>
                 <p className="mb-5 text-xs text-smoke">
-                  Vector reconstructions — stylised drawings of the interface families this work described, rendered in the platform&apos;s own palette, not screenshots of shipping products.
+                  Vector reconstructions - stylised drawings of the interface families this work described, rendered in the platform&apos;s own palette, not screenshots of shipping products.
                 </p>
                 {/* Full width, one per row: these are the surfaces the case study is
                     about, so they get the width to be read rather than three-up
                     thumbnails. */}
                 <div className="grid gap-8">
                   {detail.screens.map((s, i) => (
-                    <ShowcaseItem key={s.title} index={i} label={<><span className="font-semibold text-bone">{s.title}</span> — {s.caption}</>}>
+                    <ShowcaseItem key={s.title} index={i} label={<><span className="font-semibold text-bone">{s.title}</span> - {s.caption}</>}>
                       <ScreenMock kind={s.kind} accent={project.palette.accent} title={s.title} />
                     </ShowcaseItem>
                   ))}
@@ -409,7 +409,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
                     unreadable, and these are the artifacts that explain the thinking. */}
                 <div className="grid gap-6 sm:grid-cols-2">
                   {detail.wireframes.map((w, i) => (
-                    <ShowcaseItem key={w.title} index={i} label={<><span className="font-semibold text-bone">{w.title}</span> — {w.caption}</>}>
+                    <ShowcaseItem key={w.title} index={i} label={<><span className="font-semibold text-bone">{w.title}</span> - {w.caption}</>}>
                       <WireframeMock kind={w.kind} title={w.title} />
                     </ShowcaseItem>
                   ))}
@@ -417,12 +417,12 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </motion.section>
             )}
 
-            {/* the flow boards — the hand-drawn artifacts, photographed */}
+            {/* the flow boards - the hand-drawn artifacts, photographed */}
             {detail?.flows && detail.flows.length > 0 && (
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-1 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">User Flows · Hand-Drawn</h3>
                 <p className="mb-6 max-w-3xl text-xs leading-relaxed text-smoke">
-                  {detail.flows.length} boards from the journey mapping — the loan application drawn end to end, then
+                  {detail.flows.length} boards from the journey mapping - the loan application drawn end to end, then
                   again from the borrower&apos;s side, at screen-by-screen depth, with the clarification and rejection
                   rails pulled out. Photographed as drawn; open any board full screen to read the writing on it. The
                   figures on the boards are the illustrative ones pencilled in during the exercise, not borrower data.
@@ -434,7 +434,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </motion.section>
             )}
 
-            {/* deliverables — the tangible outputs */}
+            {/* deliverables - the tangible outputs */}
             {detail && detail.deliverables.length > 0 && (
               <motion.section variants={block} className="mt-14">
                 <h3 className="mb-4 text-[11px] font-bold uppercase tracking-[0.3em] text-crimson-2">Deliverables</h3>
@@ -456,7 +456,7 @@ export default function ProjectModal({ project, onClose, onSwitch }: { project: 
               </motion.section>
             )}
 
-            {/* outcome — the closing statement, tinted with the project's own accent */}
+            {/* outcome - the closing statement, tinted with the project's own accent */}
             <motion.section
               variants={block}
               className="mt-12 rounded-xl border p-5 sm:p-7"

@@ -32,7 +32,7 @@ export default function ResumeSection({ onView }: { onView: () => void }) {
         <div className="lg:sticky lg:top-28 lg:self-start">
           <p className="font-serif text-3xl italic leading-tight text-bone">Every episode, on one page.</p>
           <p className="mt-3 text-sm leading-relaxed text-mist">
-            {profile.tenure} across {experience.length} roles, {industries.length} industries, {projects.length} platforms and {toolbox.length} tools — view the CV
+            {profile.tenure} across {experience.length} roles, {industries.length} industries, {projects.length} platforms and {toolbox.length} tools - view the CV
             here or take a copy with you.
           </p>
           <div className="mt-6 flex flex-col gap-3">
@@ -94,7 +94,7 @@ export default function ResumeSection({ onView }: { onView: () => void }) {
             </div>
           )}
           <p className="mt-3 text-[11px] leading-relaxed text-smoke">
-            “Print CV” typesets the sheet on its own, straight from the live data — the original PDF is one click away above.
+            “Print CV” typesets the sheet on its own, straight from the live data - the original PDF is one click away above.
           </p>
           {published && updatedAt && (
             <p className="mt-2 text-[11px] leading-relaxed text-smoke">
@@ -189,7 +189,7 @@ export function ResumeSheet() {
             <div key={x.company} className="mb-5">
               <div className="flex flex-wrap justify-between gap-x-3">
                 <p className="text-sm font-semibold text-bone">
-                  {x.company} — {x.role}
+                  {x.company} - {x.role}
                 </p>
                 <p className="text-xs text-smoke">{x.period}</p>
               </div>

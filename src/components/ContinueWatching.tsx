@@ -97,7 +97,7 @@ export function ContinueWatching({ onOpen, order, profileId }: { onOpen?: (p: Pr
           </h2>
         </div>
         <p className="max-w-sm text-[13px] leading-relaxed text-mist">
-          The two most recent platforms on the CV — open either one for the problem, the approach and the outcome.
+          The two most recent platforms on the CV - open either one for the problem, the approach and the outcome.
         </p>
       </div>
 

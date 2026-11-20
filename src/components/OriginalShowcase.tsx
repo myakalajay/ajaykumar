@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 
 /**
  * Vector reconstructions of the interface families each case study describes.
- * These are stylised UI mockups — not screenshots — drawn in the project's own
+ * These are stylised UI mockups - not screenshots - drawn in the project's own
  * palette so every Original's gallery matches its poster art.
  */
 
@@ -263,7 +263,7 @@ export function ScreenMock({ kind, accent, title }: { kind: ScreenKind; accent: 
         <ScreenBody kind={kind} a={accent} />
       </svg>
       {/* Named on the image itself so a screenshot is never mistaken for the
-          interface — every surface in this gallery is a drawn reconstruction. */}
+          interface - every surface in this gallery is a drawn reconstruction. */}
       <span className="pointer-events-none absolute bottom-2 right-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/25">
         reconstruction
       </span>
@@ -275,7 +275,7 @@ export function ScreenMock({ kind, accent, title }: { kind: ScreenKind; accent: 
  * A product mockup: one of the project's own screens inside a device frame.
  *
  * Why the frame is drawn rather than photographed: these are enterprise systems
- * — mortgage underwriting, supplier compliance, broadcast operations — and there
+ * - mortgage underwriting, supplier compliance, broadcast operations - and there
  * is no photograph of them to license. Dropping generic stock imagery of
  * unrelated offices and laptops into a case study would imply a product and a
  * workplace that do not exist, which is exactly the mismatch this case study is

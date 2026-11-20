@@ -93,7 +93,7 @@ export default function About() {
           {/* career arc — a progression, so it reads left to right, not top to bottom */}
           <motion.div className="mt-10" {...rise(0.05)}>
             <h3 className="mb-1 text-[10px] font-bold uppercase tracking-[0.3em] text-smoke">The arc</h3>
-            <p className="mb-4 text-xs text-mist">Where the work has moved — left is where it started, right is where it is now.</p>
+            <p className="mb-4 text-xs text-mist">Where the work has moved - left is where it started, right is where it is now.</p>
 
             {/* The rail: a hairline that fills as it travels, with a node per stage.
                 Six columns only fit once the panel is wide enough for the longest

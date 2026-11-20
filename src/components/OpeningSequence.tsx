@@ -580,7 +580,7 @@ export default function OpeningSequence({ onDone }: { onDone: () => void }) {
             transition={{ duration: 0.9, ease: EASE, delay: 0.35 }}
           >
             <span className="font-display text-2xl tracking-wide text-crimson-2 sm:text-3xl">{headline.title}</span>
-            <span className="ml-2 text-mist">— {headline.org}</span>
+            <span className="ml-2 text-mist">- {headline.org}</span>
           </motion.p>
         )}
       </div>

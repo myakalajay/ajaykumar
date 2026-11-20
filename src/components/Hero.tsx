@@ -142,7 +142,7 @@ export default function Hero({ onPlay, onResume, profileId }: { onPlay: () => vo
         {/* The display type carries the full name; assistive tech also gets the role. */}
         <motion.h1 variants={item} className="font-display leading-[0.82] tracking-[0.02em] text-bone" style={{ fontSize: 'clamp(3.2rem, 8vw, 8.5rem)' }}>
           <span className="sr-only">
-            {profile.fullName} — {profile.role}
+            {profile.fullName} - {profile.role}
           </span>
           <span aria-hidden className="shimmer-text">
             {profile.fullName}

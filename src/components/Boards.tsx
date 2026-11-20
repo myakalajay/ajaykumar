@@ -31,7 +31,7 @@ export function BoardGallery({
           index={i}
           label={
             <>
-              <span className="font-semibold text-bone">{b.title}</span> — {b.caption}
+              <span className="font-semibold text-bone">{b.title}</span> - {b.caption}
             </>
           }
         >

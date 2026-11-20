@@ -33,7 +33,7 @@ export default function Seasons() {
         kicker={`${seasons.length} Seasons`}
         title="My Journey"
         script="seven seasons, one arc"
-        aside={<p className="max-w-xs text-sm text-mist">Pick a season to read its episodes. The seven cards below are the whole career — nothing else to navigate.</p>}
+        aside={<p className="max-w-xs text-sm text-mist">Pick a season to read its episodes. The seven cards below are the whole career - nothing else to navigate.</p>}
       />
 
       <JourneyTimeline active={active} onSelect={select} />
