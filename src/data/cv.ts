@@ -65,20 +65,20 @@ export const cv: CvContent = {
     'Lead Product Designer with 10+ years of IT experience shaping digital products and enterprise platforms across FinTech, healthcare, mortgage and lending, procurement, GovTech, media, AdTech, MarTech and recruitment. I translate complex business requirements into product strategy, intuitive workflows and scalable design systems, combining hands-on UX expertise with people leadership, executive stakeholder engagement and cross-functional delivery.',
 
   highlights: [
-    'Product Strategy — product vision, UX strategy, discovery, roadmap alignment and prioritisation.',
-    'Design Leadership — leadership and management of a 5-member design team, mentoring, ownership and design quality.',
-    'Enterprise UX — complex workflows, dashboards, role-based experiences and platform modernisation.',
-    'Design Systems — component architecture, reusable patterns, design standards and governance.',
-    'AI & Emerging Technology — AI-enabled experience concepts, intelligent automation and responsible UX principles.',
-    'Data & Research — user research, usability evaluation, behavioural insights and outcome measurement.',
-    'Cross-functional Delivery — Product, Engineering, Architecture and QA collaboration; design specifications and implementation reviews.',
-    'Stakeholder Management — client communication, executive presentations, strategic workshops and decision alignment.',
+    'Product Strategy - product vision, UX strategy, discovery, roadmap alignment and prioritisation.',
+    'Design Leadership - leadership and management of a 5-member design team, mentoring, ownership and design quality.',
+    'Enterprise UX - complex workflows, dashboards, role-based experiences and platform modernisation.',
+    'Design Systems - component architecture, reusable patterns, design standards and governance.',
+    'AI & Emerging Technology - AI-enabled experience concepts, intelligent automation and responsible UX principles.',
+    'Data & Research - user research, usability evaluation, behavioural insights and outcome measurement.',
+    'Cross-functional Delivery - Product, Engineering, Architecture and QA collaboration; design specifications and implementation reviews.',
+    'Stakeholder Management - client communication, executive presentations, strategic workshops and decision alignment.',
   ],
 
   careerSummary:
     'I connect user needs, technical feasibility and measurable business outcomes, translating complex business, user, operational and technical constraints into scalable product direction and enterprise experiences.\n\n'
     + 'The through-line is evidence. I frame the problem before anyone draws a screen, map the journey to find where time and decisions are lost, and keep business priorities, user needs and implementation reality aligned as the work moves.\n\n'
-    + 'I have worked end to end — from product discovery and client conversations through to production-ready interfaces — leading a design team and partnering with Product, Engineering, Architecture and QA.',
+    + 'I have worked end to end - from product discovery and client conversations through to production-ready interfaces - leading a design team and partnering with Product, Engineering, Architecture and QA.',
 
   experience: [
     {
@@ -86,7 +86,7 @@ export const cv: CvContent = {
       org: 'HomeLoc Solutions LLP',
       place: 'Hyderabad, India',
       period: 'Apr 2024 – May 2026',
-      tagline: 'US mortgage & lending platforms — origination to servicing.',
+      tagline: 'US mortgage & lending platforms - origination to servicing.',
       highlight:
         'Lead product discovery and UX strategy across origination, underwriting, onboarding and servicing; an implemented underwriting workflow improvement reduced decision time by 37%. Mentors designers and has established reusable design frameworks.',
     },
@@ -139,7 +139,7 @@ export const cv: CvContent = {
 
   /* The CV names no institutions, so none are named here. */
   education: [
-    { title: 'B.Com — Mass Communication and Public Relations', detail: 'Bachelor of Commerce · communication, media and public relations.' },
+    { title: 'B.Com - Mass Communication and Public Relations', detail: 'Bachelor of Commerce · communication, media and public relations.' },
     { title: 'Diploma in Graphic and Web Design', detail: 'Graphic design and web design.' },
   ],
 
@@ -148,7 +148,7 @@ export const cv: CvContent = {
   ],
 
   closing:
-    'Ten years, thirteen industries, one method: start with the customer, build the case, and make the outcome visible. I would like to bring that same rigour — and a design team that ships — to the work you do next.',
+    'Ten years, thirteen industries, one method: start with the customer, build the case, and make the outcome visible. I would like to bring that same rigour - and a design team that ships - to the work you do next.',
 
   contact: {
     displayName: 'Ajay Kumar Myakala',

@@ -50,6 +50,8 @@ export default function Hero({ onPlay, onResume, profileId }: { onPlay: () => vo
     { text: 'Figma · Miro · Jira', sub: 'Primary toolkit', pos: 'right-[4%] bottom-[24%]', depth: 0.6 },
   ];
 
+  const statusLine = profile.role.split('·').map((s) => s.trim()).filter(Boolean).slice(0, 2).join(' · ');
+
   return (
     <section
       id="top"
@@ -148,8 +150,8 @@ export default function Hero({ onPlay, onResume, profileId }: { onPlay: () => vo
             {profile.fullName}
           </span>
         </motion.h1>
-        <motion.p variants={item} className="mt-1 font-sans text-sm font-bold tracking-[0.62em] text-crimson-2 sm:text-base">
-          {profile.seriesTag}
+        <motion.p variants={item} className="mt-1.5 font-sans text-sm font-semibold tracking-[0.34em] text-crimson-2 sm:text-base">
+          {statusLine}
         </motion.p>
 
         <motion.div variants={item} className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 text-[13px] font-medium text-mist">

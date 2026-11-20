@@ -37,7 +37,7 @@ export default function Achievements({ onOpen }: { onOpen?: (p: Project) => void
         script="the moments that landed"
         kicker="Signature Impact"
         title="Career Highlights"
-        aside={<p className="max-w-xs text-sm text-mist">The outcomes the CV calls out — measured impact, tenure and the platforms behind them. Open any one for the full case study.</p>}
+        aside={<p className="max-w-xs text-sm text-mist">The outcomes the CV calls out - measured impact, tenure and the platforms behind them. Open any one for the full case study.</p>}
       />
 
       <div className="gutter grid gap-4 sm:grid-cols-2 lg:grid-cols-4 [perspective:1400px]">
